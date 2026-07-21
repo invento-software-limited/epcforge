@@ -3,7 +3,7 @@ name: Auto Tag and Release
 on:
   pull_request:
     branches:
-      - main
+      - version-16
     types:
       - closed
 
