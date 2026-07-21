@@ -44,38 +44,38 @@ def get_columns():
 
 
 def get_data(filters):
-	conditions = []
-	if filters and filters.get("project"):
-		conditions.append(f"pb.project = {frappe.db.escape(filters.project)}")
-	if filters and filters.get("cost_head"):
-		conditions.append(f"pbi.cost_head = {frappe.db.escape(filters.cost_head)}")
+	pb = frappe.qb.DocType("Project Budget")
+	pbi = frappe.qb.DocType("Project Budget Item")
 
-	where_clause = " AND ".join(conditions) if conditions else "1=1"
-
-	data = frappe.db.sql(
-		f"""
-        SELECT
-            pb.project,
-            pb.name as budget_name,
-            pbi.cost_head,
-            pbi.description,
-            pbi.budget_amount,
-            pbi.committed_amount,
-            pbi.actual_amount,
-            pbi.remaining_balance
-        FROM `tabProject Budget` pb
-        INNER JOIN `tabProject Budget Item` pbi ON pbi.parent = pb.name
-        WHERE {where_clause}
-        ORDER BY pb.project, pbi.cost_head
-        """,
-		as_dict=True,
+	query = (
+		frappe.qb.from_(pb)
+		.inner_join(pbi)
+		.on(pbi.parent == pb.name)
+		.select(
+			pb.project,
+			pb.name.as_("budget_name"),
+			pbi.cost_head,
+			pbi.description,
+			pbi.budget_amount,
+			pbi.committed_amount,
+			pbi.actual_amount,
+			pbi.remaining_balance,
+		)
+		.orderby(pb.project)
+		.orderby(pbi.cost_head)
 	)
 
+	if filters and filters.get("project"):
+		query = query.where(pb.project == filters.get("project"))
+	if filters and filters.get("cost_head"):
+		query = query.where(pbi.cost_head == filters.get("cost_head"))
+
+	data = query.run(as_dict=True)
+
 	for row in data:
-		row["percent_used"] = (
-			((row.committed_amount or 0) + (row.actual_amount or 0)) / (row.budget_amount or 1) * 100
-			if row.budget_amount
-			else 0
-		)
+		budget = row.get("budget_amount") or 0
+		committed = row.get("committed_amount") or 0
+		actual = row.get("actual_amount") or 0
+		row["percent_used"] = ((committed + actual) / budget * 100) if budget else 0
 
 	return data

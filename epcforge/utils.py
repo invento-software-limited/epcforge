@@ -36,7 +36,8 @@ def create_default_boq_groups():
 			doc.is_group = group["is_group"]
 			doc.insert(ignore_permissions=True)
 
-	frappe.db.commit()
+	# Commit seeded BOQ groups after migration setup
+	frappe.db.commit()  # nosemgrep: frappe-manual-commit
 
 
 def create_default_budget_cost_heads():
@@ -60,7 +61,8 @@ def create_default_budget_cost_heads():
 			doc.is_group = head["is_group"]
 			doc.insert(ignore_permissions=True)
 
-	frappe.db.commit()
+	# Commit seeded budget cost heads after migration setup
+	frappe.db.commit()  # nosemgrep: frappe-manual-commit
 
 
 def get_project_query_conditions(user):

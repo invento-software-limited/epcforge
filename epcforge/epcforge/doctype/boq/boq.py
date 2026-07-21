@@ -20,9 +20,6 @@ class BOQ(Document):
 	def before_cancel(self):
 		self.status = "Cancelled"
 
-	def on_cancel(self):
-		self.status = "Cancelled"
-
 	def on_submit(self):
 		self.create_project_budget_if_not_exists()
 
