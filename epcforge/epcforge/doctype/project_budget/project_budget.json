@@ -170,18 +170,7 @@
  ],
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
- "links": [
-  {
-   "group": "Transactions",
-   "link_doctype": "Purchase Order",
-   "link_fieldname": "custom_project_budget"
-  },
-  {
-   "group": "Transactions",
-   "link_doctype": "Sales Invoice",
-   "link_fieldname": "custom_project_budget"
-  }
- ],
+ "links": [],
  "modified": "2026-07-21 00:00:00.000000",
  "modified_by": "Administrator",
  "module": "EPCForge",
