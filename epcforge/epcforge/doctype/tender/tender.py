@@ -14,9 +14,6 @@ class Tender(Document):
 		if self.status not in ("Published", "Under Evaluation", "Awarded"):
 			self.status = "Published"
 
-	def on_submit(self):
-		self.status = "Published"
-
 	def before_cancel(self):
 		self.status = "Cancelled"
 

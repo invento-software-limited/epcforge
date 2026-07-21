@@ -32,26 +32,31 @@ def get_columns():
 
 
 def get_data(filters):
-	conditions = []
-	if filters and filters.get("project"):
-		conditions.append(f"project = {frappe.db.escape(filters.project)}")
-	if filters and filters.get("status"):
-		conditions.append(f"status = {frappe.db.escape(filters.status)}")
+	boq = frappe.qb.DocType("BOQ")
 
-	where_clause = " AND ".join(conditions) if conditions else "1=1"
-
-	data = frappe.db.sql(
-		f"""
-        SELECT
-            name, project, contract_type, status,
-            total_amount, estimated_cost, actual_cost,
-            budget_variance, gross_margin_pct, revision
-        FROM `tabBOQ`
-        WHERE {where_clause}
-        ORDER BY creation DESC
-        """,
-		as_dict=True,
+	query = (
+		frappe.qb.from_(boq)
+		.select(
+			boq.name,
+			boq.project,
+			boq.contract_type,
+			boq.status,
+			boq.total_amount,
+			boq.estimated_cost,
+			boq.actual_cost,
+			boq.budget_variance,
+			boq.gross_margin_pct,
+			boq.revision,
+		)
+		.orderby(boq.creation, order=frappe.qb.desc)
 	)
+
+	if filters and filters.get("project"):
+		query = query.where(boq.project == filters.get("project"))
+	if filters and filters.get("status"):
+		query = query.where(boq.status == filters.get("status"))
+
+	data = query.run(as_dict=True)
 
 	for row in data:
 		row["item_count"] = frappe.db.count("BOQ Item", {"parent": row["name"]})
