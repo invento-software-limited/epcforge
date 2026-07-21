@@ -23,6 +23,10 @@ jobs:
         with:
           python-version: '3.10'
           cache: pip
+
+      - name: Install Semgrep
+        run: pip install semgrep
+
       - uses: pre-commit/action@v3.0.0
 
       - name: Download Semgrep rules
@@ -30,7 +34,6 @@ jobs:
 
       - name: Run Semgrep rules
         run: |
-          pip install semgrep
           semgrep ci --config ./frappe-semgrep-rules/rules --config r/python.lang.correctness
 
   deps-vulnerable-check:
