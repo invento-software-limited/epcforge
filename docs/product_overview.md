@@ -68,4 +68,4 @@ Invento Software Limited builds enterprise-grade Frappe and ERPNext applications
 
 - **Website:** [invento.com.bd](https://invento.com.bd)
 - **Email:** [hello@invento.com.bd](mailto:hello@invento.com.bd)
-- **GitHub:** [invento-dev](https://github.com/invento-dev)
+- **GitHub:** [invento-software-limited/](https://github.com/invento-software-limited/)
