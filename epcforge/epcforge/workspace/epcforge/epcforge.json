@@ -1,0 +1,231 @@
+{
+ "app": "epcforge",
+ "charts": [],
+ "content": "[{\"id\":\"0NVhQ9oGMR\",\"type\":\"header\",\"data\":{\"text\":\"<span class=\\\"h4\\\"><b>EPC Operations</b></span>\",\"col\":12}},{\"id\":\"7Mbx6I5JUf\",\"type\":\"spacer\",\"data\":{\"col\":12}},{\"id\":\"9bQ3jK4LmN\",\"type\":\"card\",\"data\":{\"card_name\":\"Master Data\",\"col\":4}},{\"id\":\"3xPr9jKmQs\",\"type\":\"card\",\"data\":{\"card_name\":\"Project Management\",\"col\":4}},{\"id\":\"1aB2cD3eF4\",\"type\":\"card\",\"data\":{\"card_name\":\"Transaction\",\"col\":4}},{\"id\":\"5gH6iJ7kL8\",\"type\":\"card\",\"data\":{\"card_name\":\"Reports\",\"col\":4}}]",
+ "creation": "2026-01-03 00:00:00.000000",
+ "custom_blocks": [],
+ "docstatus": 0,
+ "doctype": "Workspace",
+ "for_user": "",
+ "hide_custom": 0,
+ "icon": "project",
+ "idx": 1,
+ "is_hidden": 0,
+ "label": "EPCForge",
+ "links": [
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Master Data",
+   "link_count": 0,
+   "onboard": 0,
+   "type": "Card Break"
+  },
+  {
+   "dependencies": "",
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "BOQ",
+   "link_count": 0,
+   "link_to": "BOQ",
+   "link_type": "DocType",
+   "onboard": 1,
+   "type": "Link"
+  },
+  {
+   "dependencies": "",
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Project Budget",
+   "link_count": 0,
+   "link_to": "Project Budget",
+   "link_type": "DocType",
+   "onboard": 1,
+   "type": "Link"
+  },
+  {
+   "dependencies": "",
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Budget Cost Head",
+   "link_count": 0,
+   "link_to": "Budget Cost Head",
+   "link_type": "DocType",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "dependencies": "",
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "BOQ Group",
+   "link_count": 0,
+   "link_to": "BOQ Group",
+   "link_type": "DocType",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Project Management",
+   "link_count": 0,
+   "onboard": 0,
+   "type": "Card Break"
+  },
+  {
+   "dependencies": "",
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Project",
+   "link_count": 0,
+   "link_to": "Project",
+   "link_type": "DocType",
+   "onboard": 1,
+   "type": "Link"
+  },
+  {
+   "dependencies": "",
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Task",
+   "link_count": 0,
+   "link_to": "Task",
+   "link_type": "DocType",
+   "onboard": 1,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Transaction",
+   "link_count": 0,
+   "onboard": 0,
+   "type": "Card Break"
+  },
+  {
+   "dependencies": "",
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Tender",
+   "link_count": 0,
+   "link_to": "Tender",
+   "link_type": "DocType",
+   "onboard": 1,
+   "type": "Link"
+  },
+  {
+   "dependencies": "",
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Document Register",
+   "link_count": 0,
+   "link_to": "Document Register",
+   "link_type": "DocType",
+   "onboard": 1,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Reports",
+   "link_count": 0,
+   "onboard": 0,
+   "type": "Card Break"
+  },
+  {
+   "dependencies": "",
+   "hidden": 0,
+   "is_query_report": 1,
+   "label": "BOQ Summary",
+   "link_count": 0,
+   "link_to": "BOQ Summary",
+   "link_type": "Report",
+   "onboard": 1,
+   "type": "Link"
+  },
+  {
+   "dependencies": "",
+   "hidden": 0,
+   "is_query_report": 1,
+   "label": "Budget vs Actual",
+   "link_count": 0,
+   "link_to": "Budget vs Actual",
+   "link_type": "Report",
+   "onboard": 1,
+   "type": "Link"
+  },
+  {
+   "dependencies": "",
+   "hidden": 0,
+   "is_query_report": 1,
+   "label": "Tender Summary",
+   "link_count": 0,
+   "link_to": "Tender Summary",
+   "link_type": "Report",
+   "onboard": 1,
+   "type": "Link"
+  }
+ ],
+ "modified": "2026-07-21 16:00:00.000000",
+ "modified_by": "Administrator",
+ "module": "EPCForge",
+ "name": "EPCForge",
+ "number_cards": [],
+ "owner": "Administrator",
+ "parent_page": "",
+ "public": 1,
+ "quick_lists": [],
+ "restrict_to_domain": "",
+ "roles": [
+  {
+   "role": "System Manager"
+  },
+  {
+   "role": "Project Manager"
+  },
+  {
+   "role": "Engineer"
+  }
+ ],
+ "sequence_id": 12.0,
+ "shortcuts": [
+  {
+   "label": "New Project",
+   "link_to": "Project",
+   "type": "DocType",
+   "doc_view": "New"
+  },
+  {
+   "label": "New Task",
+   "link_to": "Task",
+   "type": "DocType",
+   "doc_view": "New"
+  },
+  {
+   "label": "New BOQ",
+   "link_to": "BOQ",
+   "type": "DocType",
+   "doc_view": "New"
+  },
+  {
+   "label": "New Tender",
+   "link_to": "Tender",
+   "type": "DocType",
+   "doc_view": "New"
+  },
+  {
+   "label": "New Document Register",
+   "link_to": "Document Register",
+   "type": "DocType",
+   "doc_view": "New"
+  },
+  {
+   "label": "BOQ Summary Report",
+   "link_to": "BOQ Summary",
+   "type": "Report"
+  }
+ ],
+ "title": "EPCForge",
+ "type": "Workspace"
+}

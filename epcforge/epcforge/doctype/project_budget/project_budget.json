@@ -1,0 +1,233 @@
+{
+ "actions": [],
+ "allow_rename": 1,
+ "autoname": "format:BUD-{project}-{####}",
+ "creation": "2026-07-21 00:00:00.000000",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+  "details_tab",
+  "project",
+  "project_name",
+  "boq",
+  "client",
+  "portfolio_information_column",
+  "epc_role",
+  "epc_discipline",
+  "sec_break_summary",
+  "contract_value",
+  "approved_budget",
+  "committed_amount",
+  "actual_cost",
+  "col_break_evm",
+  "percent_used",
+  "remaining_budget",
+  "cost_variance",
+  "sec_break_items",
+  "budget_items",
+  "dashboard_tab",
+  "dashboard"
+ ],
+ "fields": [
+  {
+   "fieldname": "details_tab",
+   "fieldtype": "Tab Break",
+   "label": "Details"
+  },
+  {
+   "fieldname": "project",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "label": "Project",
+   "options": "Project",
+   "reqd": 1,
+   "unique": 1
+  },
+  {
+   "fetch_from": "project.project_name",
+   "fieldname": "project_name",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "Project Name",
+   "read_only": 1
+  },
+  {
+   "fieldname": "boq",
+   "fieldtype": "Link",
+   "label": "BOQ",
+   "options": "BOQ",
+   "read_only": 1
+  },
+  {
+   "fieldname": "client",
+   "fieldtype": "Data",
+   "label": "Client"
+  },
+  {
+   "fieldname": "portfolio_information_column",
+   "fieldtype": "Column Break",
+   "label": "Portfolio Information"
+  },
+  {
+   "fieldname": "epc_role",
+   "fieldtype": "Select",
+   "in_list_view": 1,
+   "label": "Role",
+   "options": "\nPrime Contractor\nSubcontractor\nJV Partner\nConsultant"
+  },
+  {
+   "fieldname": "epc_discipline",
+   "fieldtype": "Select",
+   "in_list_view": 1,
+   "label": "Discipline",
+   "options": "\nCivil & Structural\nMechanical\nElectrical\nInstrumentation\nPiping\nHVAC\nTelecom\nGeneral Works"
+  },
+  {
+   "fieldname": "sec_break_summary",
+   "fieldtype": "Section Break",
+   "label": "Financial Summary"
+  },
+  {
+   "default": "0",
+   "fieldname": "contract_value",
+   "fieldtype": "Currency",
+   "label": "Contract Value (BOQ)",
+   "read_only": 1
+  },
+  {
+   "default": "0",
+   "fieldname": "approved_budget",
+   "fieldtype": "Currency",
+   "in_list_view": 1,
+   "label": "Approved Budget",
+   "read_only": 1
+  },
+  {
+   "default": "0",
+   "fieldname": "committed_amount",
+   "fieldtype": "Currency",
+   "in_list_view": 1,
+   "label": "Committed Amount",
+   "read_only": 1
+  },
+  {
+   "default": "0",
+   "fieldname": "actual_cost",
+   "fieldtype": "Currency",
+   "in_list_view": 1,
+   "label": "Actual Cost",
+   "read_only": 1
+  },
+  {
+   "fieldname": "col_break_evm",
+   "fieldtype": "Column Break"
+  },
+  {
+   "default": "0",
+   "fieldname": "percent_used",
+   "fieldtype": "Percent",
+   "label": "% Budget Used",
+   "read_only": 1
+  },
+  {
+   "default": "0",
+   "fieldname": "remaining_budget",
+   "fieldtype": "Currency",
+   "label": "Remaining Budget",
+   "read_only": 1
+  },
+  {
+   "default": "0",
+   "fieldname": "cost_variance",
+   "fieldtype": "Currency",
+   "label": "Cost Variance (CV)",
+   "read_only": 1
+  },
+  {
+   "fieldname": "sec_break_items",
+   "fieldtype": "Section Break",
+   "label": "Cost Breakdown"
+  },
+  {
+   "fieldname": "budget_items",
+   "fieldtype": "Table",
+   "label": "Budget Line Items",
+   "options": "Project Budget Item",
+   "reqd": 1
+  },
+  {
+   "depends_on": "eval:!doc.__islocal",
+   "fieldname": "dashboard_tab",
+   "fieldtype": "Tab Break",
+   "label": "Dashboard",
+   "show_dashboard": 1
+  },
+  {
+   "fieldname": "dashboard",
+   "fieldtype": "HTML",
+   "label": "Dashboard"
+  }
+ ],
+ "grid_page_length": 50,
+ "index_web_pages_for_search": 1,
+ "links": [
+  {
+   "group": "Transactions",
+   "link_doctype": "Purchase Order",
+   "link_fieldname": "custom_project_budget"
+  },
+  {
+   "group": "Transactions",
+   "link_doctype": "Sales Invoice",
+   "link_fieldname": "custom_project_budget"
+  }
+ ],
+ "modified": "2026-07-21 00:00:00.000000",
+ "modified_by": "Administrator",
+ "module": "EPCForge",
+ "name": "Project Budget",
+ "naming_rule": "Expression (old style)",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "System Manager",
+   "share": 1,
+   "write": 1
+  },
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "Project Manager",
+   "share": 1,
+   "write": 1
+  },
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "Engineer",
+   "share": 1,
+   "write": 1
+  }
+ ],
+ "row_format": "Dynamic",
+ "sort_field": "creation",
+ "sort_order": "DESC",
+ "states": []
+}

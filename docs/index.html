@@ -1,0 +1,1042 @@
+<!DOCTYPE html>
+<html lang="en" prefix="og: https://ogp.me/ns#">
+<head>
+  <!-- ===== BASICS ===== -->
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>EPCForge — Product Overview &amp; User Guide</title>
+  <meta name="description" content="EPCForge is an Engineering, Procurement &amp; Construction management app for Frappe/ERPNext featuring BOQ, budgeting, tendering, and document control." />
+  <meta name="keywords" content="Frappe, ERPNext, EPC, BOQ, Bill of Quantities, Construction Management, Engineering, Procurement, Project Budgeting, Tender Management" />
+  <meta name="author" content="Invento Software Limited" />
+  <meta name="robots" content="index, follow" />
+  <meta name="theme-color" content="#0d9488" />
+  <meta name="application-name" content="EPCForge" />
+  <meta name="apple-mobile-web-app-title" content="EPCForge Docs" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="mobile-web-app-capable" content="yes" />
+
+  <!-- ===== CANONICAL ===== -->
+  <link rel="canonical" href="https://invento-dev.github.io/epcforge/" />
+
+  <!-- ===== FAVICON ===== -->
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='16' fill='%230d9488'/%3E%3Ctext x='50' y='68' font-size='44' font-weight='bold' text-anchor='middle' fill='%23fff' font-family='system-ui'%3EEF%3C/text%3E%3C/svg%3E" />
+  <link rel="icon" type="image/png" sizes="32x32" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAAAXNSR0IArs4c6QAAAMlJREFUWEft1rENwjAQBdD/V4wAWYARKJmAEZghEzACIzACIyQyASNEMkJEytn4LFmR7MiOEyne6sqf9O0LgPljYD4G+NnWq9b6AABKqSWlNLXWXgCAc84BwNBaSwBQSskA4DHG7J1zB4RfE0K4EhETY4wAgIhKiKgQETFjbQDAmQ9EhIiMMS4iAgBKKQsAuBHRAwARXQHgQkRnItqUUt4tJecfBQCcc4+UUggAmXNeKaU1ET0BQErpjYhHRHzMOf8TQPRaax/FGGHOmZxzG2uM/wU0P/cDlJ9Y6qCjFNUAAAAASUVORK5CYII=" />
+  <link rel="apple-touch-icon" sizes="180x180" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAALQAAAC0CAYAAAA9zQYyAAAAAXNSR0IArs4c6QAABO9JREFUeJztnU9oHEUchjebTZrYBGMSNG6Sg3oQ9KAHI5p4cBcPgn8u4k1R8CIoikcFj6J4VfQiHoR4UFBBoSc9JFFUJGhMNG0M2SRmuruH3+6SZna3md2d/S3U74FAdjP9zXy7M/NrdnYIIYQQQgghhBBCCCGEEEIIIYQQQgghhBBCCCGEEEIIIYQQQgghhBDCM9gH2AM4ADgAmFJiKgU4B7gMuAq4FhFvR8S/hSr2h1FEAuA1wJsJ0XPAAxFxFzCvLq1ujAL8FPAe4MMEaYg4iIj7UfqVRAVYB/gS8KeEyLuAB4CbUfqVRAV4K+CHgC8mCJwBHASci9KvJCrAtwP+uMTIuwB3o/QriSqEfRPgR4CvlRB4COC3UfqVRAW4G/B9gA+UEHcpa85H6VcSFeAOwPcBPqQk7hbgTJR+JQEQfBfgIyVEtgLuROlXEhXgHYB/BviIEiI3A+5F6VcSFeAtgIuAB5UE3gK4H6VfSVSAVwI+AnhMCZELAB9H6VcSFeAZgI8BHlNC4HjAj1H6lSQC+HjA44D3KombC/hJlH4lUQGeAviXgI8rIXIs4BdR+pVEBTgK8CnAe0qIdAD+EqVfSVSAnYBPAd5bQqQD8Jco/UqiArwU8GnA+0qIdAD+EqVfSVSAlwI+DfiAEiIdgL9E6VcSFeAlgE8HfqSESAfgr1H6lUQFeDHgR4EfKyGyC/B3lH4lUQFeBPgJ4MdLiOyG6P0qogI8H/BTwI+XENkF+Hsz/Uqe/ymLBcA+pYQ2DfCPNvQriQqwG/BTwCeUENk8+FvbyZVE/VboKeBTSoj8O8hfUjggKQrwRsBngE8rIfLPIP9V4YCkKMCbAJ8FPquEyK+B/63hiKQowJsBnwM+r4TIr4H/r+GIpCjAmwOfB36vhMgvgb/VcERSFOAtgD8Evl9C5Gbg71H6lUQFeDPgD8D3S4hsBvwjSr+SqABvAfwR+H4Jkc2Af0TpVxIV4K2APwPfLyGyGfCPKP1KokK8BfAn4Ps1RDYH/BClX0lUgLcC/gx8v4bI5oAfo/QriQrwVsCfge/XENkc8GOUfiVRAV6dM+XnwA9riOwE/BylX0lUgDcD/gr8UQ2RnYC/R+lXEhXgTYC/AT+qIbIT8Pco/UqiArwZ8Hfgx6UFsgHwjyj9SqICvDnwD+AnpQWyIXIpSr+SqABvAfwT+EkpkSUBf4vSryQqwFsA/gZ+UkpkScDfovQriQrw5sA/gZ+VEtkC+DtKv5KoAG8B/BP4eSmRLYC/o/QriQrwFsA/gZ+XEtkK+DuUfiVRAV4M+AXwi1IiWwF/D9KvJCrAiwG/AH5ZSmQr4O9B+pVEBXgR4FfAr0qJbA38L0q/kqgALwT8GvhdKZGtgP9F6VcSFeAFgN8AvyslsgXwvyj9SqICPA/wW+B3pURWQ+lXEhXgvYHfAX9USmQpRH8fi4g/lRJZAuhvYpR+JVEB3gP4O/CHpQWWAtE/xCj9SqICPAD4J/CHpQVKIvo8Sr+SqADvC/wL+FNpgVII0T+j9CuJCvAewL+Bf5YWWAz0f4zSrySqEP4NpQQWA/2HUfqVRAW4N/At8M9SAosB/RJYFFL8S6IC3Bv4bymlBZYA/R1Kv5KoAPcGvo+ULkv/PSn9SqICPAD4fqR0WZL+x1H6lUQFuDfwESldlqR/Okq/kqgA9wY+CqVfSVSAe2MvwP8BYgN2HxMbLmAAAAAASUVORK5CYII=" />
+  <link rel="manifest" href="site.webmanifest" />
+
+  <!-- ===== MARKED (Markdown parser) ===== -->
+  <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js" defer></script>
+
+  <!-- ===== DNS PRECONNECT & RESOURCE HINTS ===== -->
+  <link rel="dns-prefetch" href="https://cdn.jsdelivr.net" />
+  <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin />
+
+  <!-- ===== OPEN GRAPH (Facebook, LinkedIn, etc.) ===== -->
+  <meta property="og:type" content="website" />
+  <meta property="og:site_name" content="EPCForge" />
+  <meta property="og:title" content="EPCForge — Product Overview &amp; User Guide" />
+  <meta property="og:description" content="EPCForge is an Engineering, Procurement &amp; Construction management app for Frappe/ERPNext featuring BOQ, budgeting, tendering, and document control." />
+  <meta property="og:url" content="https://invento-dev.github.io/epcforge/" />
+  <meta property="og:locale" content="en_US" />
+  <meta property="og:locale:alternate" content="en_GB" />
+  <meta property="og:image" content="https://invento-dev.github.io/epcforge/assets/og-image.svg" />
+  <meta property="og:image:width" content="1200" />
+  <meta property="og:image:height" content="630" />
+  <meta property="og:image:alt" content="EPCForge — Engineering, Procurement &amp; Construction Management for Frappe/ERPNext" />
+  <meta property="og:image:type" content="image/svg+xml" />
+
+  <!-- ===== OG ARTICLE TAGS ===== -->
+  <meta property="article:tag" content="Frappe" />
+  <meta property="article:tag" content="ERPNext" />
+  <meta property="article:tag" content="EPC" />
+  <meta property="article:tag" content="BOQ" />
+  <meta property="article:tag" content="Construction" />
+
+  <!-- ===== TWITTER CARD ===== -->
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="EPCForge — Documentation" />
+  <meta name="twitter:description" content="EPCForge is an Engineering, Procurement &amp; Construction management app for Frappe/ERPNext featuring BOQ, budgeting, tendering, and document control." />
+  <meta name="twitter:image" content="https://invento-dev.github.io/epcforge/assets/og-image.svg" />
+
+  <!-- ===== JSON-LD STRUCTURED DATA ===== -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebSite",
+    "name": "EPCForge",
+    "alternateName": "EPCForge Docs",
+    "url": "https://invento-dev.github.io/epcforge/",
+    "description": "EPC Operations, BOQ & Budget Management for Frappe and ERPNext.",
+    "inLanguage": "en-US",
+    "isPartOf": {
+      "@type": "Organization",
+      "name": "Invento Software Limited",
+      "url": "https://github.com/invento-dev"
+    }
+  }
+  </script>
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "SoftwareApplication",
+    "name": "EPCForge",
+    "operatingSystem": "Linux, Docker",
+    "applicationCategory": "BusinessApplication",
+    "description": "EPC Operations, BOQ & Budget Management",
+    "url": "https://github.com/invento-dev/epcforge",
+    "author": {
+      "@type": "Organization",
+      "name": "Invento Software Limited"
+    },
+    "offers": {
+      "@type": "Offer",
+      "price": "0",
+      "priceCurrency": "USD"
+    }
+  }
+  </script>
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "itemListElement": [
+      {
+        "@type": "ListItem",
+        "position": 1,
+        "name": "Home",
+        "item": "https://invento-dev.github.io/epcforge/"
+      }
+    ]
+  }
+  </script>
+
+  <!-- ===== STYLES ===== -->
+  <style>
+    /* ===== RESET & BASE ===== */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --teal-900: #0f766e;
+      --teal-700: #0d9488;
+      --teal-600: #14b8a6;
+      --teal-500: #2dd4bf;
+      --teal-50: #f0fdfa;
+      --red-500: #e63946;
+      --red-50: #fde8ea;
+      --gold-500: #d4a017;
+      --gray-50: #f8f9fa;
+      --gray-100: #f1f3f5;
+      --gray-200: #e9ecef;
+      --gray-300: #dee2e6;
+      --gray-400: #adb5bd;
+      --gray-500: #868e96;
+      --gray-600: #495057;
+      --gray-700: #343a40;
+      --gray-800: #212529;
+      --gray-900: #1a1a2e;
+      --white: #ffffff;
+      --sidebar-width: 300px;
+      --header-height: 64px;
+      --font-sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+      --font-mono: "SF Mono", SFMono-Regular, "Fira Code", "Fira Mono", Menlo, monospace;
+    }
+
+    /* Screen-reader only */
+    .sr-only {
+      position: absolute;
+      width: 1px; height: 1px;
+      padding: 0; margin: -1px;
+      overflow: hidden;
+      clip: rect(0, 0, 0, 0);
+      white-space: nowrap;
+      border: 0;
+    }
+
+    /* Skip-to-content link */
+    .skip-link {
+      position: absolute;
+      top: -100%;
+      left: 8px;
+      background: var(--teal-700);
+      color: var(--white);
+      padding: 8px 16px;
+      border-radius: 0 0 8px 8px;
+      z-index: 200;
+      font-size: 14px;
+      font-weight: 600;
+      text-decoration: none;
+      transition: top 0.15s ease;
+    }
+    .skip-link:focus { top: 0; }
+
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: var(--font-sans);
+      font-size: 16px;
+      line-height: 1.7;
+      color: var(--gray-800);
+      background: var(--gray-50);
+      display: flex;
+      min-height: 100vh;
+    }
+
+    /* Page wrapper: stacks topbar and main vertically */
+    .page-wrap {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      min-width: 0;
+      min-height: 100vh;
+    }
+
+    a { color: var(--teal-700); text-decoration: none; }
+    a:hover { color: var(--teal-500); text-decoration: underline; }
+
+    img { max-width: 100%; height: auto; display: block; }
+    code { font-family: var(--font-mono); }
+
+    /* ===== SIDEBAR ===== */
+    .sidebar {
+      position: fixed;
+      top: 0; left: 0;
+      width: var(--sidebar-width);
+      height: 100vh;
+      background: var(--white);
+      border-right: 1px solid var(--gray-200);
+      display: flex;
+      flex-direction: column;
+      z-index: 100;
+      transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      overflow-y: auto;
+    }
+
+    .sidebar-brand {
+      padding: 24px 24px 20px;
+      border-bottom: 1px solid var(--gray-100);
+      flex-shrink: 0;
+    }
+
+    .sidebar-brand a {
+      text-decoration: none;
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+
+    .brand-icon {
+      width: 44px;
+      height: 44px;
+      background: linear-gradient(135deg, var(--teal-700), var(--teal-500));
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--white);
+      font-size: 20px;
+      font-weight: 700;
+      flex-shrink: 0;
+      box-shadow: 0 2px 8px rgba(13, 148, 136, 0.25);
+    }
+
+    .brand-text {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .brand-name {
+      font-size: 15px;
+      font-weight: 700;
+      color: var(--gray-900);
+      line-height: 1.3;
+    }
+
+    .brand-sub {
+      font-size: 12px;
+      color: var(--gray-500);
+      font-weight: 500;
+      letter-spacing: 0.02em;
+    }
+
+    .sidebar-nav {
+      padding: 16px 12px;
+      flex: 1;
+    }
+
+    .sidebar-nav-label {
+      font-size: 11px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--gray-400);
+      padding: 8px 12px 6px;
+    }
+
+    .nav-btn {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      width: 100%;
+      padding: 12px 16px;
+      border: none;
+      border-radius: 10px;
+      background: transparent;
+      color: var(--gray-600);
+      font-size: 15px;
+      font-weight: 500;
+      font-family: var(--font-sans);
+      cursor: pointer;
+      transition: all 0.2s ease;
+      text-align: left;
+      margin-bottom: 2px;
+    }
+
+    .nav-btn:hover {
+      background: var(--gray-100);
+      color: var(--gray-800);
+    }
+
+    .nav-btn:focus-visible {
+      outline: 2px solid var(--teal-600);
+      outline-offset: 2px;
+    }
+
+    .nav-btn.active {
+      background: var(--teal-50);
+      color: var(--teal-700);
+      font-weight: 600;
+    }
+
+    .nav-btn .nav-icon { font-size: 18px; width: 24px; text-align: center; flex-shrink: 0; }
+
+    .nav-btn .badge {
+      margin-left: auto;
+      font-size: 11px;
+      background: var(--gray-200);
+      color: var(--gray-500);
+      padding: 2px 8px;
+      border-radius: 20px;
+      font-weight: 500;
+    }
+
+    .nav-btn.active .badge {
+      background: var(--teal-700);
+      color: var(--white);
+    }
+
+    .sidebar-footer {
+      padding: 16px 20px;
+      border-top: 1px solid var(--gray-100);
+      flex-shrink: 0;
+    }
+
+    .sidebar-footer a {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 13px;
+      color: var(--gray-500);
+      text-decoration: none;
+    }
+    .sidebar-footer a:hover { color: var(--gray-700); }
+    .sidebar-footer a:focus-visible {
+      outline: 2px solid var(--teal-600);
+      outline-offset: 2px;
+    }
+
+    /* ===== MAIN CONTENT ===== */
+    .main {
+      margin-left: var(--sidebar-width);
+      flex: 1;
+      min-height: 100vh;
+      padding: 0;
+    }
+
+    /* Top bar (mobile) */
+    .topbar {
+      display: none;
+      position: sticky;
+      top: 0;
+      z-index: 99;
+      background: var(--white);
+      border-bottom: 1px solid var(--gray-200);
+      padding: 0 16px;
+      height: var(--header-height);
+      align-items: center;
+      gap: 12px;
+    }
+
+    .hamburger {
+      width: 40px; height: 40px;
+      border: none;
+      background: transparent;
+      cursor: pointer;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 5px;
+      border-radius: 8px;
+      padding: 8px;
+    }
+
+    .hamburger:hover { background: var(--gray-100); }
+    .hamburger:focus-visible { outline: 2px solid var(--teal-600); outline-offset: 2px; }
+    .hamburger span {
+      display: block;
+      width: 22px; height: 2.5px;
+      background: var(--gray-700);
+      border-radius: 2px;
+      transition: 0.3s;
+    }
+
+    .topbar-title {
+      font-size: 16px;
+      font-weight: 600;
+      color: var(--gray-800);
+    }
+
+    /* ===== CONTENT AREA ===== */
+    .content-area {
+      max-width: 880px;
+      margin: 0 auto;
+      padding: 48px 48px 80px;
+    }
+
+    .content-loading {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 80px 20px;
+      color: var(--gray-400);
+    }
+
+    .content-loading .spinner {
+      width: 40px; height: 40px;
+      border: 3px solid var(--gray-200);
+      border-top-color: var(--teal-700);
+      border-radius: 50%;
+      animation: spin 0.8s linear infinite;
+      margin-bottom: 16px;
+    }
+
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    .content-error {
+      text-align: center;
+      padding: 60px 20px;
+      color: var(--red-500);
+    }
+
+    /* ===== MARKDOWN RENDERED STYLES ===== */
+    .markdown-body {
+      animation: fadeIn 0.35s ease;
+    }
+
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+
+    .markdown-body h1 {
+      font-size: 2.25rem;
+      font-weight: 800;
+      color: var(--gray-900);
+      line-height: 1.25;
+      margin-bottom: 0.5rem;
+      padding-bottom: 0.5rem;
+      border-bottom: 3px solid var(--teal-700);
+      display: inline-block;
+    }
+
+    .markdown-body h2 {
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: var(--teal-700);
+      margin-top: 2.5rem;
+      margin-bottom: 1rem;
+      padding-bottom: 0.4rem;
+      border-bottom: 1px solid var(--gray-200);
+    }
+
+    .markdown-body h3 {
+      font-size: 1.2rem;
+      font-weight: 600;
+      color: var(--gray-800);
+      margin-top: 2rem;
+      margin-bottom: 0.75rem;
+    }
+
+    .markdown-body h4 {
+      font-size: 1.05rem;
+      font-weight: 600;
+      color: var(--gray-700);
+      margin-top: 1.5rem;
+      margin-bottom: 0.5rem;
+    }
+
+    .markdown-body p {
+      margin-bottom: 1.1rem;
+      color: var(--gray-700);
+    }
+
+    .markdown-body ul, .markdown-body ol {
+      margin-bottom: 1.2rem;
+      padding-left: 1.5rem;
+    }
+    .markdown-body li { margin-bottom: 0.35rem; }
+    .markdown-body li > ul, .markdown-body li > ol { margin-top: 0.25rem; margin-bottom: 0.25rem; }
+
+    .markdown-body strong { font-weight: 700; color: var(--gray-900); }
+    .markdown-body em { font-style: italic; }
+    .markdown-body hr { border: none; border-top: 1px solid var(--gray-200); margin: 2rem 0; }
+
+    .markdown-body blockquote {
+      border-left: 4px solid var(--teal-600);
+      background: var(--teal-50);
+      padding: 0.75rem 1.25rem;
+      margin: 1.25rem 0;
+      border-radius: 0 8px 8px 0;
+      color: var(--gray-700);
+    }
+    .markdown-body blockquote p:last-child { margin-bottom: 0; }
+
+    .markdown-body code {
+      background: var(--gray-100);
+      padding: 2px 6px;
+      border-radius: 4px;
+      font-size: 0.875em;
+      color: var(--red-500);
+    }
+
+    .markdown-body pre {
+      background: var(--gray-900);
+      color: #e9ecef;
+      padding: 16px 20px;
+      border-radius: 10px;
+      overflow-x: auto;
+      margin: 1.25rem 0;
+      font-size: 0.875rem;
+      line-height: 1.6;
+    }
+    .markdown-body pre code { background: transparent; color: inherit; padding: 0; border-radius: 0; font-size: inherit; }
+
+    .markdown-body table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 1.25rem 0;
+      font-size: 0.95rem;
+    }
+    .markdown-body th {
+      background: var(--teal-700);
+      color: var(--white);
+      font-weight: 600;
+      text-align: left;
+      padding: 10px 14px;
+    }
+    .markdown-body th:first-child { border-radius: 8px 0 0 0; }
+    .markdown-body th:last-child { border-radius: 0 8px 0 0; }
+    .markdown-body td { padding: 10px 14px; border-bottom: 1px solid var(--gray-200); }
+    .markdown-body tr:last-child td { border-bottom: none; }
+    .markdown-body tr:nth-child(even) td { background: var(--gray-50); }
+
+    .markdown-body img {
+      margin: 1.5rem auto;
+      border-radius: 12px;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+      border: 1px solid var(--gray-200);
+      max-height: 600px;
+      object-fit: contain;
+      background: var(--white);
+    }
+
+    .markdown-body ul li::marker { color: var(--teal-600); }
+
+    /* ===== OVERLAY (mobile) ===== */
+    .sidebar-overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.4);
+      z-index: 99;
+      opacity: 0;
+      transition: opacity 0.3s ease;
+      pointer-events: none;
+    }
+    .sidebar-overlay.show { opacity: 1; pointer-events: auto; }
+
+    /* ===== RESPONSIVE ===== */
+    @media (max-width: 768px) {
+      .sidebar { transform: translateX(-100%); }
+      .sidebar.open { transform: translateX(0); }
+      .topbar { display: flex; }
+      .main { margin-left: 0; }
+      .content-area { padding: 24px 20px 60px; }
+      .sidebar-overlay { display: block; }
+      .markdown-body h1 { font-size: 1.65rem; }
+      .markdown-body h2 { font-size: 1.25rem; }
+    }
+
+    @media (min-width: 769px) and (max-width: 1024px) {
+      .content-area { padding: 32px 28px 60px; }
+    }
+
+    @media print {
+      .sidebar, .topbar, .sidebar-overlay { display: none !important; }
+      .main { margin-left: 0; }
+      .content-area { padding: 20px; max-width: 100%; }
+      .markdown-body img { box-shadow: none; border: 1px solid #ccc; break-inside: avoid; }
+    }
+
+    /* ===== PUBLISHER HIGHLIGHT CARD ===== */
+    .publisher-card {
+      background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%);
+      border: 1px solid #e2e8f0;
+      border-radius: 16px;
+      padding: 28px;
+      margin-bottom: 32px;
+      box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.05), 0 8px 10px -6px rgba(0, 0, 0, 0.05);
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+      position: relative;
+      overflow: hidden;
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    .publisher-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 4px;
+      background: linear-gradient(90deg, #2F3181 0%, #0E7059 50%, #008B47 100%);
+    }
+    .publisher-card:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.08), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+      border-color: #cbd5e1;
+    }
+    .publisher-card-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 16px;
+    }
+    .publisher-logo-wrapper {
+      max-width: 240px;
+      display: flex;
+      align-items: center;
+    }
+    .publisher-logo-img {
+      width: 100%;
+      height: auto;
+      max-height: 52px;
+      object-fit: contain;
+    }
+    .publisher-badge {
+      background: linear-gradient(90deg, rgba(47,49,129,0.08) 0%, rgba(0,139,71,0.08) 100%);
+      color: #0e7059;
+      padding: 6px 14px;
+      border-radius: 99px;
+      font-size: 12px;
+      font-weight: 600;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      border: 1px solid rgba(14, 112, 89, 0.15);
+    }
+    .publisher-card-body {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+    .publisher-card-title {
+      font-size: 18px !important;
+      font-weight: 700 !important;
+      color: #1e293b !important;
+      margin: 0 !important;
+      line-height: 1.4 !important;
+      border-bottom: none !important;
+      padding-bottom: 0 !important;
+      display: block !important;
+    }
+    .publisher-card-description {
+      font-size: 14.5px !important;
+      line-height: 1.6 !important;
+      color: #475569 !important;
+      margin: 0 !important;
+    }
+    .publisher-card-actions {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+      margin-top: 4px;
+    }
+    .publisher-btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      padding: 10px 20px;
+      border-radius: 8px;
+      font-size: 14px;
+      font-weight: 600;
+      transition: all 0.2s ease;
+      text-decoration: none !important;
+    }
+    .publisher-btn-primary {
+      background: linear-gradient(135deg, #2F3181 0%, #008B47 100%);
+      color: #ffffff !important;
+      box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+    }
+    .publisher-btn-primary:hover {
+      opacity: 0.95;
+      transform: translateY(-1px);
+      box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+    }
+    .publisher-btn-secondary {
+      background: #ffffff;
+      color: #334155 !important;
+      border: 1px solid #cbd5e1;
+    }
+    .publisher-btn-secondary:hover {
+      background: #f8fafc;
+      border-color: #94a3b8;
+      color: #0f172a !important;
+    }
+    @media (prefers-color-scheme: dark) {
+      .publisher-card {
+        background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
+        border-color: #334155;
+      }
+      .publisher-card:hover {
+        border-color: #475569;
+      }
+      .publisher-card-title {
+        color: #f8fafc !important;
+      }
+      .publisher-card-description {
+        color: #94a3b8 !important;
+      }
+      .publisher-btn-secondary {
+        background: #1e293b;
+        color: #cbd5e1 !important;
+        border-color: #475569;
+      }
+      .publisher-btn-secondary:hover {
+        background: #334155;
+        color: #f8fafc !important;
+        border-color: #64748b;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ===== SKIP LINK (accessibility) ===== -->
+  <a class="skip-link" href="#content">Skip to main content</a>
+
+  <!-- ===== SIDEBAR ===== -->
+  <aside class="sidebar" id="sidebar" role="navigation" aria-label="Documentation navigation">
+    <div class="sidebar-brand">
+      <a href="/epcforge/" aria-label="Home — EPCForge">
+        <div class="brand-icon" aria-hidden="true">EF</div>
+        <div class="brand-text">
+          <span class="brand-name">EPCForge</span>
+          <span class="brand-sub">EPC Management</span>
+        </div>
+      </a>
+    </div>
+
+    <nav class="sidebar-nav" aria-label="Documentation pages">
+      <div class="sidebar-nav-label" id="nav-heading">Documentation</div>
+
+      <button class="nav-btn active" data-page="overview" onclick="switchPage('overview')" aria-current="page">
+        <span class="nav-icon" aria-hidden="true">📘</span>
+        Product Overview
+      </button>
+
+      <button class="nav-btn" data-page="guide" onclick="switchPage('guide')">
+        <span class="nav-icon" aria-hidden="true">📖</span>
+        User Guide
+      </button>
+    </nav>
+
+    <div class="sidebar-footer">
+      <a href="https://github.com/invento-dev/epcforge" target="_blank" rel="noopener noreferrer" aria-label="View source code on GitHub">
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path fill-rule="evenodd" d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/></svg>
+        GitHub
+      </a>
+    </div>
+  </aside>
+
+  <!-- ===== OVERLAY (mobile) ===== -->
+  <div class="sidebar-overlay" id="overlay" onclick="closeSidebar()" role="presentation"></div>
+
+  <!-- ===== PAGE WRAP (topbar + main, stacked vertically) ===== -->
+  <div class="page-wrap">
+    <header class="topbar">
+      <button class="hamburger" onclick="toggleSidebar()" aria-label="Toggle navigation menu" aria-expanded="false" aria-controls="sidebar">
+        <span></span><span></span><span></span>
+      </button>
+      <span class="topbar-title" id="topbarTitle">Product Overview</span>
+    </header>
+
+    <main class="main" id="main-content" role="main">
+      <article class="content-area" id="content-area" itemscope itemtype="https://schema.org/Article">
+      <meta itemprop="author" content="Invento Software Limited" />
+      <meta itemprop="publisher" content="Invento Software Limited" />
+      <span itemprop="publisher" itemscope itemtype="https://schema.org/Organization">
+        <meta itemprop="name" content="Invento Software Limited" />
+      </span>
+
+      <!-- Invento Software Limited Featured Card -->
+      <div class="publisher-card">
+        <div class="publisher-card-header">
+          <div class="publisher-logo-wrapper">
+            <img src="assets/logo.svg" alt="Invento Software Limited Logo" class="publisher-logo-img" />
+          </div>
+          <span class="publisher-badge">Featured Partner</span>
+        </div>
+        <div class="publisher-card-body">
+          <h2 class="publisher-card-title">Built by Invento Software Limited</h2>
+          <p class="publisher-card-description">
+            Invento Software Limited builds enterprise Frappe/ERPNext applications and extensions for construction, engineering, and manufacturing industries.
+          </p>
+        </div>
+        <div class="publisher-card-actions">
+          <a href="https://invento.com.bd" target="_blank" rel="noopener noreferrer" class="publisher-btn publisher-btn-primary">
+            <span>Visit Our Website</span>
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="7" y1="17" x2="17" y2="7"></line><polyline points="7 7 17 7 17 17"></polyline></svg>
+          </a>
+          <a href="mailto:hello@invento.com.bd" class="publisher-btn publisher-btn-secondary">
+            <span>Contact Support</span>
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg>
+          </a>
+        </div>
+      </div>
+
+      <div class="content-loading" id="loading-indicator" role="status" aria-live="polite">
+        <div class="spinner" aria-hidden="true"></div>
+        <span>Loading documentation…</span>
+      </div>
+
+      <div id="content" aria-live="polite"></div>
+    </article>
+  </main>
+  </div><!-- /.page-wrap -->
+
+  <script>
+    // ---- Configuration ----
+    const SITE_URL = 'https://invento-dev.github.io/epcforge/';
+    const PAGES = {
+      overview: {
+        file: 'product_overview.md',
+        title: 'Product Overview',
+        description: 'Product overview for EPCForge — learn about key features including BOQ Engine, Project Budgeting, Tender Management, and Document Register.',
+        emoji: '📘',
+      },
+      guide: {
+        file: 'user_guide.md',
+        title: 'User Guide',
+        description: 'Comprehensive user guide for EPCForge — installation, core workflows, field reference, and troubleshooting.',
+        emoji: '📖',
+      },
+    };
+
+    let currentPage = 'overview';
+    let cachedContent = {};
+
+    // ---- Sidebar toggling (mobile) ----
+    function toggleSidebar() {
+      const sidebar = document.getElementById('sidebar');
+      const overlay = document.getElementById('overlay');
+      const hamburger = document.querySelector('.hamburger');
+      const isOpen = sidebar.classList.toggle('open');
+      overlay.classList.toggle('show', isOpen);
+      document.body.style.overflow = isOpen ? 'hidden' : '';
+      if (hamburger) hamburger.setAttribute('aria-expanded', isOpen);
+    }
+
+    function closeSidebar() {
+      document.getElementById('sidebar').classList.remove('open');
+      document.getElementById('overlay').classList.remove('show');
+      document.body.style.overflow = '';
+      const hamburger = document.querySelector('.hamburger');
+      if (hamburger) hamburger.setAttribute('aria-expanded', 'false');
+    }
+
+    // ---- Markdown rendering ----
+    function renderMarkdown(text) {
+      marked.setOptions({ breaks: true, gfm: true });
+
+      const html = marked.parse(text);
+      const div = document.createElement('div');
+      div.className = 'markdown-body';
+      div.innerHTML = html;
+
+      // External links
+      div.querySelectorAll('a').forEach(a => {
+        if (a.hostname && a.hostname !== location.hostname) {
+          a.setAttribute('target', '_blank');
+          a.setAttribute('rel', 'noopener noreferrer');
+        }
+      });
+
+      // Add IDs to headings for anchor links
+      div.querySelectorAll('h1, h2, h3, h4').forEach(h => {
+        const id = h.textContent.toLowerCase()
+          .replace(/[^a-z0-9ঀ-]+/g, '-')
+          .replace(/^-+|-+$/g, '');
+        if (id && !h.id) h.id = id;
+      });
+
+      // Smooth scroll for anchor links
+      div.querySelectorAll('a[href^="#"]').forEach(a => {
+        a.addEventListener('click', e => {
+          e.preventDefault();
+          const id = a.getAttribute('href').slice(1);
+          const el = document.getElementById(id);
+          if (el) el.scrollIntoView({ behavior: 'smooth' });
+        });
+      });
+
+      return div;
+    }
+
+    // ---- Update JSON-LD breadcrumb ----
+    function updateBreadcrumb(pageTitle) {
+      const breadcrumbScript = document.querySelector('script[type="application/ld+json"]:nth-of-type(3)');
+      if (breadcrumbScript) {
+        try {
+          const data = JSON.parse(breadcrumbScript.textContent);
+          data.itemListElement = [
+            { '@type': 'ListItem', position: 1, name: 'Home', item: SITE_URL },
+            { '@type': 'ListItem', position: 2, name: pageTitle, item: SITE_URL }
+          ];
+          breadcrumbScript.textContent = JSON.stringify(data);
+        } catch (e) { /* ignore parse errors */ }
+      }
+    }
+
+    // ---- Load and display a page ----
+    async function loadPage(pageKey) {
+      const page = PAGES[pageKey];
+      if (!page) return;
+
+      const contentEl = document.getElementById('content');
+      const loadingEl = document.getElementById('loading-indicator');
+      const contentArea = document.getElementById('content-area');
+      const heading = pageKey === 'overview' ? 'Product Overview' : 'User Guide';
+
+      // Hide loading, show content area
+      if (loadingEl) loadingEl.style.display = 'none';
+      if (contentArea) contentArea.setAttribute('aria-label', heading);
+
+      // If cached, render immediately
+      if (cachedContent[pageKey]) {
+        contentEl.innerHTML = '';
+        contentEl.appendChild(cachedContent[pageKey].cloneNode(true));
+        updateActiveNav(pageKey);
+        updateMeta(pageKey);
+        updateBreadcrumb(page.title);
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+        return;
+      }
+
+      // Show loading
+      contentEl.innerHTML = '';
+      if (loadingEl) loadingEl.style.display = 'flex';
+
+      try {
+        const response = await fetch(page.file);
+        if (!response.ok) throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+        const text = await response.text();
+
+        const rendered = renderMarkdown(text);
+        cachedContent[pageKey] = rendered.cloneNode(true);
+
+        if (loadingEl) loadingEl.style.display = 'none';
+        contentEl.innerHTML = '';
+        contentEl.appendChild(rendered);
+
+        updateActiveNav(pageKey);
+        updateMeta(pageKey);
+        updateBreadcrumb(page.title);
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+
+        // Close sidebar on mobile after navigation
+        closeSidebar();
+      } catch (err) {
+        console.error('Failed to load page:', err);
+        if (loadingEl) loadingEl.style.display = 'none';
+        contentEl.innerHTML = `
+          <div class="content-error">
+            <p style="font-size:2rem;margin-bottom:8px;" aria-hidden="true">⚠️</p>
+            <p style="font-size:1.1rem;font-weight:600;color:var(--gray-700);margin-bottom:4px;">Failed to load documentation</p>
+            <p style="color:var(--gray-500);font-size:0.9rem;">${err.message}</p>
+            <p style="margin-top:16px;">
+              <button onclick="location.reload()" style="padding:8px 20px;background:var(--teal-700);color:#fff;border:none;border-radius:8px;cursor:pointer;font-size:14px;font-weight:500;">Retry</button>
+            </p>
+          </div>
+        `;
+      }
+    }
+
+    // ---- Update meta tags on page switch ----
+    function updateMeta(pageKey) {
+      const page = PAGES[pageKey];
+      if (!page) return;
+
+      const fullTitle = `${page.title} — EPCForge`;
+      document.title = fullTitle;
+
+      // Meta description
+      let metaDesc = document.querySelector('meta[name="description"]');
+      if (metaDesc) metaDesc.setAttribute('content', page.description);
+
+      // OG / Twitter
+      const ogTitle = document.querySelector('meta[property="og:title"]');
+      if (ogTitle) ogTitle.setAttribute('content', fullTitle);
+      const ogDesc = document.querySelector('meta[property="og:description"]');
+      if (ogDesc) ogDesc.setAttribute('content', page.description);
+      const twTitle = document.querySelector('meta[name="twitter:title"]');
+      if (twTitle) twTitle.setAttribute('content', fullTitle);
+      const twDesc = document.querySelector('meta[name="twitter:description"]');
+      if (twDesc) twDesc.setAttribute('content', page.description);
+
+      // Top bar title
+      document.getElementById('topbarTitle').textContent = page.title;
+    }
+
+    // ---- Page switching ----
+    function switchPage(pageKey) {
+      if (pageKey === currentPage) return;
+      currentPage = pageKey;
+      loadPage(pageKey);
+    }
+
+    function updateActiveNav(pageKey) {
+      document.querySelectorAll('.nav-btn').forEach(btn => {
+        const isActive = btn.dataset.page === pageKey;
+        btn.classList.toggle('active', isActive);
+        btn.setAttribute('aria-current', isActive ? 'page' : 'false');
+      });
+    }
+
+    // ---- Keyboard shortcuts ----
+    document.addEventListener('keydown', e => {
+      if (e.key === 'Escape') closeSidebar();
+      if (e.ctrlKey || e.metaKey) return;
+      if (e.key === '1') switchPage('overview');
+      if (e.key === '2') switchPage('guide');
+    });
+
+    // ---- Load default page on DOM ready ----
+    function init() {
+      loadPage('overview');
+    }
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', init);
+    } else {
+      init();
+    }
+  </script>
+</body>
+</html>

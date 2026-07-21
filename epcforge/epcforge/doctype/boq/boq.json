@@ -1,0 +1,311 @@
+{
+ "actions": [],
+ "allow_rename": 1,
+ "autoname": "naming_series:",
+ "creation": "2026-07-21 00:00:00.000000",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+  "overview_tab",
+  "sec_boq_details",
+  "naming_series",
+  "project",
+  "project_name",
+  "contract_type",
+  "col_break_boq",
+  "status",
+  "revision",
+  "total_amount",
+  "sec_costing",
+  "estimated_cost",
+  "actual_cost",
+  "col_break_costing",
+  "budget_variance",
+  "gross_margin_pct",
+  "items_tab",
+  "boq_items",
+  "payment_tab",
+  "sec_payment_terms",
+  "advance_pct",
+  "retention_pct",
+  "col_break_payment",
+  "ld_pct_per_week",
+  "ld_max_cap_pct",
+  "sec_payment_schedule",
+  "boq_payment_schedule",
+  "amended_from"
+ ],
+ "fields": [
+  {
+   "fieldname": "overview_tab",
+   "fieldtype": "Tab Break",
+   "label": "Overview"
+  },
+  {
+   "fieldname": "sec_boq_details",
+   "fieldtype": "Section Break",
+   "label": "Project Details"
+  },
+  {
+   "fieldname": "naming_series",
+   "fieldtype": "Select",
+   "label": "Naming Series",
+   "options": "BOQ-.YYYY.-.#####",
+   "reqd": 1
+  },
+  {
+   "fieldname": "project",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "in_standard_filter": 1,
+   "label": "Project",
+   "options": "Project",
+   "reqd": 1
+  },
+  {
+   "fetch_from": "project.project_name",
+   "fieldname": "project_name",
+   "fieldtype": "Data",
+   "label": "Project Name",
+   "read_only": 1
+  },
+  {
+   "default": "Lump Sum",
+   "fieldname": "contract_type",
+   "fieldtype": "Select",
+   "label": "Contract Type",
+   "options": "Lump Sum\nUnit Rate\nCost Plus Fee\nReimbursable"
+  },
+  {
+   "fieldname": "col_break_boq",
+   "fieldtype": "Column Break"
+  },
+  {
+   "default": "Draft",
+   "fieldname": "status",
+   "fieldtype": "Select",
+   "in_list_view": 1,
+   "in_standard_filter": 1,
+   "label": "Status",
+   "options": "Draft\nSubmitted\nApproved\nCancelled",
+   "read_only": 1
+  },
+  {
+   "default": "0",
+   "fieldname": "revision",
+   "fieldtype": "Int",
+   "label": "Revision",
+   "read_only": 1
+  },
+  {
+   "default": "0",
+   "fieldname": "total_amount",
+   "fieldtype": "Currency",
+   "in_list_view": 1,
+   "label": "Total Amount",
+   "read_only": 1
+  },
+  {
+   "fieldname": "sec_costing",
+   "fieldtype": "Section Break",
+   "label": "Costing Summary"
+  },
+  {
+   "default": "0",
+   "fieldname": "estimated_cost",
+   "fieldtype": "Currency",
+   "label": "Estimated Cost",
+   "read_only": 1
+  },
+  {
+   "default": "0",
+   "fieldname": "actual_cost",
+   "fieldtype": "Currency",
+   "label": "Actual Cost",
+   "read_only": 1
+  },
+  {
+   "fieldname": "col_break_costing",
+   "fieldtype": "Column Break"
+  },
+  {
+   "default": "0",
+   "fieldname": "budget_variance",
+   "fieldtype": "Currency",
+   "label": "Budget Variance",
+   "read_only": 1
+  },
+  {
+   "default": "0",
+   "fieldname": "gross_margin_pct",
+   "fieldtype": "Percent",
+   "label": "Gross Margin %",
+   "read_only": 1
+  },
+  {
+   "fieldname": "items_tab",
+   "fieldtype": "Tab Break",
+   "label": "BOQ Items"
+  },
+  {
+   "fieldname": "boq_items",
+   "fieldtype": "Table",
+   "label": "BOQ Items",
+   "options": "BOQ Item",
+   "reqd": 1
+  },
+  {
+   "fieldname": "payment_tab",
+   "fieldtype": "Tab Break",
+   "label": "Payment Schedule"
+  },
+  {
+   "fieldname": "sec_payment_terms",
+   "fieldtype": "Section Break",
+   "label": "Payment Terms"
+  },
+  {
+   "default": "0",
+   "fieldname": "advance_pct",
+   "fieldtype": "Percent",
+   "label": "Advance %"
+  },
+  {
+   "default": "0",
+   "fieldname": "retention_pct",
+   "fieldtype": "Percent",
+   "label": "Retention %"
+  },
+  {
+   "fieldname": "col_break_payment",
+   "fieldtype": "Column Break"
+  },
+  {
+   "default": "0",
+   "fieldname": "ld_pct_per_week",
+   "fieldtype": "Percent",
+   "label": "LD % Per Week"
+  },
+  {
+   "default": "0",
+   "fieldname": "ld_max_cap_pct",
+   "fieldtype": "Percent",
+   "label": "LD Max Cap %"
+  },
+  {
+   "fieldname": "sec_payment_schedule",
+   "fieldtype": "Section Break",
+   "label": "Milestones"
+  },
+  {
+   "fieldname": "boq_payment_schedule",
+   "fieldtype": "Table",
+   "label": "Payment Milestones",
+   "options": "BOQ Payment Schedule"
+  },
+  {
+   "fieldname": "amended_from",
+   "fieldtype": "Link",
+   "label": "Amended From",
+   "no_copy": 1,
+   "options": "BOQ",
+   "print_hide": 1,
+   "read_only": 1,
+   "search_index": 1
+  }
+ ],
+ "grid_page_length": 50,
+ "index_web_pages_for_search": 1,
+ "is_submittable": 1,
+ "links": [
+  {
+   "group": "Sales",
+   "link_doctype": "Quotation",
+   "link_fieldname": "custom_boq"
+  },
+  {
+   "group": "Sales",
+   "link_doctype": "Sales Order",
+   "link_fieldname": "custom_boq"
+  },
+  {
+   "group": "Budget",
+   "link_doctype": "Project Budget",
+   "link_fieldname": "boq"
+  }
+ ],
+ "modified": "2026-07-21 00:00:00.000000",
+ "modified_by": "Administrator",
+ "module": "EPCForge",
+ "name": "BOQ",
+ "naming_rule": "By \"Naming Series\" field",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "amend": 1,
+   "cancel": 1,
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "System Manager",
+   "share": 1,
+   "submit": 1,
+   "write": 1
+  },
+  {
+   "amend": 1,
+   "cancel": 1,
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "Project Manager",
+   "share": 1,
+   "submit": 1,
+   "write": 1
+  },
+  {
+   "amend": 1,
+   "cancel": 1,
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "Engineer",
+   "share": 1,
+   "write": 1
+  }
+ ],
+ "row_format": "Dynamic",
+ "sort_field": "creation",
+ "sort_order": "DESC",
+ "states": [
+  {
+   "color": "Red",
+   "title": "Draft"
+  },
+  {
+   "color": "Blue",
+   "title": "Submitted"
+  },
+  {
+   "color": "Green",
+   "title": "Approved"
+  },
+  {
+   "color": "Gray",
+   "title": "Cancelled"
+  }
+ ],
+ "track_changes": 1
+}

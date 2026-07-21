@@ -1,0 +1,47 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 630" width="1200" height="630">
+  <defs>
+    <linearGradient id="bgGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#0f172a;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#1e293b;stop-opacity:1" />
+    </linearGradient>
+    <linearGradient id="accentGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#0d9488;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#2563eb;stop-opacity:1" />
+    </linearGradient>
+  </defs>
+
+  <!-- Background -->
+  <rect width="1200" height="630" fill="url(#bgGrad)" />
+  <rect x="0" y="0" width="1200" height="8" fill="url(#accentGrad)" />
+
+  <!-- Accent Circle -->
+  <circle cx="1050" cy="150" r="300" fill="#0d9488" opacity="0.08" />
+
+  <!-- Badge -->
+  <rect x="100" y="120" width="220" height="36" rx="18" fill="#0d9488" opacity="0.2" />
+  <text x="210" y="143" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="14" font-weight="600" fill="#2dd4bf" text-anchor="middle">FRAPPE / ERPNEXT APP</text>
+
+  <!-- Title -->
+  <text x="100" y="240" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="64" font-weight="800" fill="#ffffff">EPC<tspan fill="#2dd4bf">Forge</tspan></text>
+
+  <!-- Subtitle -->
+  <text x="100" y="310" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="28" font-weight="500" fill="#94a3b8">Engineering, Procurement &amp; Construction Management</text>
+
+  <!-- Feature Tags -->
+  <g transform="translate(100, 390)">
+    <rect x="0" y="0" width="160" height="42" rx="8" fill="#334155" />
+    <text x="80" y="26" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="15" font-weight="600" fill="#f8fafc" text-anchor="middle">🎯 BOQ Engine</text>
+
+    <rect x="180" y="0" width="180" height="42" rx="8" fill="#334155" />
+    <text x="270" y="26" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="15" font-weight="600" fill="#f8fafc" text-anchor="middle">💾 Project Budget</text>
+
+    <rect x="380" y="0" width="180" height="42" rx="8" fill="#334155" />
+    <text x="470" y="26" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="15" font-weight="600" fill="#f8fafc" text-anchor="middle">🔌 Tender Control</text>
+
+    <rect x="580" y="0" width="200" height="42" rx="8" fill="#334155" />
+    <text x="680" y="26" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="15" font-weight="600" fill="#f8fafc" text-anchor="middle">⚡ Document Register</text>
+  </g>
+
+  <!-- Footer -->
+  <text x="100" y="540" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="16" font-weight="500" fill="#64748b">Developed by Invento Software Limited · github.com/invento-dev/epcforge</text>
+</svg>

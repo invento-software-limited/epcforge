@@ -1,0 +1,16 @@
+{
+  "name": "EPCForge",
+  "short_name": "EPCForge Docs",
+  "description": "Documentation for the EPCForge Frappe app — EPC Operations, BOQ & Budget Management.",
+  "start_url": "/epcforge/",
+  "display": "standalone",
+  "background_color": "#f8f9fa",
+  "theme_color": "#0d9488",
+  "icons": [
+    {
+      "src": "assets/logo.svg",
+      "sizes": "192x192",
+      "type": "image/svg+xml"
+    }
+  ]
+}

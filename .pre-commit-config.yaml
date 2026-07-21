@@ -63,7 +63,16 @@ repos:
                 epcforge/public/js/lib/.*
             )$
 
+  - repo: local
+    hooks:
+      - id: semgrep
+        name: semgrep
+        entry: bash -c 'export PROTOCOL_BUFFERS_PYTHON_IMPLEMENTATION=python && semgrep --config=https://github.com/frappe/semgrep-rules --config r/python.lang.correctness "$@"' --
+        language: system
+        types: [python]
+
 ci:
+
     autoupdate_schedule: weekly
     skip: []
     submodules: false

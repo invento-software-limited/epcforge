@@ -1,0 +1,118 @@
+{
+ "actions": [],
+ "allow_import": 1,
+ "allow_rename": 1,
+ "autoname": "field:boq_group_name",
+ "creation": "2026-07-21 00:00:00.000000",
+ "default_view": "Tree",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+  "boq_group_name",
+  "parent_boq_group",
+  "is_group",
+  "lft",
+  "rgt",
+  "old_parent"
+ ],
+ "fields": [
+  {
+   "fieldname": "boq_group_name",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "BOQ Group Name",
+   "reqd": 1,
+   "unique": 1
+  },
+  {
+   "bold": 1,
+   "fieldname": "parent_boq_group",
+   "fieldtype": "Link",
+   "ignore_user_permissions": 1,
+   "in_list_view": 1,
+   "label": "Parent BOQ Group",
+   "options": "BOQ Group"
+  },
+  {
+   "bold": 1,
+   "default": "0",
+   "description": "Only leaf nodes are allowed in BOQ Items",
+   "fieldname": "is_group",
+   "fieldtype": "Check",
+   "in_list_view": 1,
+   "label": "Is Group"
+  },
+  {
+   "fieldname": "lft",
+   "fieldtype": "Int",
+   "hidden": 1,
+   "label": "Left",
+   "no_copy": 1,
+   "print_hide": 1,
+   "search_index": 1
+  },
+  {
+   "fieldname": "rgt",
+   "fieldtype": "Int",
+   "hidden": 1,
+   "label": "Right",
+   "no_copy": 1,
+   "print_hide": 1,
+   "search_index": 1
+  },
+  {
+   "fieldname": "old_parent",
+   "fieldtype": "Link",
+   "hidden": 1,
+   "ignore_user_permissions": 1,
+   "label": "Old Parent",
+   "no_copy": 1,
+   "options": "BOQ Group",
+   "print_hide": 1,
+   "report_hide": 1
+  }
+ ],
+ "icon": "fa fa-sitemap",
+ "is_tree": 1,
+ "links": [],
+ "modified": "2026-07-21 00:00:00.000000",
+ "modified_by": "Administrator",
+ "module": "EPCForge",
+ "name": "BOQ Group",
+ "naming_rule": "By fieldname",
+ "nsm_parent_field": "parent_boq_group",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "System Manager",
+   "share": 1,
+   "write": 1
+  },
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "Project Manager",
+   "share": 1,
+   "write": 1
+  }
+ ],
+ "search_fields": "parent_boq_group",
+ "show_name_in_global_search": 1,
+ "sort_field": "lft",
+ "sort_order": "ASC",
+ "states": [],
+ "title_field": "boq_group_name",
+ "track_changes": 1
+}

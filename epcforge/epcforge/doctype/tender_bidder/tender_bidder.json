@@ -1,0 +1,84 @@
+{
+ "actions": [],
+ "allow_rename": 1,
+ "creation": "2026-07-21 11:04:43.931337",
+ "doctype": "DocType",
+ "editable_grid": 1,
+ "engine": "InnoDB",
+ "field_order": [
+  "supplier",
+  "supplier_name",
+  "contact_email",
+  "col_break_1",
+  "bid_status",
+  "bid_amount",
+  "bid_submission_date",
+  "remarks"
+ ],
+ "fields": [
+  {
+   "fieldname": "supplier",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "label": "Supplier/Bidder",
+   "options": "Supplier",
+   "reqd": 1
+  },
+  {
+   "fetch_from": "supplier.supplier_name",
+   "fieldname": "supplier_name",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "Supplier Name"
+  },
+  {
+   "fetch_from": "supplier.email_id",
+   "fieldname": "contact_email",
+   "fieldtype": "Data",
+   "label": "Contact Email"
+  },
+  {
+   "fieldname": "col_break_1",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "bid_status",
+   "fieldtype": "Select",
+   "in_list_view": 1,
+   "label": "Bid Status",
+   "options": "Invited\nDocument Downloaded\nQuotation Submitted\nEvaluated\nAwarded\nRejected"
+  },
+  {
+   "fieldname": "bid_amount",
+   "fieldtype": "Currency",
+   "in_list_view": 1,
+   "label": "Bid Amount"
+  },
+  {
+   "fieldname": "bid_submission_date",
+   "fieldtype": "Datetime",
+   "label": "Submission Date"
+  },
+  {
+   "fieldname": "remarks",
+   "fieldtype": "Small Text",
+   "label": "Remarks"
+  }
+ ],
+ "grid_page_length": 50,
+ "index_web_pages_for_search": 1,
+ "istable": 1,
+ "links": [],
+ "modified": "2026-07-21 11:04:43.931337",
+ "modified_by": "Administrator",
+ "module": "EPCForge",
+ "name": "Tender Bidder",
+ "owner": "Administrator",
+ "permissions": [],
+ "row_format": "Dynamic",
+ "rows_threshold_for_grid_search": 20,
+ "sort_field": "creation",
+ "sort_order": "DESC",
+ "states": [],
+ "track_changes": 1
+}

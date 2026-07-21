@@ -1,0 +1,66 @@
+{
+ "cards": [
+  {
+   "card": "Active Projects"
+  },
+  {
+   "card": "Open Tasks"
+  },
+  {
+   "card": "Total BOQs"
+  },
+  {
+   "card": "Total BOQ Value"
+  },
+  {
+   "card": "Total Tenders"
+  },
+  {
+   "card": "Tenders Under Evaluation"
+  },
+  {
+   "card": "Pending Document Reviews"
+  },
+  {
+   "card": "Active Project Budgets"
+  }
+ ],
+ "charts": [
+  {
+   "chart": "Projects by Status",
+   "width": "Half"
+  },
+  {
+   "chart": "Tasks by Status",
+   "width": "Half"
+  },
+  {
+   "chart": "BOQ by Status",
+   "width": "Half"
+  },
+  {
+   "chart": "Tender by Status",
+   "width": "Half"
+  },
+  {
+   "chart": "Document Register by Type",
+   "width": "Half"
+  },
+  {
+   "chart": "Budget by Discipline",
+   "width": "Half"
+  }
+ ],
+ "creation": "2026-07-21 14:27:04.511053",
+ "dashboard_name": "EPCForge",
+ "docstatus": 0,
+ "doctype": "Dashboard",
+ "idx": 0,
+ "is_default": 1,
+ "is_standard": 1,
+ "modified": "2026-07-21 16:00:00.000000",
+ "modified_by": "Administrator",
+ "module": "EPCForge",
+ "name": "EPCForge",
+ "owner": "Administrator"
+}

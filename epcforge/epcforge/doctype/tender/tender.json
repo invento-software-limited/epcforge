@@ -1,0 +1,303 @@
+{
+ "actions": [],
+ "allow_rename": 1,
+ "autoname": "naming_series:",
+ "creation": "2026-07-21 11:05:45.261331",
+ "doctype": "DocType",
+ "document_type": "Document",
+ "editable_grid": 1,
+ "engine": "InnoDB",
+ "field_order": [
+  "tender_details_section",
+  "naming_series",
+  "tender_title",
+  "project",
+  "tender_type",
+  "procurement_method",
+  "status",
+  "col_break_1",
+  "publish_date",
+  "submission_deadline",
+  "bid_open_date",
+  "estimated_value",
+  "bid_bond_amount",
+  "scope_section",
+  "scope_of_work",
+  "eligibility_criteria",
+  "col_break_2",
+  "tender_documents",
+  "bidder_section",
+  "invited_bidders",
+  "col_break_3",
+  "bidder_count",
+  "quotes_received",
+  "evaluation_section",
+  "lowest_bidder",
+  "lowest_bid_amount",
+  "awarded_to",
+  "award_amount",
+  "award_date",
+  "col_break_4",
+  "evaluation_notes",
+  "amended_from"
+ ],
+ "fields": [
+  {
+   "fieldname": "tender_details_section",
+   "fieldtype": "Section Break",
+   "label": "Tender Details"
+  },
+  {
+   "default": "TND-.YYYY.-.#####",
+   "fieldname": "naming_series",
+   "fieldtype": "Select",
+   "label": "Series",
+   "options": "TND-.YYYY.-.#####",
+   "reqd": 1
+  },
+  {
+   "fieldname": "tender_title",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "Tender Title",
+   "reqd": 1
+  },
+  {
+   "fieldname": "project",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "in_standard_filter": 1,
+   "label": "Project",
+   "options": "Project"
+  },
+  {
+   "fieldname": "tender_type",
+   "fieldtype": "Select",
+   "in_list_view": 1,
+   "label": "Tender Type",
+   "options": "\nOpen Tender\nLimited Tender\nSingle Tender\nNegotiated\nRequest for Proposal (RFP)\nRequest for Quotation (RFQ)"
+  },
+  {
+   "fieldname": "procurement_method",
+   "fieldtype": "Select",
+   "label": "Procurement Method",
+   "options": "\nNational\nInternational\nDirect Contracting\nFramework Agreement"
+  },
+  {
+   "default": "Draft",
+   "fieldname": "status",
+   "fieldtype": "Select",
+   "in_list_view": 1,
+   "in_standard_filter": 1,
+   "label": "Status",
+   "options": "Draft\nPublished\nUnder Evaluation\nAwarded\nCancelled"
+  },
+  {
+   "fieldname": "col_break_1",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "publish_date",
+   "fieldtype": "Date",
+   "label": "Publish Date"
+  },
+  {
+   "fieldname": "submission_deadline",
+   "fieldtype": "Datetime",
+   "label": "Submission Deadline",
+   "reqd": 1
+  },
+  {
+   "fieldname": "bid_open_date",
+   "fieldtype": "Datetime",
+   "label": "Bid Open Date"
+  },
+  {
+   "fieldname": "estimated_value",
+   "fieldtype": "Currency",
+   "label": "Estimated Value"
+  },
+  {
+   "fieldname": "bid_bond_amount",
+   "fieldtype": "Currency",
+   "label": "Bid Bond / EMD Amount"
+  },
+  {
+   "fieldname": "scope_section",
+   "fieldtype": "Section Break",
+   "label": "Scope & Requirements"
+  },
+  {
+   "fieldname": "scope_of_work",
+   "fieldtype": "Text Editor",
+   "label": "Scope of Work"
+  },
+  {
+   "fieldname": "eligibility_criteria",
+   "fieldtype": "Text Editor",
+   "label": "Eligibility Criteria"
+  },
+  {
+   "fieldname": "col_break_2",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "tender_documents",
+   "fieldtype": "Table",
+   "label": "Tender Documents",
+   "options": "Tender Document"
+  },
+  {
+   "fieldname": "bidder_section",
+   "fieldtype": "Section Break",
+   "label": "Bidders"
+  },
+  {
+   "fieldname": "invited_bidders",
+   "fieldtype": "Table",
+   "label": "Invited Bidders",
+   "options": "Tender Bidder"
+  },
+  {
+   "fieldname": "col_break_3",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "bidder_count",
+   "fieldtype": "Int",
+   "label": "Total Bidders",
+   "read_only": 1
+  },
+  {
+   "fieldname": "quotes_received",
+   "fieldtype": "Int",
+   "label": "Quotes Received",
+   "read_only": 1
+  },
+  {
+   "fieldname": "evaluation_section",
+   "fieldtype": "Section Break",
+   "label": "Evaluation Summary"
+  },
+  {
+   "fieldname": "lowest_bidder",
+   "fieldtype": "Link",
+   "label": "Lowest Bidder",
+   "options": "Supplier",
+   "read_only": 1
+  },
+  {
+   "fieldname": "lowest_bid_amount",
+   "fieldtype": "Currency",
+   "label": "Lowest Bid Amount",
+   "read_only": 1
+  },
+  {
+   "fieldname": "awarded_to",
+   "fieldtype": "Link",
+   "label": "Awarded To",
+   "options": "Supplier"
+  },
+  {
+   "fieldname": "award_amount",
+   "fieldtype": "Currency",
+   "label": "Award Amount"
+  },
+  {
+   "fieldname": "award_date",
+   "fieldtype": "Date",
+   "label": "Award Date"
+  },
+  {
+   "fieldname": "col_break_4",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "evaluation_notes",
+   "fieldtype": "Text Editor",
+   "label": "Evaluation Notes"
+  },
+  {
+   "fieldname": "amended_from",
+   "fieldtype": "Link",
+   "label": "Amended From",
+   "no_copy": 1,
+   "options": "Tender",
+   "read_only": 1,
+   "search_index": 1
+  }
+ ],
+ "grid_page_length": 50,
+ "index_web_pages_for_search": 1,
+ "is_submittable": 1,
+ "links": [],
+ "modified": "2026-07-21 11:05:45.261331",
+ "modified_by": "Administrator",
+ "module": "EPCForge",
+ "name": "Tender",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "amend": 1,
+   "cancel": 1,
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "System Manager",
+   "share": 1,
+   "submit": 1,
+   "write": 1
+  },
+  {
+   "amend": 1,
+   "cancel": 1,
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "Project Manager",
+   "share": 1,
+   "submit": 1,
+   "write": 1
+  },
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "Engineer",
+   "share": 1,
+   "write": 1
+  },
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "Supplier",
+   "share": 1,
+   "write": 1
+  }
+ ],
+ "row_format": "Dynamic",
+ "rows_threshold_for_grid_search": 20,
+ "search_fields": "tender_title, project",
+ "sort_field": "creation",
+ "sort_order": "DESC",
+ "states": [],
+ "title_field": "tender_title",
+ "track_changes": 1
+}

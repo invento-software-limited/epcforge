@@ -1,0 +1,225 @@
+
+{
+ "actions": [],
+ "allow_rename": 0,
+ "beta": 0,
+ "creation": "2026-08-04 00:00:00.000000",
+ "doctype": "DocType",
+ "document_type": "Setup",
+ "editable_grid": 1,
+ "engine": "InnoDB",
+ "field_order": [
+  "general_section",
+  "default_company",
+  "default_project",
+  "default_currency",
+  "col_break_general",
+  "default_role",
+  "default_discipline",
+  "default_contract_type",
+  "number_series_section",
+  "boq_naming_series",
+  "tender_naming_series",
+  "document_naming_series",
+  "col_break_series",
+  "budget_naming_series",
+  "tender_defaults_section",
+  "default_procurement_method",
+  "default_bid_bond_pct",
+  "col_break_tender",
+  "default_tender_type",
+  "retention_default_pct",
+  "email_section",
+  "notification_sender_email",
+  "notification_sender_name",
+  "col_break_email",
+  "enable_email_notifications"
+ ],
+ "fields": [
+  {
+   "fieldname": "general_section",
+   "fieldtype": "Section Break",
+   "label": "General"
+  },
+  {
+   "fieldname": "default_company",
+   "fieldtype": "Link",
+   "label": "Default Company",
+   "options": "Company"
+  },
+  {
+   "fieldname": "default_project",
+   "fieldtype": "Link",
+   "label": "Default Project",
+   "options": "Project"
+  },
+  {
+   "fieldname": "default_currency",
+   "fieldtype": "Link",
+   "default": "USD",
+   "label": "Default Currency",
+   "options": "Currency"
+  },
+  {
+   "fieldname": "col_break_general",
+   "fieldtype": "Column Break"
+  },
+  {
+   "description": "Default role applied to new Project Budget records",
+   "fieldname": "default_role",
+   "fieldtype": "Select",
+   "label": "Default EPC Role",
+   "options": "\nPrime Contractor\nSubcontractor\nJV Partner\nConsultant"
+  },
+  {
+   "description": "Default discipline applied to new Project Budget records",
+   "fieldname": "default_discipline",
+   "fieldtype": "Select",
+   "label": "Default Discipline",
+   "options": "\nCivil & Structural\nMechanical\nElectrical\nInstrumentation\nPiping\nHVAC\nTelecom\nGeneral Works"
+  },
+  {
+   "fieldname": "default_contract_type",
+   "fieldtype": "Select",
+   "label": "Default Contract Type",
+   "options": "\nLump Sum\nUnit Rate\nCost Plus Fee\nReimbursable"
+  },
+  {
+   "fieldname": "number_series_section",
+   "fieldtype": "Section Break",
+   "label": "Number Series"
+  },
+  {
+   "description": "Override default naming series for BOQ",
+   "fieldname": "boq_naming_series",
+   "fieldtype": "Data",
+   "label": "BOQ Naming Series"
+  },
+  {
+   "description": "Override default naming series for Tender",
+   "fieldname": "tender_naming_series",
+   "fieldtype": "Data",
+   "label": "Tender Naming Series"
+  },
+  {
+   "description": "Override default naming series for Document Register",
+   "fieldname": "document_naming_series",
+   "fieldtype": "Data",
+   "label": "Document Naming Series"
+  },
+  {
+   "fieldname": "col_break_series",
+   "fieldtype": "Column Break"
+  },
+  {
+   "description": "Override default naming for Project Budget",
+   "fieldname": "budget_naming_series",
+   "fieldtype": "Data",
+   "label": "Budget Naming Series"
+  },
+  {
+   "fieldname": "tender_defaults_section",
+   "fieldtype": "Section Break",
+   "label": "Tender Defaults"
+  },
+  {
+   "fieldname": "default_procurement_method",
+   "fieldtype": "Select",
+   "label": "Default Procurement Method",
+   "options": "\nNational\nInternational\nDirect Contracting\nFramework Agreement"
+  },
+  {
+   "fieldname": "default_bid_bond_pct",
+   "fieldtype": "Percent",
+   "label": "Default Bid Bond % of Estimated Value"
+  },
+  {
+   "fieldname": "col_break_tender",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "default_tender_type",
+   "fieldtype": "Select",
+   "label": "Default Tender Type",
+   "options": "\nOpen Tender\nLimited Tender\nSingle Tender\nNegotiated\nRequest for Proposal (RFP)\nRequest for Quotation (RFQ)"
+  },
+  {
+   "fieldname": "retention_default_pct",
+   "fieldtype": "Percent",
+   "label": "Default Retention % (BOQ)"
+  },
+  {
+   "fieldname": "email_section",
+   "fieldtype": "Section Break",
+   "label": "Email & Notifications"
+  },
+  {
+   "fieldname": "notification_sender_email",
+   "fieldtype": "Data",
+   "label": "Notification Sender Email",
+   "options": "Email"
+  },
+  {
+   "fieldname": "notification_sender_name",
+   "fieldtype": "Data",
+   "label": "Notification Sender Name"
+  },
+  {
+   "fieldname": "col_break_email",
+   "fieldtype": "Column Break"
+  },
+  {
+   "default": "1",
+   "fieldname": "enable_email_notifications",
+   "fieldtype": "Check",
+   "label": "Enable Email Notifications"
+  }
+ ],
+ "grid_page_length": 50,
+ "index_web_pages_for_search": 1,
+ "issingle": 1,
+ "links": [],
+ "modified": "2026-08-04 00:00:00.000000",
+ "modified_by": "Administrator",
+ "module": "EPCForge",
+ "name": "EPCForge Settings",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "System Manager",
+   "share": 1,
+   "write": 1
+  },
+  {
+   "create": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "Project Manager",
+   "share": 1,
+   "write": 1
+  },
+  {
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "Engineer",
+   "share": 1
+  }
+ ],
+ "row_format": "Dynamic",
+ "sort_field": "creation",
+ "sort_order": "DESC",
+ "states": []
+}

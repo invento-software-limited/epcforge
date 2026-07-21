@@ -1,0 +1,23 @@
+{
+ "app": "epcforge",
+ "bg_color": "gray",
+ "creation": "2026-01-03 12:00:00",
+ "docstatus": 0,
+ "doctype": "Desktop Icon",
+ "hidden": 0,
+ "icon_image": "/private/files/favicon.svg",
+ "icon_type": "Link",
+ "idx": 0,
+ "label": "EPCForge",
+ "link_to": "EPCForge",
+ "link_type": "Workspace Sidebar",
+ "logo_url": "/assets/epcforge/img/favicon.svg",
+ "modified": "2026-07-21 14:29:37.215645",
+ "modified_by": "Administrator",
+ "name": "EPCForge",
+ "owner": "Administrator",
+ "restrict_removal": 1,
+ "roles": [],
+ "sidebar": "EPCForge",
+ "standard": 1
+}

@@ -1,0 +1,16 @@
+[
+ {
+  "docstatus": 0,
+  "doctype": "Session Default Settings",
+  "modified": "2026-06-30 10:00:00.000000",
+  "name": "Session Default Settings",
+  "session_defaults": [
+   {
+    "ref_doctype": "Company"
+   },
+   {
+    "ref_doctype": "Project"
+   }
+  ]
+ }
+]

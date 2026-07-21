@@ -4,12 +4,33 @@ authors = [
     { name = "Invento Software Limited", email = "hello@invento.com.bd"}
 ]
 description = "EPC Operations, BOQ & Budget Management"
-requires-python = ">=3.14"
 readme = "README.md"
 dynamic = ["version"]
 dependencies = [
     # "frappe~=16.0.0" # Installed and managed by bench.
 ]
+requires-python = ">=3.10"
+keywords = ["epc", "engineering", "procurement", "construction", "boq", "budget", "tender", "erpnext", "frappe"]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Framework :: Frappe",
+    "Framework :: ERPNext",
+    "Intended Audience :: Manufacturing",
+    "Intended Audience :: Financial and Insurance Industry",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: JavaScript",
+    "Topic :: Office/Business :: Financial",
+    "Topic :: Office/Business :: Scheduling",
+]
+
+[project.urls]
+Homepage = "https://invento.com.bd"
+Repository = "https://github.com/invento-dev/epcforge"
+Documentation = "https://github.com/invento-dev/epcforge#readme"
+"Bug Tracker" = "https://github.com/invento-dev/epcforge/issues"
+"Frappe Marketplace" = "https://frappecloud.com/marketplace/apps/epcforge"
 
 [build-system]
 requires = ["flit_core >=3.4,<4"]
@@ -25,7 +46,7 @@ packages = []
 
 [tool.ruff]
 line-length = 110
-target-version = "py314"
+target-version = "py311"
 
 [tool.ruff.lint]
 select = [
@@ -63,3 +84,6 @@ typing-modules = ["frappe.types.DF"]
 quote-style = "double"
 indent-style = "tab"
 docstring-code-format = true
+
+[tool.bench.frappe-dependencies]
+frappe = ">=16.0.0,<17.0.0"

@@ -1,0 +1,56 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 400" width="800" height="400">
+  <defs>
+    <linearGradient id="splashBg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#f1f5f9;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#e2e8f0;stop-opacity:1" />
+    </linearGradient>
+    <linearGradient id="splashBrand" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#1a56db;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#0d9488;stop-opacity:1" />
+    </linearGradient>
+  </defs>
+
+  <!-- Background -->
+  <rect width="800" height="400" fill="url(#splashBg)" rx="12"/>
+
+  <!-- Subtle pattern lines -->
+  <line x1="0" y1="80" x2="800" y2="80" stroke="#cbd5e1" stroke-width="0.5" opacity="0.4"/>
+  <line x1="0" y1="320" x2="800" y2="320" stroke="#cbd5e1" stroke-width="0.5" opacity="0.4"/>
+  <line x1="150" y1="0" x2="150" y2="400" stroke="#cbd5e1" stroke-width="0.5" opacity="0.4"/>
+  <line x1="650" y1="0" x2="650" y2="400" stroke="#cbd5e1" stroke-width="0.5" opacity="0.4"/>
+
+  <!-- Large hexagon background -->
+  <polygon points="400,60 500,115 500,225 400,280 300,225 300,115" 
+           fill="url(#splashBrand)" opacity="0.06"/>
+
+  <!-- Center icon -->
+  <g transform="translate(400,170)">
+    <!-- Gear -->
+    <path d="M0,-65 L8,-65 L10,-52 L12,-50 L24,-56 L28,-48 L18,-40 L20,-37 L32,-33 L33,-25 L22,-24
+             L20,-21 L24,-11 L17,-7 L10,-14 L7,-12 L4,-24 L-4,-24 L-7,-12 L-10,-14 L-17,-7
+             L-24,-11 L-20,-21 L-22,-24 L-33,-25 L-32,-33 L-20,-37 L-18,-40 L-28,-48 L-24,-56
+             L-12,-50 L-10,-52 L-8,-65 Z"
+          fill="url(#splashBrand)" opacity="0.15"/>
+    <circle cx="0" cy="0" r="32" fill="url(#splashBrand)" opacity="0.10"/>
+    <circle cx="0" cy="0" r="20" fill="url(#splashBrand)" opacity="0.18"/>
+    <circle cx="0" cy="0" r="9" fill="url(#splashBrand)" opacity="0.30"/>
+    <polygon points="0,-5 4.3,-2.5 4.3,2.5 0,5 -4.3,2.5 -4.3,-2.5" fill="#1a56db" opacity="0.5"/>
+  </g>
+
+  <!-- Title -->
+  <text x="400" y="270" font-family="'Segoe UI', 'Helvetica Neue', Arial, sans-serif"
+        font-size="48" font-weight="700" fill="#1e293b" text-anchor="middle" letter-spacing="1">
+    EPC<tspan fill="url(#splashBrand)" font-weight="800">Forge</tspan>
+  </text>
+
+  <!-- Tagline -->
+  <text x="400" y="305" font-family="'Segoe UI', 'Helvetica Neue', Arial, sans-serif"
+        font-size="16" fill="#64748b" text-anchor="middle" font-weight="400" letter-spacing="4">
+    ENGINEERING · PROCUREMENT · CONSTRUCTION
+  </text>
+
+  <!-- Loading bar background -->
+  <rect x="300" y="335" width="200" height="4" rx="2" fill="#e2e8f0"/>
+  <!-- Loading bar fill -->
+  <rect x="300" y="335" width="120" height="4" rx="2" fill="url(#splashBrand)" opacity="0.6"/>
+</svg>

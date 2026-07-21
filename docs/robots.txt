@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://invento-dev.github.io/epcforge/sitemap.xml
