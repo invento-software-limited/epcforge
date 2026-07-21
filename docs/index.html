@@ -1,12 +1,15 @@
 <!DOCTYPE html>
 <html lang="en" prefix="og: https://ogp.me/ns#">
+
 <head>
   <!-- ===== BASICS ===== -->
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>EPCForge — Product Overview &amp; User Guide</title>
-  <meta name="description" content="EPCForge is an Engineering, Procurement &amp; Construction management app for Frappe/ERPNext featuring BOQ, budgeting, tendering, and document control." />
-  <meta name="keywords" content="Frappe, ERPNext, EPC, BOQ, Bill of Quantities, Construction Management, Engineering, Procurement, Project Budgeting, Tender Management" />
+  <meta name="description"
+    content="EPCForge is an Engineering, Procurement &amp; Construction management app for Frappe/ERPNext featuring BOQ, budgeting, tendering, and document control." />
+  <meta name="keywords"
+    content="Frappe, ERPNext, EPC, BOQ, Bill of Quantities, Construction Management, Engineering, Procurement, Project Budgeting, Tender Management" />
   <meta name="author" content="Invento Software Limited" />
   <meta name="robots" content="index, follow" />
   <meta name="theme-color" content="#0d9488" />
@@ -16,12 +19,15 @@
   <meta name="mobile-web-app-capable" content="yes" />
 
   <!-- ===== CANONICAL ===== -->
-  <link rel="canonical" href="https://invento-dev.github.io/epcforge/" />
+  <link rel="canonical" href="https://invento-software-limited/.github.io/epcforge/" />
 
   <!-- ===== FAVICON ===== -->
-  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='16' fill='%230d9488'/%3E%3Ctext x='50' y='68' font-size='44' font-weight='bold' text-anchor='middle' fill='%23fff' font-family='system-ui'%3EEF%3C/text%3E%3C/svg%3E" />
-  <link rel="icon" type="image/png" sizes="32x32" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAAAXNSR0IArs4c6QAAAMlJREFUWEft1rENwjAQBdD/V4wAWYARKJmAEZghEzACIzACIyQyASNEMkJEytn4LFmR7MiOEyne6sqf9O0LgPljYD4G+NnWq9b6AABKqSWlNLXWXgCAc84BwNBaSwBQSskA4DHG7J1zB4RfE0K4EhETY4wAgIhKiKgQETFjbQDAmQ9EhIiMMS4iAgBKKQsAuBHRAwARXQHgQkRnItqUUt4tJecfBQCcc4+UUggAmXNeKaU1ET0BQErpjYhHRHzMOf8TQPRaax/FGGHOmZxzG2uM/wU0P/cDlJ9Y6qCjFNUAAAAASUVORK5CYII=" />
-  <link rel="apple-touch-icon" sizes="180x180" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAALQAAAC0CAYAAAA9zQYyAAAAAXNSR0IArs4c6QAABO9JREFUeJztnU9oHEUchjebTZrYBGMSNG6Sg3oQ9KAHI5p4cBcPgn8u4k1R8CIoikcFj6J4VfQiHoR4UFBBoSc9JFFUJGhMNG0M2SRmuruH3+6SZna3md2d/S3U74FAdjP9zXy7M/NrdnYIIYQQQgghhBBCCCGEEEIIIYQQQgghhBBCCCGEEEIIIYQQQgghhBDCM9gH2AM4ADgAmFJiKgU4B7gMuAq4FhFvR8S/hSr2h1FEAuA1wJsJ0XPAAxFxFzCvLq1ujAL8FPAe4MMEaYg4iIj7UfqVRAVYB/gS8KeEyLuAB4CbUfqVRAV4K+CHgC8mCJwBHASci9KvJCrAtwP+uMTIuwB3o/QriSqEfRPgR4CvlRB4COC3UfqVRAW4G/B9gA+UEHcpa85H6VcSFeAOwPcBPqQk7hbgTJR+JQEQfBfgIyVEtgLuROlXEhXgHYB/BviIEiI3A+5F6VcSFeAtgIuAB5UE3gK4H6VfSVSAVwI+AnhMCZELAB9H6VcSFeAZgI8BHlNC4HjAj1H6lSQC+HjA44D3KombC/hJlH4lUQGeAviXgI8rIXIs4BdR+pVEBTgK8CnAe0qIdAD+EqVfSVSAnYBPAd5bQqQD8Jco/UqiArwU8GnA+0qIdAD+EqVfSVSAlwI+DfiAEiIdgL9E6VcSFeAlgE8HfqSESAfgr1H6lUQFeDHgR4EfKyGyC/B3lH4lUQFeBPgJ4MdLiOyG6P0qogI8H/BTwI+XENkF+Hsz/Uqe/ymLBcA+pYQ2DfCPNvQriQqwG/BTwCeUENk8+FvbyZVE/VboKeBTSoj8O8hfUjggKQrwRsBngE8rIfLPIP9V4YCkKMCbAJ8FPquEyK+B/63hiKQowJsBnwM+r4TIr4H/r+GIpCjAmwOfB36vhMgvgb/VcERSFOAtgD8Evl9C5Gbg71H6lUQFeDPgD8D3S4hsBvwjSr+SqABvAfwR+H4Jkc2Af0TpVxIV4K2APwPfLyGyGfCPKP1KokK8BfAn4Ps1RDYH/BClX0lUgLcC/gx8v4bI5oAfo/QriQrwVsCfge/XENkc8GOUfiVRAV6dM+XnwA9riOwE/BylX0lUgDcD/gr8UQ2RnYC/R+lXEhXgTYC/AT+qIbIT8Pco/UqiArwZ8Hfgx6UFsgHwjyj9SqICvDnwD+AnpQWyIXIpSr+SqABvAfwT+EkpkSUBf4vSryQqwFsA/gZ+UkpkScDfovQriQrw5sA/gZ+VEtkC+DtKv5KoAG8B/BP4eSmRLYC/o/QriQrwFsA/gZ+XEtkK+DuUfiVRAV4M+AXwi1IiWwF/D9KvJCrAiwG/AH5ZSmQr4O9B+pVEBXgR4FfAr0qJbA38L0q/kqgALwT8GvhdKZGtgP9F6VcSFeAFgN8AvyslsgXwvyj9SqICPA/wW+B3pURWQ+lXEhXgvYHfAX9USmQpRH8fi4g/lRJZAuhvYpR+JVEB3gP4O/CHpQWWAtE/xCj9SqICPAD4J/CHpQVKIvo8Sr+SqADvC/wL+FNpgVII0T+j9CuJCvAewL+Bf5YWWAz0f4zSrySqEP4NpQQWA/2HUfqVRAW4N/At8M9SAosB/RJYFFL8S6IC3Bv4bymlBZYA/R1Kv5KoAPcGvo+ULkv/PSn9SqICPAD4fqR0WZL+x1H6lUQFuDfwESldlqR/Okq/kqgA9wY+CqVfSVSAe2MvwP8BYgN2HxMbLmAAAAAASUVORK5CYII=" />
+  <link rel="icon" type="image/svg+xml"
+    href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='16' fill='%230d9488'/%3E%3Ctext x='50' y='68' font-size='44' font-weight='bold' text-anchor='middle' fill='%23fff' font-family='system-ui'%3EEF%3C/text%3E%3C/svg%3E" />
+  <link rel="icon" type="image/png" sizes="32x32"
+    href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAAAXNSR0IArs4c6QAAAMlJREFUWEft1rENwjAQBdD/V4wAWYARKJmAEZghEzACIzACIyQyASNEMkJEytn4LFmR7MiOEyne6sqf9O0LgPljYD4G+NnWq9b6AABKqSWlNLXWXgCAc84BwNBaSwBQSskA4DHG7J1zB4RfE0K4EhETY4wAgIhKiKgQETFjbQDAmQ9EhIiMMS4iAgBKKQsAuBHRAwARXQHgQkRnItqUUt4tJecfBQCcc4+UUggAmXNeKaU1ET0BQErpjYhHRHzMOf8TQPRaax/FGGHOmZxzG2uM/wU0P/cDlJ9Y6qCjFNUAAAAASUVORK5CYII=" />
+  <link rel="apple-touch-icon" sizes="180x180"
+    href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAALQAAAC0CAYAAAA9zQYyAAAAAXNSR0IArs4c6QAABO9JREFUeJztnU9oHEUchjebTZrYBGMSNG6Sg3oQ9KAHI5p4cBcPgn8u4k1R8CIoikcFj6J4VfQiHoR4UFBBoSc9JFFUJGhMNG0M2SRmuruH3+6SZna3md2d/S3U74FAdjP9zXy7M/NrdnYIIYQQQgghhBBCCCGEEEIIIYQQQgghhBBCCCGEEEIIIYQQQgghhBDCM9gH2AM4ADgAmFJiKgU4B7gMuAq4FhFvR8S/hSr2h1FEAuA1wJsJ0XPAAxFxFzCvLq1ujAL8FPAe4MMEaYg4iIj7UfqVRAVYB/gS8KeEyLuAB4CbUfqVRAV4K+CHgC8mCJwBHASci9KvJCrAtwP+uMTIuwB3o/QriSqEfRPgR4CvlRB4COC3UfqVRAW4G/B9gA+UEHcpa85H6VcSFeAOwPcBPqQk7hbgTJR+JQEQfBfgIyVEtgLuROlXEhXgHYB/BviIEiI3A+5F6VcSFeAtgIuAB5UE3gK4H6VfSVSAVwI+AnhMCZELAB9H6VcSFeAZgI8BHlNC4HjAj1H6lSQC+HjA44D3KombC/hJlH4lUQGeAviXgI8rIXIs4BdR+pVEBTgK8CnAe0qIdAD+EqVfSVSAnYBPAd5bQqQD8Jco/UqiArwU8GnA+0qIdAD+EqVfSVSAlwI+DfiAEiIdgL9E6VcSFeAlgE8HfqSESAfgr1H6lUQFeDHgR4EfKyGyC/B3lH4lUQFeBPgJ4MdLiOyG6P0qogI8H/BTwI+XENkF+Hsz/Uqe/ymLBcA+pYQ2DfCPNvQriQqwG/BTwCeUENk8+FvbyZVE/VboKeBTSoj8O8hfUjggKQrwRsBngE8rIfLPIP9V4YCkKMCbAJ8FPquEyK+B/63hiKQowJsBnwM+r4TIr4H/r+GIpCjAmwOfB36vhMgvgb/VcERSFOAtgD8Evl9C5Gbg71H6lUQFeDPgD8D3S4hsBvwjSr+SqABvAfwR+H4Jkc2Af0TpVxIV4K2APwPfLyGyGfCPKP1KokK8BfAn4Ps1RDYH/BClX0lUgLcC/gx8v4bI5oAfo/QriQrwVsCfge/XENkc8GOUfiVRAV6dM+XnwA9riOwE/BylX0lUgDcD/gr8UQ2RnYC/R+lXEhXgTYC/AT+qIbIT8Pco/UqiArwZ8Hfgx6UFsgHwjyj9SqICvDnwD+AnpQWyIXIpSr+SqABvAfwT+EkpkSUBf4vSryQqwFsA/gZ+UkpkScDfovQriQrw5sA/gZ+VEtkC+DtKv5KoAG8B/BP4eSmRLYC/o/QriQrwFsA/gZ+XEtkK+DuUfiVRAV4M+AXwi1IiWwF/D9KvJCrAiwG/AH5ZSmQr4O9B+pVEBXgR4FfAr0qJbA38L0q/kqgALwT8GvhdKZGtgP9F6VcSFeAFgN8AvyslsgXwvyj9SqICPA/wW+B3pURWQ+lXEhXgvYHfAX9USmQpRH8fi4g/lRJZAuhvYpR+JVEB3gP4O/CHpQWWAtE/xCj9SqICPAD4J/CHpQVKIvo8Sr+SqADvC/wL+FNpgVII0T+j9CuJCvAewL+Bf5YWWAz0f4zSrySqEP4NpQQWA/2HUfqVRAW4N/At8M9SAosB/RJYFFL8S6IC3Bv4bymlBZYA/R1Kv5KoAPcGvo+ULkv/PSn9SqICPAD4fqR0WZL+x1H6lUQFuDfwESldlqR/Okq/kqgA9wY+CqVfSVSAe2MvwP8BYgN2HxMbLmAAAAAASUVORK5CYII=" />
   <link rel="manifest" href="site.webmanifest" />
 
   <!-- ===== MARKED (Markdown parser) ===== -->
@@ -35,14 +41,16 @@
   <meta property="og:type" content="website" />
   <meta property="og:site_name" content="EPCForge" />
   <meta property="og:title" content="EPCForge — Product Overview &amp; User Guide" />
-  <meta property="og:description" content="EPCForge is an Engineering, Procurement &amp; Construction management app for Frappe/ERPNext featuring BOQ, budgeting, tendering, and document control." />
-  <meta property="og:url" content="https://invento-dev.github.io/epcforge/" />
+  <meta property="og:description"
+    content="EPCForge is an Engineering, Procurement &amp; Construction management app for Frappe/ERPNext featuring BOQ, budgeting, tendering, and document control." />
+  <meta property="og:url" content="https://invento-software-limited/.github.io/epcforge/" />
   <meta property="og:locale" content="en_US" />
   <meta property="og:locale:alternate" content="en_GB" />
-  <meta property="og:image" content="https://invento-dev.github.io/epcforge/assets/og-image.svg" />
+  <meta property="og:image" content="https://invento-software-limited/.github.io/epcforge/assets/og-image.svg" />
   <meta property="og:image:width" content="1200" />
   <meta property="og:image:height" content="630" />
-  <meta property="og:image:alt" content="EPCForge — Engineering, Procurement &amp; Construction Management for Frappe/ERPNext" />
+  <meta property="og:image:alt"
+    content="EPCForge — Engineering, Procurement &amp; Construction Management for Frappe/ERPNext" />
   <meta property="og:image:type" content="image/svg+xml" />
 
   <!-- ===== OG ARTICLE TAGS ===== -->
@@ -55,8 +63,9 @@
   <!-- ===== TWITTER CARD ===== -->
   <meta name="twitter:card" content="summary_large_image" />
   <meta name="twitter:title" content="EPCForge — Documentation" />
-  <meta name="twitter:description" content="EPCForge is an Engineering, Procurement &amp; Construction management app for Frappe/ERPNext featuring BOQ, budgeting, tendering, and document control." />
-  <meta name="twitter:image" content="https://invento-dev.github.io/epcforge/assets/og-image.svg" />
+  <meta name="twitter:description"
+    content="EPCForge is an Engineering, Procurement &amp; Construction management app for Frappe/ERPNext featuring BOQ, budgeting, tendering, and document control." />
+  <meta name="twitter:image" content="https://invento-software-limited/.github.io/epcforge/assets/og-image.svg" />
 
   <!-- ===== JSON-LD STRUCTURED DATA ===== -->
   <script type="application/ld+json">
@@ -65,13 +74,13 @@
     "@type": "WebSite",
     "name": "EPCForge",
     "alternateName": "EPCForge Docs",
-    "url": "https://invento-dev.github.io/epcforge/",
+    "url": "https://invento-software-limited/.github.io/epcforge/",
     "description": "EPC Operations, BOQ & Budget Management for Frappe and ERPNext.",
     "inLanguage": "en-US",
     "isPartOf": {
       "@type": "Organization",
       "name": "Invento Software Limited",
-      "url": "https://github.com/invento-dev"
+      "url": "https://github.com/invento-software-limited/"
     }
   }
   </script>
@@ -83,7 +92,7 @@
     "operatingSystem": "Linux, Docker",
     "applicationCategory": "BusinessApplication",
     "description": "EPC Operations, BOQ & Budget Management",
-    "url": "https://github.com/invento-dev/epcforge",
+    "url": "https://github.com/invento-software-limited//epcforge",
     "author": {
       "@type": "Organization",
       "name": "Invento Software Limited"
@@ -104,7 +113,7 @@
         "@type": "ListItem",
         "position": 1,
         "name": "Home",
-        "item": "https://invento-dev.github.io/epcforge/"
+        "item": "https://invento-software-limited/.github.io/epcforge/"
       }
     ]
   }
@@ -113,7 +122,13 @@
   <!-- ===== STYLES ===== -->
   <style>
     /* ===== RESET & BASE ===== */
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    *,
+    *::before,
+    *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
 
     :root {
       --teal-900: #0f766e;
@@ -144,8 +159,10 @@
     /* Screen-reader only */
     .sr-only {
       position: absolute;
-      width: 1px; height: 1px;
-      padding: 0; margin: -1px;
+      width: 1px;
+      height: 1px;
+      padding: 0;
+      margin: -1px;
       overflow: hidden;
       clip: rect(0, 0, 0, 0);
       white-space: nowrap;
@@ -167,9 +184,15 @@
       text-decoration: none;
       transition: top 0.15s ease;
     }
-    .skip-link:focus { top: 0; }
 
-    html { scroll-behavior: smooth; }
+    .skip-link:focus {
+      top: 0;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
     body {
       font-family: var(--font-sans);
       font-size: 16px;
@@ -189,16 +212,31 @@
       min-height: 100vh;
     }
 
-    a { color: var(--teal-700); text-decoration: none; }
-    a:hover { color: var(--teal-500); text-decoration: underline; }
+    a {
+      color: var(--teal-700);
+      text-decoration: none;
+    }
 
-    img { max-width: 100%; height: auto; display: block; }
-    code { font-family: var(--font-mono); }
+    a:hover {
+      color: var(--teal-500);
+      text-decoration: underline;
+    }
+
+    img {
+      max-width: 100%;
+      height: auto;
+      display: block;
+    }
+
+    code {
+      font-family: var(--font-mono);
+    }
 
     /* ===== SIDEBAR ===== */
     .sidebar {
       position: fixed;
-      top: 0; left: 0;
+      top: 0;
+      left: 0;
       width: var(--sidebar-width);
       height: 100vh;
       background: var(--white);
@@ -306,7 +344,12 @@
       font-weight: 600;
     }
 
-    .nav-btn .nav-icon { font-size: 18px; width: 24px; text-align: center; flex-shrink: 0; }
+    .nav-btn .nav-icon {
+      font-size: 18px;
+      width: 24px;
+      text-align: center;
+      flex-shrink: 0;
+    }
 
     .nav-btn .badge {
       margin-left: auto;
@@ -337,7 +380,11 @@
       color: var(--gray-500);
       text-decoration: none;
     }
-    .sidebar-footer a:hover { color: var(--gray-700); }
+
+    .sidebar-footer a:hover {
+      color: var(--gray-700);
+    }
+
     .sidebar-footer a:focus-visible {
       outline: 2px solid var(--teal-600);
       outline-offset: 2px;
@@ -366,7 +413,8 @@
     }
 
     .hamburger {
-      width: 40px; height: 40px;
+      width: 40px;
+      height: 40px;
       border: none;
       background: transparent;
       cursor: pointer;
@@ -379,11 +427,19 @@
       padding: 8px;
     }
 
-    .hamburger:hover { background: var(--gray-100); }
-    .hamburger:focus-visible { outline: 2px solid var(--teal-600); outline-offset: 2px; }
+    .hamburger:hover {
+      background: var(--gray-100);
+    }
+
+    .hamburger:focus-visible {
+      outline: 2px solid var(--teal-600);
+      outline-offset: 2px;
+    }
+
     .hamburger span {
       display: block;
-      width: 22px; height: 2.5px;
+      width: 22px;
+      height: 2.5px;
       background: var(--gray-700);
       border-radius: 2px;
       transition: 0.3s;
@@ -412,7 +468,8 @@
     }
 
     .content-loading .spinner {
-      width: 40px; height: 40px;
+      width: 40px;
+      height: 40px;
       border: 3px solid var(--gray-200);
       border-top-color: var(--teal-700);
       border-radius: 50%;
@@ -420,7 +477,11 @@
       margin-bottom: 16px;
     }
 
-    @keyframes spin { to { transform: rotate(360deg); } }
+    @keyframes spin {
+      to {
+        transform: rotate(360deg);
+      }
+    }
 
     .content-error {
       text-align: center;
@@ -433,7 +494,17 @@
       animation: fadeIn 0.35s ease;
     }
 
-    @keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(8px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
 
     .markdown-body h1 {
       font-size: 2.25rem;
@@ -477,16 +548,36 @@
       color: var(--gray-700);
     }
 
-    .markdown-body ul, .markdown-body ol {
+    .markdown-body ul,
+    .markdown-body ol {
       margin-bottom: 1.2rem;
       padding-left: 1.5rem;
     }
-    .markdown-body li { margin-bottom: 0.35rem; }
-    .markdown-body li > ul, .markdown-body li > ol { margin-top: 0.25rem; margin-bottom: 0.25rem; }
 
-    .markdown-body strong { font-weight: 700; color: var(--gray-900); }
-    .markdown-body em { font-style: italic; }
-    .markdown-body hr { border: none; border-top: 1px solid var(--gray-200); margin: 2rem 0; }
+    .markdown-body li {
+      margin-bottom: 0.35rem;
+    }
+
+    .markdown-body li>ul,
+    .markdown-body li>ol {
+      margin-top: 0.25rem;
+      margin-bottom: 0.25rem;
+    }
+
+    .markdown-body strong {
+      font-weight: 700;
+      color: var(--gray-900);
+    }
+
+    .markdown-body em {
+      font-style: italic;
+    }
+
+    .markdown-body hr {
+      border: none;
+      border-top: 1px solid var(--gray-200);
+      margin: 2rem 0;
+    }
 
     .markdown-body blockquote {
       border-left: 4px solid var(--teal-600);
@@ -496,7 +587,10 @@
       border-radius: 0 8px 8px 0;
       color: var(--gray-700);
     }
-    .markdown-body blockquote p:last-child { margin-bottom: 0; }
+
+    .markdown-body blockquote p:last-child {
+      margin-bottom: 0;
+    }
 
     .markdown-body code {
       background: var(--gray-100);
@@ -516,7 +610,14 @@
       font-size: 0.875rem;
       line-height: 1.6;
     }
-    .markdown-body pre code { background: transparent; color: inherit; padding: 0; border-radius: 0; font-size: inherit; }
+
+    .markdown-body pre code {
+      background: transparent;
+      color: inherit;
+      padding: 0;
+      border-radius: 0;
+      font-size: inherit;
+    }
 
     .markdown-body table {
       width: 100%;
@@ -524,6 +625,7 @@
       margin: 1.25rem 0;
       font-size: 0.95rem;
     }
+
     .markdown-body th {
       background: var(--teal-700);
       color: var(--white);
@@ -531,58 +633,122 @@
       text-align: left;
       padding: 10px 14px;
     }
-    .markdown-body th:first-child { border-radius: 8px 0 0 0; }
-    .markdown-body th:last-child { border-radius: 0 8px 0 0; }
-    .markdown-body td { padding: 10px 14px; border-bottom: 1px solid var(--gray-200); }
-    .markdown-body tr:last-child td { border-bottom: none; }
-    .markdown-body tr:nth-child(even) td { background: var(--gray-50); }
+
+    .markdown-body th:first-child {
+      border-radius: 8px 0 0 0;
+    }
+
+    .markdown-body th:last-child {
+      border-radius: 0 8px 0 0;
+    }
+
+    .markdown-body td {
+      padding: 10px 14px;
+      border-bottom: 1px solid var(--gray-200);
+    }
+
+    .markdown-body tr:last-child td {
+      border-bottom: none;
+    }
+
+    .markdown-body tr:nth-child(even) td {
+      background: var(--gray-50);
+    }
 
     .markdown-body img {
       margin: 1.5rem auto;
       border-radius: 12px;
-      box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
       border: 1px solid var(--gray-200);
       max-height: 600px;
       object-fit: contain;
       background: var(--white);
     }
 
-    .markdown-body ul li::marker { color: var(--teal-600); }
+    .markdown-body ul li::marker {
+      color: var(--teal-600);
+    }
 
     /* ===== OVERLAY (mobile) ===== */
     .sidebar-overlay {
       display: none;
       position: fixed;
       inset: 0;
-      background: rgba(0,0,0,0.4);
+      background: rgba(0, 0, 0, 0.4);
       z-index: 99;
       opacity: 0;
       transition: opacity 0.3s ease;
       pointer-events: none;
     }
-    .sidebar-overlay.show { opacity: 1; pointer-events: auto; }
+
+    .sidebar-overlay.show {
+      opacity: 1;
+      pointer-events: auto;
+    }
 
     /* ===== RESPONSIVE ===== */
     @media (max-width: 768px) {
-      .sidebar { transform: translateX(-100%); }
-      .sidebar.open { transform: translateX(0); }
-      .topbar { display: flex; }
-      .main { margin-left: 0; }
-      .content-area { padding: 24px 20px 60px; }
-      .sidebar-overlay { display: block; }
-      .markdown-body h1 { font-size: 1.65rem; }
-      .markdown-body h2 { font-size: 1.25rem; }
+      .sidebar {
+        transform: translateX(-100%);
+      }
+
+      .sidebar.open {
+        transform: translateX(0);
+      }
+
+      .topbar {
+        display: flex;
+      }
+
+      .main {
+        margin-left: 0;
+      }
+
+      .content-area {
+        padding: 24px 20px 60px;
+      }
+
+      .sidebar-overlay {
+        display: block;
+      }
+
+      .markdown-body h1 {
+        font-size: 1.65rem;
+      }
+
+      .markdown-body h2 {
+        font-size: 1.25rem;
+      }
     }
 
     @media (min-width: 769px) and (max-width: 1024px) {
-      .content-area { padding: 32px 28px 60px; }
+      .content-area {
+        padding: 32px 28px 60px;
+      }
     }
 
     @media print {
-      .sidebar, .topbar, .sidebar-overlay { display: none !important; }
-      .main { margin-left: 0; }
-      .content-area { padding: 20px; max-width: 100%; }
-      .markdown-body img { box-shadow: none; border: 1px solid #ccc; break-inside: avoid; }
+
+      .sidebar,
+      .topbar,
+      .sidebar-overlay {
+        display: none !important;
+      }
+
+      .main {
+        margin-left: 0;
+      }
+
+      .content-area {
+        padding: 20px;
+        max-width: 100%;
+      }
+
+      .markdown-body img {
+        box-shadow: none;
+        border: 1px solid #ccc;
+        break-inside: avoid;
+      }
     }
 
     /* ===== PUBLISHER HIGHLIGHT CARD ===== */
@@ -600,18 +766,23 @@
       overflow: hidden;
       transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     }
+
     .publisher-card::before {
       content: '';
       position: absolute;
-      top: 0; left: 0; right: 0;
+      top: 0;
+      left: 0;
+      right: 0;
       height: 4px;
       background: linear-gradient(90deg, #2F3181 0%, #0E7059 50%, #008B47 100%);
     }
+
     .publisher-card:hover {
       transform: translateY(-2px);
       box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.08), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
       border-color: #cbd5e1;
     }
+
     .publisher-card-header {
       display: flex;
       align-items: center;
@@ -619,19 +790,22 @@
       flex-wrap: wrap;
       gap: 16px;
     }
+
     .publisher-logo-wrapper {
       max-width: 240px;
       display: flex;
       align-items: center;
     }
+
     .publisher-logo-img {
       width: 100%;
       height: auto;
       max-height: 52px;
       object-fit: contain;
     }
+
     .publisher-badge {
-      background: linear-gradient(90deg, rgba(47,49,129,0.08) 0%, rgba(0,139,71,0.08) 100%);
+      background: linear-gradient(90deg, rgba(47, 49, 129, 0.08) 0%, rgba(0, 139, 71, 0.08) 100%);
       color: #0e7059;
       padding: 6px 14px;
       border-radius: 99px;
@@ -641,11 +815,13 @@
       text-transform: uppercase;
       border: 1px solid rgba(14, 112, 89, 0.15);
     }
+
     .publisher-card-body {
       display: flex;
       flex-direction: column;
       gap: 12px;
     }
+
     .publisher-card-title {
       font-size: 18px !important;
       font-weight: 700 !important;
@@ -656,18 +832,21 @@
       padding-bottom: 0 !important;
       display: block !important;
     }
+
     .publisher-card-description {
       font-size: 14.5px !important;
       line-height: 1.6 !important;
       color: #475569 !important;
       margin: 0 !important;
     }
+
     .publisher-card-actions {
       display: flex;
       gap: 12px;
       flex-wrap: wrap;
       margin-top: 4px;
     }
+
     .publisher-btn {
       display: inline-flex;
       align-items: center;
@@ -680,45 +859,55 @@
       transition: all 0.2s ease;
       text-decoration: none !important;
     }
+
     .publisher-btn-primary {
       background: linear-gradient(135deg, #2F3181 0%, #008B47 100%);
       color: #ffffff !important;
       box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
     }
+
     .publisher-btn-primary:hover {
       opacity: 0.95;
       transform: translateY(-1px);
       box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
     }
+
     .publisher-btn-secondary {
       background: #ffffff;
       color: #334155 !important;
       border: 1px solid #cbd5e1;
     }
+
     .publisher-btn-secondary:hover {
       background: #f8fafc;
       border-color: #94a3b8;
       color: #0f172a !important;
     }
+
     @media (prefers-color-scheme: dark) {
       .publisher-card {
         background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
         border-color: #334155;
       }
+
       .publisher-card:hover {
         border-color: #475569;
       }
+
       .publisher-card-title {
         color: #f8fafc !important;
       }
+
       .publisher-card-description {
         color: #94a3b8 !important;
       }
+
       .publisher-btn-secondary {
         background: #1e293b;
         color: #cbd5e1 !important;
         border-color: #475569;
       }
+
       .publisher-btn-secondary:hover {
         background: #334155;
         color: #f8fafc !important;
@@ -727,6 +916,7 @@
     }
   </style>
 </head>
+
 <body>
 
   <!-- ===== SKIP LINK (accessibility) ===== -->
@@ -759,8 +949,12 @@
     </nav>
 
     <div class="sidebar-footer">
-      <a href="https://github.com/invento-dev/epcforge" target="_blank" rel="noopener noreferrer" aria-label="View source code on GitHub">
-        <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path fill-rule="evenodd" d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/></svg>
+      <a href="https://github.com/invento-software-limited//epcforge" target="_blank" rel="noopener noreferrer"
+        aria-label="View source code on GitHub">
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+          <path fill-rule="evenodd"
+            d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z" />
+        </svg>
         GitHub
       </a>
     </div>
@@ -772,7 +966,8 @@
   <!-- ===== PAGE WRAP (topbar + main, stacked vertically) ===== -->
   <div class="page-wrap">
     <header class="topbar">
-      <button class="hamburger" onclick="toggleSidebar()" aria-label="Toggle navigation menu" aria-expanded="false" aria-controls="sidebar">
+      <button class="hamburger" onclick="toggleSidebar()" aria-label="Toggle navigation menu" aria-expanded="false"
+        aria-controls="sidebar">
         <span></span><span></span><span></span>
       </button>
       <span class="topbar-title" id="topbarTitle">Product Overview</span>
@@ -780,51 +975,61 @@
 
     <main class="main" id="main-content" role="main">
       <article class="content-area" id="content-area" itemscope itemtype="https://schema.org/Article">
-      <meta itemprop="author" content="Invento Software Limited" />
-      <meta itemprop="publisher" content="Invento Software Limited" />
-      <span itemprop="publisher" itemscope itemtype="https://schema.org/Organization">
-        <meta itemprop="name" content="Invento Software Limited" />
-      </span>
+        <meta itemprop="author" content="Invento Software Limited" />
+        <meta itemprop="publisher" content="Invento Software Limited" />
+        <span itemprop="publisher" itemscope itemtype="https://schema.org/Organization">
+          <meta itemprop="name" content="Invento Software Limited" />
+        </span>
 
-      <!-- Invento Software Limited Featured Card -->
-      <div class="publisher-card">
-        <div class="publisher-card-header">
-          <div class="publisher-logo-wrapper">
-            <img src="assets/logo.svg" alt="Invento Software Limited Logo" class="publisher-logo-img" />
+        <!-- Invento Software Limited Featured Card -->
+        <div class="publisher-card">
+          <div class="publisher-card-header">
+            <div class="publisher-logo-wrapper">
+              <img src="assets/logo.svg" alt="Invento Software Limited Logo" class="publisher-logo-img" />
+            </div>
+            <span class="publisher-badge">Featured Partner</span>
           </div>
-          <span class="publisher-badge">Featured Partner</span>
+          <div class="publisher-card-body">
+            <h2 class="publisher-card-title">Built by Invento Software Limited</h2>
+            <p class="publisher-card-description">
+              Invento Software Limited builds enterprise Frappe/ERPNext applications and extensions for construction,
+              engineering, and manufacturing industries.
+            </p>
+          </div>
+          <div class="publisher-card-actions">
+            <a href="https://invento.com.bd" target="_blank" rel="noopener noreferrer"
+              class="publisher-btn publisher-btn-primary">
+              <span>Visit Our Website</span>
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"
+                stroke-linecap="round" stroke-linejoin="round">
+                <line x1="7" y1="17" x2="17" y2="7"></line>
+                <polyline points="7 7 17 7 17 17"></polyline>
+              </svg>
+            </a>
+            <a href="mailto:hello@invento.com.bd" class="publisher-btn publisher-btn-secondary">
+              <span>Contact Support</span>
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"
+                stroke-linecap="round" stroke-linejoin="round">
+                <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path>
+                <polyline points="22,6 12,13 2,6"></polyline>
+              </svg>
+            </a>
+          </div>
         </div>
-        <div class="publisher-card-body">
-          <h2 class="publisher-card-title">Built by Invento Software Limited</h2>
-          <p class="publisher-card-description">
-            Invento Software Limited builds enterprise Frappe/ERPNext applications and extensions for construction, engineering, and manufacturing industries.
-          </p>
-        </div>
-        <div class="publisher-card-actions">
-          <a href="https://invento.com.bd" target="_blank" rel="noopener noreferrer" class="publisher-btn publisher-btn-primary">
-            <span>Visit Our Website</span>
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="7" y1="17" x2="17" y2="7"></line><polyline points="7 7 17 7 17 17"></polyline></svg>
-          </a>
-          <a href="mailto:hello@invento.com.bd" class="publisher-btn publisher-btn-secondary">
-            <span>Contact Support</span>
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg>
-          </a>
-        </div>
-      </div>
 
-      <div class="content-loading" id="loading-indicator" role="status" aria-live="polite">
-        <div class="spinner" aria-hidden="true"></div>
-        <span>Loading documentation…</span>
-      </div>
+        <div class="content-loading" id="loading-indicator" role="status" aria-live="polite">
+          <div class="spinner" aria-hidden="true"></div>
+          <span>Loading documentation…</span>
+        </div>
 
-      <div id="content" aria-live="polite"></div>
-    </article>
-  </main>
+        <div id="content" aria-live="polite"></div>
+      </article>
+    </main>
   </div><!-- /.page-wrap -->
 
   <script>
     // ---- Configuration ----
-    const SITE_URL = 'https://invento-dev.github.io/epcforge/';
+    const SITE_URL = 'https://invento-software-limited/.github.io/epcforge/';
     const PAGES = {
       overview: {
         file: 'product_overview.md',
@@ -1039,4 +1244,5 @@
     }
   </script>
 </body>
+
 </html>

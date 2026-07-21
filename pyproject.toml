@@ -27,9 +27,9 @@ classifiers = [
 
 [project.urls]
 Homepage = "https://invento.com.bd"
-Repository = "https://github.com/invento-dev/epcforge"
-Documentation = "https://github.com/invento-dev/epcforge#readme"
-"Bug Tracker" = "https://github.com/invento-dev/epcforge/issues"
+Repository = "https://github.com/invento-software-limited//epcforge"
+Documentation = "https://github.com/invento-software-limited//epcforge#readme"
+"Bug Tracker" = "https://github.com/invento-software-limited//epcforge/issues"
 "Frappe Marketplace" = "https://frappecloud.com/marketplace/apps/epcforge"
 
 [build-system]

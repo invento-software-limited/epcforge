@@ -9,7 +9,7 @@ Install the app using the Frappe Bench CLI:
 cd /path/to/your/bench
 
 # Get the app
-bench get-app https://github.com/invento-dev/epcforge
+bench get-app https://github.com/invento-software-limited//epcforge
 
 # Install on your site
 bench --site your-site.com install-app epcforge
@@ -107,5 +107,5 @@ EPCForge exposes whitelisted Python methods for integration:
 For issues, feature requests, or professional support:
 
 - 📧 **Email:** [hello@invento.com.bd](mailto:hello@invento.com.bd)
-- 🐞 **GitHub Issues:** [Open an Issue](https://github.com/invento-dev/epcforge/issues)
+- 🐞 **GitHub Issues:** [Open an Issue](https://github.com/invento-software-limited//epcforge/issues)
 - 🌟 **Contribute:** Star the repository and submit pull requests on GitHub.
