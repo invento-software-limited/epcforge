@@ -219,16 +219,6 @@
  "is_submittable": 1,
  "links": [
   {
-   "group": "Sales",
-   "link_doctype": "Quotation",
-   "link_fieldname": "custom_boq"
-  },
-  {
-   "group": "Sales",
-   "link_doctype": "Sales Order",
-   "link_fieldname": "custom_boq"
-  },
-  {
    "group": "Budget",
    "link_doctype": "Project Budget",
    "link_fieldname": "boq"
