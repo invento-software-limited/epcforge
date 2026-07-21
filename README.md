@@ -1,25 +1,25 @@
 <p align="center">
-  <img src="https://raw.githubusercontent.com/invento-software-limited//epcforge/main/epcforge/public/img/epcforge-logo.svg" width="260" alt="EPCForge Logo">
+  <img src="https://raw.githubusercontent.com/invento-software-limited/epcforge/main/epcforge/public/img/epcforge-logo.svg" width="260" alt="EPCForge Logo">
 </p>
 
 <h1 align="center">EPCForge</h1>
 
 <p align="center">
-  <strong>Engineering, Procurement & Construction Management for Frappe / ERPNext</strong>
+  <strong>Engineering, Procurement & Construction Management for Frappe / ERPNext v16</strong>
 </p>
 
 <p align="center">
-  <a href="https://github.com/invento-software-limited//epcforge/blob/main/LICENSE"><img src="https://img.shields.io/badge/License-MIT-teal.svg" alt="License: MIT"></a>
-  <a href="https://invento-software-limited/.github.io/epcforge/"><img src="https://img.shields.io/badge/Docs-GitHub%20Pages-0d9488.svg" alt="Documentation"></a>
-  <a href="https://frappe.io"><img src="https://img.shields.io/badge/Frappe-v14%20%7C%20v15%20%7C%20v16-orange.svg" alt="Frappe Version"></a>
-  <a href="https://erpnext.com"><img src="https://img.shields.io/badge/ERPNext-v14%20%7C%20v15%20%7C%20v16-blue.svg" alt="ERPNext Version"></a>
+  <a href="https://github.com/invento-software-limited/epcforge/blob/main/LICENSE"><img src="https://img.shields.io/badge/License-MIT-teal.svg" alt="License: MIT"></a>
+  <a href="https://invento-software-limited.github.io/epcforge/"><img src="https://img.shields.io/badge/Docs-GitHub%20Pages-0d9488.svg" alt="Documentation"></a>
+  <a href="https://frappe.io"><img src="https://img.shields.io/badge/Frappe-v16.0.0+-orange.svg" alt="Frappe Version"></a>
+  <a href="https://erpnext.com"><img src="https://img.shields.io/badge/ERPNext-v16.0.0+-blue.svg" alt="ERPNext Version"></a>
 </p>
 
 ---
 
 ## 📦 About EPCForge
 
-**EPCForge** is an enterprise-grade Frappe application designed for Engineering, Procurement, and Construction (EPC) firms, main contractors, estimation engineers, and project managers. It extends ERPNext with hierarchical Bill of Quantities (BOQ), baseline budget tracking, vendor tender management, and an engineering document control register.
+**EPCForge** is an enterprise-grade Frappe application designed for Engineering, Procurement, and Construction (EPC) firms, main contractors, estimation engineers, and project managers. Built specifically for **Frappe v16** and **ERPNext v16**, it extends ERPNext with hierarchical Bill of Quantities (BOQ), baseline budget tracking, vendor tender management, and an engineering document control register.
 
 Whether managing multi-million-dollar infrastructure projects or commercial builds, EPCForge unifies cost estimation, tender bidding, document submittals, and financial tracking directly inside your ERPNext Desk.
 
@@ -59,8 +59,8 @@ Whether managing multi-million-dollar infrastructure projects or commercial buil
 
 ## 💻 Prerequisites & Compatibility
 
-- **Frappe Framework**: `v14.0.0` or higher (`v16` ready)
-- **ERPNext**: `v14.0.0` or higher (`v16` ready)
+- **Frappe Framework**: `v16.0.0` or higher (`>=16.0.0,<17.0.0`)
+- **ERPNext**: `v16.0.0` or higher (`>=16.0.0,<17.0.0`)
 - **Python**: `3.10` or higher
 
 ---
@@ -74,7 +74,7 @@ Install EPCForge on your Frappe bench using the Bench CLI:
 cd ~/frappe-bench
 
 # Fetch the repository
-bench get-app https://github.com/invento-software-limited//epcforge
+bench get-app https://github.com/invento-software-limited/epcforge
 
 # Install on your target site
 bench --site [your-site-name] install-app epcforge
@@ -99,7 +99,7 @@ bench --site [your-site-name] migrate
 ## 📚 Documentation
 
 Detailed documentation, user guide, and API reference are available on our GitHub Pages site:
-👉 **[EPCForge Online Documentation Portal](https://invento-software-limited/.github.io/epcforge/)**
+👉 **[EPCForge Online Documentation Portal](https://invento-software-limited.github.io/epcforge/)**
 
 ---
 
@@ -109,7 +109,7 @@ Developed and maintained by **Invento Software Limited**. Invento builds enterpr
 
 - 🌐 **Website**: [invento.com.bd](https://invento.com.bd)
 - 📧 **Support Email**: [hello@invento.com.bd](mailto:hello@invento.com.bd)
-- 🐞 **Issue Tracker**: [GitHub Issues](https://github.com/invento-software-limited//epcforge/issues)
+- 🐞 **Issue Tracker**: [GitHub Issues](https://github.com/invento-software-limited/epcforge/issues)
 - ⭐ **Star Us**: If you find EPCForge helpful, give us a star on GitHub!
 
 ---
