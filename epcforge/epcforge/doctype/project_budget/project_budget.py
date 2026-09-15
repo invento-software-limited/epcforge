@@ -170,7 +170,7 @@ class ProjectBudget(Document):
 
 
 @frappe.whitelist()
-def get_budget_summary(budget_name):
+def get_budget_summary(budget_name: str):
 	"""Return summary data for the budget dashboard"""
 	budget = frappe.get_doc("Project Budget", budget_name)
 	return {

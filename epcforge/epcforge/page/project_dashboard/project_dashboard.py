@@ -33,7 +33,7 @@ def get_projects_list():
 
 
 @frappe.whitelist()
-def get_dashboard_data(project_id):
+def get_dashboard_data(project_id: str):
 	"""Everything the single-project dashboard renders, in one call."""
 	project = frappe.db.get_value(
 		"Project",

@@ -228,7 +228,7 @@ class BOQ(Document):
 
 
 @frappe.whitelist()
-def get_boq_summary(boq_name):
+def get_boq_summary(boq_name: str):
 	"""Return summary data for the BOQ dashboard"""
 	boq = frappe.get_doc("BOQ", boq_name)
 	return {
@@ -244,7 +244,7 @@ def get_boq_summary(boq_name):
 
 
 @frappe.whitelist()
-def get_boq_items_by_group(boq_name):
+def get_boq_items_by_group(boq_name: str):
 	"""Return BOQ items grouped for tree display"""
 	boq = frappe.get_doc("BOQ", boq_name)
 	items = []
@@ -267,7 +267,7 @@ def get_boq_items_by_group(boq_name):
 
 
 @frappe.whitelist()
-def get_billing_milestones(project):
+def get_billing_milestones(project: str):
 	"""Fetch billing-milestone Tasks from the project schedule."""
 	if not project:
 		return []
@@ -283,7 +283,7 @@ def get_billing_milestones(project):
 
 
 @frappe.whitelist()
-def create_material_request(source_name, target_doc=None):
+def create_material_request(source_name: str, target_doc: Document | str | None = None):
 	"""Create a Material Request from BOQ using get_mapped_doc.
 	Maps only Material-type rows with a stock Item.
 	"""
@@ -331,7 +331,7 @@ def create_material_request(source_name, target_doc=None):
 
 
 @frappe.whitelist()
-def create_sales_invoice(source_name, milestone_row_name):
+def create_sales_invoice(source_name: str, milestone_row_name: str):
 	boq = frappe.get_doc("BOQ", source_name)
 	row = next((r for r in boq.get("boq_payment_schedule") if r.name == milestone_row_name), None)
 	if not row:
@@ -385,7 +385,7 @@ def create_sales_invoice(source_name, milestone_row_name):
 
 
 @frappe.whitelist()
-def get_boq_dashboard_data(boq_name):
+def get_boq_dashboard_data(boq_name: str):
 	"""Procurement, costing, and payment data for the BOQ form's in-document
 	Dashboard tab. Reuses the same aggregations as the Project Dashboard page
 	so the two views never drift apart.
@@ -414,7 +414,7 @@ def get_boq_dashboard_data(boq_name):
 
 
 @frappe.whitelist()
-def get_linked_boq_item(task_name):
+def get_linked_boq_item(task_name: str):
 	"""Return the stock BOQ Item row linked to this Task, if any."""
 	row = frappe.db.get_value(
 		"BOQ Item",
@@ -428,7 +428,7 @@ def get_linked_boq_item(task_name):
 
 
 @frappe.whitelist()
-def create_mr_from_task(source_name, target_doc=None):
+def create_mr_from_task(source_name: str, target_doc: Document | str | None = None):
 	"""Create a Material Request from the single BOQ Item linked to this Task."""
 	row = get_linked_boq_item(source_name)
 	if not row:

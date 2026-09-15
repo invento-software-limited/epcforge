@@ -124,7 +124,7 @@ def get_active_project():
 
 
 @frappe.whitelist()
-def set_active_project(project_id):
+def set_active_project(project_id: str):
 	"""Set the user's active project (sidebar switcher) session default."""
 	if project_id:
 		frappe.defaults.set_user_default("project", project_id)
