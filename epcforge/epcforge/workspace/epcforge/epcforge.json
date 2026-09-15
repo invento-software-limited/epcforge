@@ -1,8 +1,8 @@
 {
  "app": "epcforge",
  "charts": [],
- "content": "[{\"id\":\"0NVhQ9oGMR\",\"type\":\"header\",\"data\":{\"text\":\"<span class=\\\"h4\\\"><b>EPC Operations</b></span>\",\"col\":12}},{\"id\":\"7Mbx6I5JUf\",\"type\":\"spacer\",\"data\":{\"col\":12}},{\"id\":\"9bQ3jK4LmN\",\"type\":\"card\",\"data\":{\"card_name\":\"Master Data\",\"col\":4}},{\"id\":\"3xPr9jKmQs\",\"type\":\"card\",\"data\":{\"card_name\":\"Project Management\",\"col\":4}},{\"id\":\"1aB2cD3eF4\",\"type\":\"card\",\"data\":{\"card_name\":\"Transaction\",\"col\":4}},{\"id\":\"5gH6iJ7kL8\",\"type\":\"card\",\"data\":{\"card_name\":\"Reports\",\"col\":4}}]",
- "creation": "2026-01-03 00:00:00.000000",
+ "content": "[{\"id\":\"MTqEwfHOrp\",\"type\":\"onboarding\",\"data\":{\"onboarding_name\":\"EPCForge Onboarding\",\"col\":12}},{\"id\":\"0NVhQ9oGMR\",\"type\":\"header\",\"data\":{\"text\":\"<span class=\\\"h4\\\"><b>EPC Operations</b></span>\",\"col\":12}},{\"id\":\"7Mbx6I5JUf\",\"type\":\"spacer\",\"data\":{\"col\":12}},{\"id\":\"9bQ3jK4LmN\",\"type\":\"card\",\"data\":{\"card_name\":\"Master Data\",\"col\":4}},{\"id\":\"3xPr9jKmQs\",\"type\":\"card\",\"data\":{\"card_name\":\"Project Management\",\"col\":4}},{\"id\":\"1aB2cD3eF4\",\"type\":\"card\",\"data\":{\"card_name\":\"Transaction\",\"col\":4}},{\"id\":\"5gH6iJ7kL8\",\"type\":\"card\",\"data\":{\"card_name\":\"Reports\",\"col\":4}}]",
+ "creation": "2026-01-03 00:00:00",
  "custom_blocks": [],
  "docstatus": 0,
  "doctype": "Workspace",
@@ -167,7 +167,7 @@
    "type": "Link"
   }
  ],
- "modified": "2026-07-21 16:00:00.000000",
+ "modified": "2026-09-15 15:56:19.885405",
  "modified_by": "Administrator",
  "module": "EPCForge",
  "name": "EPCForge",
@@ -191,39 +191,55 @@
  "sequence_id": 12.0,
  "shortcuts": [
   {
+   "color": "Blue",
+   "doc_view": "",
+   "label": "Dashboard",
+   "link_to": "project-dashboard",
+   "type": "Page"
+  },
+  {
+   "doc_view": "New",
    "label": "New Project",
    "link_to": "Project",
-   "type": "DocType",
-   "doc_view": "New"
+   "type": "DocType"
   },
   {
+   "doc_view": "New",
    "label": "New Task",
    "link_to": "Task",
-   "type": "DocType",
-   "doc_view": "New"
+   "type": "DocType"
   },
   {
+   "doc_view": "New",
    "label": "New BOQ",
    "link_to": "BOQ",
-   "type": "DocType",
-   "doc_view": "New"
+   "type": "DocType"
   },
   {
+   "doc_view": "New",
    "label": "New Tender",
    "link_to": "Tender",
-   "type": "DocType",
-   "doc_view": "New"
+   "type": "DocType"
   },
   {
+   "doc_view": "New",
    "label": "New Document Register",
    "link_to": "Document Register",
-   "type": "DocType",
-   "doc_view": "New"
+   "type": "DocType"
   },
   {
+   "doc_view": "",
    "label": "BOQ Summary Report",
    "link_to": "BOQ Summary",
+   "report_ref_doctype": "BOQ",
    "type": "Report"
+  },
+  {
+   "color": "Grey",
+   "doc_view": "",
+   "label": "Documentation",
+   "type": "URL",
+   "url": "https://invento-software-limited.github.io/epcforge/"
   }
  ],
  "title": "EPCForge",

@@ -1,0 +1,44 @@
+{
+ "allow_roles": [
+  {
+   "role": "System Manager"
+  },
+  {
+   "role": "Project Manager"
+  },
+  {
+   "role": "Engineer"
+  }
+ ],
+ "creation": "2026-07-21 16:00:00.000000",
+ "docstatus": 0,
+ "doctype": "Module Onboarding",
+ "idx": 0,
+ "is_complete": 0,
+ "modified": "2026-07-21 16:00:00.000000",
+ "modified_by": "Administrator",
+ "module": "EPCForge",
+ "name": "EPCForge Onboarding",
+ "owner": "Administrator",
+ "steps": [
+  {
+   "step": "Create EPC Project"
+  },
+  {
+   "step": "Create BOQ"
+  },
+  {
+   "step": "Create Project Budget"
+  },
+  {
+   "step": "Create Task"
+  },
+  {
+   "step": "Create Tender"
+  },
+  {
+   "step": "Create Document Register"
+  }
+ ],
+ "title": "EPCForge Setup"
+}

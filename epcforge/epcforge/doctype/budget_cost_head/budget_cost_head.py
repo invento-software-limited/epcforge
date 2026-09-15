@@ -2,11 +2,11 @@
 # For license information, please see license.txt
 
 import frappe
-from frappe.model.document import Document
+from frappe.utils.nestedset import NestedSet
 
 
-class BudgetCostHead(Document):
-	pass
+class BudgetCostHead(NestedSet):
+	nsm_parent_field = "parent_cost_head"
 
 
 def get_children(doctype, parent=None, **filters):
@@ -24,8 +24,6 @@ def get_children(doctype, parent=None, **filters):
 
 def add_node():
 	"""Add a new node in the tree"""
-	from frappe.utils.nestedset import add_node as add_node_ns
-
 	doc = frappe.get_doc(
 		{
 			"doctype": "Budget Cost Head",

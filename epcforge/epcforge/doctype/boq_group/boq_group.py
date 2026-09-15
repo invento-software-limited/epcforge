@@ -2,13 +2,11 @@
 # For license information, please see license.txt
 
 import frappe
-from frappe.model.document import Document
+from frappe.utils.nestedset import NestedSet
 
 
-class BOQGroup(Document):
-	def on_update(self):
-		"""Rebuild tree on rename/move"""
-		pass
+class BOQGroup(NestedSet):
+	nsm_parent_field = "parent_boq_group"
 
 
 def get_children(doctype, parent=None, **filters):
@@ -26,8 +24,6 @@ def get_children(doctype, parent=None, **filters):
 
 def add_node():
 	"""Add a new node in the tree"""
-	from frappe.utils.nestedset import add_node as add_node_ns
-
 	doc = frappe.get_doc(
 		{
 			"doctype": "BOQ Group",

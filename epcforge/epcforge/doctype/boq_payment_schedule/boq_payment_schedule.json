@@ -7,11 +7,17 @@
  "engine": "InnoDB",
  "field_order": [
   "milestone",
+  "linked_wbs",
   "description",
   "col_break_1",
   "percent_amount",
   "amount",
-  "target_date"
+  "advance_deduction",
+  "retention_amount",
+  "net_payable",
+  "target_date",
+  "sales_invoice",
+  "payment_status"
  ],
  "fields": [
   {
@@ -20,6 +26,12 @@
    "in_list_view": 1,
    "label": "Milestone",
    "reqd": 1
+  },
+  {
+   "fieldname": "linked_wbs",
+   "fieldtype": "Link",
+   "label": "Linked WBS (Task)",
+   "options": "Task"
   },
   {
    "fieldname": "description",
@@ -42,13 +54,56 @@
    "fieldname": "amount",
    "fieldtype": "Currency",
    "in_list_view": 1,
-   "label": "Amount"
+   "label": "Amount",
+   "allow_on_submit": 1
+  },
+  {
+   "fieldname": "advance_deduction",
+   "fieldtype": "Currency",
+   "label": "Advance Deduction",
+   "default": "0",
+   "read_only": 1,
+   "allow_on_submit": 1
+  },
+  {
+   "fieldname": "retention_amount",
+   "fieldtype": "Currency",
+   "label": "Retention Amount",
+   "default": "0",
+   "read_only": 1,
+   "allow_on_submit": 1
+  },
+  {
+   "fieldname": "net_payable",
+   "fieldtype": "Currency",
+   "label": "Net Payable",
+   "default": "0",
+   "read_only": 1,
+   "allow_on_submit": 1
   },
   {
    "fieldname": "target_date",
    "fieldtype": "Date",
    "in_list_view": 1,
    "label": "Target Date"
+  },
+  {
+   "fieldname": "sales_invoice",
+   "fieldtype": "Link",
+   "label": "Sales Invoice",
+   "options": "Sales Invoice",
+   "read_only": 1,
+   "no_copy": 1,
+   "allow_on_submit": 1
+  },
+  {
+   "fieldname": "payment_status",
+   "fieldtype": "Select",
+   "label": "Payment Status",
+   "options": "Pending\nInvoiced\nReceived",
+   "default": "Pending",
+   "read_only": 1,
+   "allow_on_submit": 1
   }
  ],
  "grid_page_length": 50,
