@@ -281,14 +281,14 @@
   },
   {
    "create": 1,
-   "delete": 1,
-   "email": 1,
-   "export": 1,
+   "delete": 0,
+   "email": 0,
+   "export": 0,
    "print": 1,
    "read": 1,
-   "report": 1,
+   "report": 0,
    "role": "Supplier",
-   "share": 1,
+   "share": 0,
    "write": 1
   }
  ],

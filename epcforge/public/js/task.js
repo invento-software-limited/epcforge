@@ -29,6 +29,25 @@ frappe.ui.form.on("Task", {
 				},
 				__("EPCForge")
 			);
+
+			frappe.call({
+				method: "epcforge.epcforge.doctype.boq.boq.get_linked_boq_item",
+				args: { task_name: frm.doc.name },
+				callback: function (r) {
+					if (r.message) {
+						frm.add_custom_button(
+							__("Material Request"),
+							function () {
+								frappe.model.open_mapped_doc({
+									method: "epcforge.epcforge.doctype.boq.boq.create_mr_from_task",
+									frm: frm,
+								});
+							},
+							__("Create")
+						);
+					}
+				},
+			});
 		}
 	},
 });

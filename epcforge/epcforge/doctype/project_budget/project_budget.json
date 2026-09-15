@@ -23,6 +23,14 @@
   "percent_used",
   "remaining_budget",
   "cost_variance",
+  "sec_break_evm",
+  "manual_evm_override",
+  "cpi",
+  "epc_spi",
+  "col_break_evm2",
+  "eac",
+  "epc_health",
+  "epc_sched_status",
   "sec_break_items",
   "budget_items",
   "dashboard_tab",
@@ -144,6 +152,57 @@
    "read_only": 1
   },
   {
+   "fieldname": "sec_break_evm",
+   "fieldtype": "Section Break",
+   "label": "Earned Value Metrics (EVM)"
+  },
+  {
+   "fieldname": "manual_evm_override",
+   "fieldtype": "Check",
+   "label": "Manual EVM Override",
+   "default": "0",
+   "description": "When checked, CPI/SPI/EAC/Health/Schedule Status are not auto-recalculated and can be entered manually."
+  },
+  {
+   "fieldname": "cpi",
+   "fieldtype": "Float",
+   "label": "Cost Performance Index (CPI)",
+   "default": "1",
+   "precision": "2"
+  },
+  {
+   "fieldname": "epc_spi",
+   "fieldtype": "Float",
+   "label": "Schedule Performance Index (SPI)",
+   "default": "1",
+   "precision": "2"
+  },
+  {
+   "fieldname": "col_break_evm2",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "eac",
+   "fieldtype": "Currency",
+   "label": "Estimate at Completion (EAC)",
+   "default": "0",
+   "read_only": 1
+  },
+  {
+   "fieldname": "epc_health",
+   "fieldtype": "Select",
+   "label": "Budget Health",
+   "options": "Green\nYellow\nRed",
+   "read_only": 1
+  },
+  {
+   "fieldname": "epc_sched_status",
+   "fieldtype": "Select",
+   "label": "Schedule Status",
+   "options": "On Track\nDelayed\nSeverely Delayed\nCompleted",
+   "read_only": 1
+  },
+  {
    "fieldname": "sec_break_items",
    "fieldtype": "Section Break",
    "label": "Cost Breakdown"
@@ -152,8 +211,7 @@
    "fieldname": "budget_items",
    "fieldtype": "Table",
    "label": "Budget Line Items",
-   "options": "Project Budget Item",
-   "reqd": 1
+   "options": "Project Budget Item"
   },
   {
    "depends_on": "eval:!doc.__islocal",

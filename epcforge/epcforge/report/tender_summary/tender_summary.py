@@ -3,6 +3,8 @@
 
 import frappe
 from frappe import _
+from frappe.query_builder import Order
+from frappe.query_builder.functions import Count
 
 
 def execute(filters=None):
@@ -83,7 +85,7 @@ def get_data(filters):
 	t = frappe.qb.DocType("Tender")
 	tb = frappe.qb.DocType("Tender Bidder")
 
-	subquery = frappe.qb.from_(tb).select(frappe.qb.fn.Count("*")).where(tb.parent == t.name)
+	subquery = frappe.qb.from_(tb).select(Count("*")).where(tb.parent == t.name)
 
 	query = (
 		frappe.qb.from_(t)
@@ -99,7 +101,7 @@ def get_data(filters):
 			t.awarded_to,
 			t.award_amount,
 		)
-		.orderby(t.submission_deadline, order=frappe.qb.desc)
+		.orderby(t.submission_deadline, order=Order.desc)
 	)
 
 	if filters:

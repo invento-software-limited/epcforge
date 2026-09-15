@@ -12,7 +12,9 @@
   "budget_amount",
   "committed_amount",
   "actual_amount",
-  "remaining_balance"
+  "remaining_balance",
+  "percent_used",
+  "status"
  ],
  "fields": [
   {
@@ -63,6 +65,21 @@
    "fieldtype": "Currency",
    "in_list_view": 1,
    "label": "Remaining Balance",
+   "read_only": 1
+  },
+  {
+   "fieldname": "percent_used",
+   "fieldtype": "Percent",
+   "label": "% Used",
+   "default": "0",
+   "read_only": 1
+  },
+  {
+   "fieldname": "status",
+   "fieldtype": "Select",
+   "label": "Status",
+   "options": "Not Started\nOn Track\nOver Budget\nUnder Budget",
+   "default": "Not Started",
    "read_only": 1
   }
  ],

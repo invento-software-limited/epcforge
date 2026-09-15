@@ -33,7 +33,10 @@
   "ld_max_cap_pct",
   "sec_payment_schedule",
   "boq_payment_schedule",
-  "amended_from"
+  "amended_from",
+  "dashboard_tab",
+  "dashboard",
+  "connections_tab"
  ],
  "fields": [
   {
@@ -70,11 +73,10 @@
    "read_only": 1
   },
   {
-   "default": "Lump Sum",
    "fieldname": "contract_type",
    "fieldtype": "Select",
    "label": "Contract Type",
-   "options": "Lump Sum\nUnit Rate\nCost Plus Fee\nReimbursable"
+   "options": "\nLump Sum\nUnit Rate\nCost Plus Fee\nReimbursable"
   },
   {
    "fieldname": "col_break_boq",
@@ -103,7 +105,8 @@
    "fieldtype": "Currency",
    "in_list_view": 1,
    "label": "Total Amount",
-   "read_only": 1
+   "read_only": 1,
+   "allow_on_submit": 1
   },
   {
    "fieldname": "sec_costing",
@@ -115,14 +118,16 @@
    "fieldname": "estimated_cost",
    "fieldtype": "Currency",
    "label": "Estimated Cost",
-   "read_only": 1
+   "read_only": 1,
+   "allow_on_submit": 1
   },
   {
    "default": "0",
    "fieldname": "actual_cost",
    "fieldtype": "Currency",
    "label": "Actual Cost",
-   "read_only": 1
+   "read_only": 1,
+   "allow_on_submit": 1
   },
   {
    "fieldname": "col_break_costing",
@@ -133,14 +138,16 @@
    "fieldname": "budget_variance",
    "fieldtype": "Currency",
    "label": "Budget Variance",
-   "read_only": 1
+   "read_only": 1,
+   "allow_on_submit": 1
   },
   {
    "default": "0",
    "fieldname": "gross_margin_pct",
    "fieldtype": "Percent",
    "label": "Gross Margin %",
-   "read_only": 1
+   "read_only": 1,
+   "allow_on_submit": 1
   },
   {
    "fieldname": "items_tab",
@@ -201,7 +208,8 @@
    "fieldname": "boq_payment_schedule",
    "fieldtype": "Table",
    "label": "Payment Milestones",
-   "options": "BOQ Payment Schedule"
+   "options": "BOQ Payment Schedule",
+   "allow_on_submit": 1
   },
   {
    "fieldname": "amended_from",
@@ -212,6 +220,21 @@
    "print_hide": 1,
    "read_only": 1,
    "search_index": 1
+  },
+  {
+   "fieldname": "dashboard_tab",
+   "fieldtype": "Tab Break",
+   "label": "Dashboard"
+  },
+  {
+   "fieldname": "dashboard",
+   "fieldtype": "HTML"
+  },
+  {
+   "fieldname": "connections_tab",
+   "fieldtype": "Tab Break",
+   "label": "Connections",
+   "show_dashboard": 1
   }
  ],
  "grid_page_length": 50,
@@ -222,6 +245,41 @@
    "group": "Budget",
    "link_doctype": "Project Budget",
    "link_fieldname": "boq"
+  },
+  {
+   "group": "Procurement",
+   "link_doctype": "Material Request",
+   "link_fieldname": "custom_boq"
+  },
+  {
+   "group": "Procurement",
+   "link_doctype": "Purchase Order",
+   "link_fieldname": "custom_boq"
+  },
+  {
+   "group": "Procurement",
+   "link_doctype": "Purchase Receipt",
+   "link_fieldname": "custom_boq"
+  },
+  {
+   "group": "Procurement",
+   "link_doctype": "Stock Entry",
+   "link_fieldname": "custom_boq"
+  },
+  {
+   "group": "Quality",
+   "link_doctype": "Quality Inspection",
+   "link_fieldname": "custom_boq"
+  },
+  {
+   "group": "Accounts",
+   "link_doctype": "Purchase Invoice",
+   "link_fieldname": "custom_boq"
+  },
+  {
+   "group": "Accounts",
+   "link_doctype": "Sales Invoice",
+   "link_fieldname": "custom_boq"
   }
  ],
  "modified": "2026-07-21 00:00:00.000000",

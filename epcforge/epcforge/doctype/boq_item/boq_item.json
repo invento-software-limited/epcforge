@@ -12,13 +12,18 @@
   "group",
   "phase",
   "item_type",
+  "linked_wbs",
   "col_break_1",
   "qty",
   "uom",
   "rate",
+  "preferred_vendor",
   "amount",
   "estimated_cost",
-  "percent_complete"
+  "actual_cost",
+  "margin_pct",
+  "percent_complete",
+  "purchase_order"
  ],
  "fields": [
   {
@@ -64,6 +69,12 @@
    "options": "Material\nLabour\nEquipment\nSubcontract\nOverhead"
   },
   {
+   "fieldname": "linked_wbs",
+   "fieldtype": "Link",
+   "label": "Linked WBS (Task)",
+   "options": "Task"
+  },
+  {
    "fieldname": "col_break_1",
    "fieldtype": "Column Break"
   },
@@ -91,12 +102,19 @@
    "reqd": 1
   },
   {
+   "fieldname": "preferred_vendor",
+   "fieldtype": "Link",
+   "label": "Preferred Vendor",
+   "options": "Supplier"
+  },
+  {
    "default": "0",
    "fieldname": "amount",
    "fieldtype": "Currency",
    "in_list_view": 1,
    "label": "Amount",
-   "read_only": 1
+   "read_only": 1,
+   "allow_on_submit": 1
   },
   {
    "default": "0",
@@ -106,10 +124,36 @@
    "label": "Estimated Cost"
   },
   {
+   "fieldname": "actual_cost",
+   "fieldtype": "Currency",
+   "label": "Actual Cost",
+   "default": "0",
+   "read_only": 1,
+   "allow_on_submit": 1
+  },
+  {
+   "fieldname": "margin_pct",
+   "fieldtype": "Percent",
+   "label": "Margin %",
+   "default": "0",
+   "read_only": 1,
+   "allow_on_submit": 1
+  },
+  {
    "default": "0",
    "fieldname": "percent_complete",
    "fieldtype": "Percent",
-   "label": "% Complete"
+   "label": "% Complete",
+   "allow_on_submit": 1
+  },
+  {
+   "fieldname": "purchase_order",
+   "fieldtype": "Link",
+   "label": "Purchase Order",
+   "options": "Purchase Order",
+   "read_only": 1,
+   "no_copy": 1,
+   "allow_on_submit": 1
   }
  ],
  "grid_page_length": 50,
