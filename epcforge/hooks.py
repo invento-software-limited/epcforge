@@ -16,9 +16,15 @@ required_apps = ["erpnext"]
 add_to_apps_screen = [
 	{
 		"name": "epcforge",
-		"logo": "/assets/epcforge/img/epcforge-logo.svg",
+		# The full wordmark lockup (epcforge-logo.svg) is 600x200 — not square, so it rendered
+		# squeezed/pale in the icon tile. This is a square-cropped, solid version of just its
+		# hexagon+gear mark, sized for a 1:1 tile.
+		"logo": "/assets/epcforge/img/epcforge-icon.svg",
 		"title": "EPCForge",
-		"route": "/epcforge",
+		# Was "/epcforge" — a bare app-name path with no page behind it (404 in v16). The desk's
+		# apps-screen passes this through unresolved as the icon's href, so it has to be a real
+		# route: the public "EPCForge" workspace, the first item in the app's own sidebar.
+		"route": "/desk/epcforge",
 	}
 ]
 
@@ -108,7 +114,6 @@ reports = ["epcforge.epcforge.report.tender_summary.tender_summary"]
 
 # Toolbar
 # ---------------
-website_context = {
-	"favicon": "/assets/epcforge/img/favicon.svg",
-	"splash_image": "/assets/epcforge/img/splash.svg",
-}
+# Was setting website_context.favicon/splash_image, which Frappe applies site-wide
+# (it's merged into every page's render context, not scoped to EPCForge's own pages),
+# forcing EPCForge's branding onto the whole site for every app. Removed.

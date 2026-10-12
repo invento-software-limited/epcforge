@@ -1,0 +1,27 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 150 150" width="150" height="150">
+  <defs>
+    <linearGradient id="brandGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#1a56db;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#0d9488;stop-opacity:1" />
+    </linearGradient>
+  </defs>
+
+  <!-- Hexagon background, solid -->
+  <polygon points="75,5 135,40 135,110 75,145 15,110 15,40" fill="url(#brandGrad)"/>
+
+  <!-- Gear icon, solid white on the brand hexagon -->
+  <g transform="translate(75,75)">
+    <!-- Outer gear teeth -->
+    <path d="M0,-45 L6,-45 L7,-36 L9,-35 L17,-39 L20,-34 L13,-28 L14,-26 L22,-23 L23,-18 L15,-17
+             L14,-15 L17,-8 L12,-5 L7,-10 L5,-9 L3,-17 L-3,-17 L-5,-9 L-7,-10 L-12,-5 L-17,-8
+             L-14,-15 L-15,-17 L-23,-18 L-22,-23 L-14,-26 L-13,-28 L-20,-34 L-17,-39 L-9,-35
+             L-7,-36 L-6,-45 Z"
+          fill="#ffffff" opacity="0.95"/>
+    <!-- Inner circle -->
+    <circle cx="0" cy="0" r="22" fill="#ffffff" opacity="0.95"/>
+    <!-- Center bolt, in brand color so it reads as a hole through the gear -->
+    <circle cx="0" cy="0" r="8" fill="#0d9488"/>
+    <!-- Hexagon keyhole -->
+    <polygon points="0,-4 3.5,-2 3.5,2 0,4 -3.5,2 -3.5,-2" fill="#ffffff"/>
+  </g>
+</svg>

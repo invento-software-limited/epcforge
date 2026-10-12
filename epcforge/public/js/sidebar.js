@@ -147,14 +147,16 @@ frappe.epcforge.open_project_switch_dialog = function () {
 	});
 };
 
+// v16's sidebar is scoped per "shell" (frappe.app.sidebar.current_module), and
+// frappe.boot.module_sidebars[shell].app names the app that shell belongs to —
+// that's the reliable signal. (The old DOM text/attribute sniffing below no longer
+// works: v16's sidebar item template dropped the data-link-to attribute entirely.)
 frappe.epcforge.check_is_epcforge_sidebar = function () {
-	const $sidebar = $(".body-sidebar");
-	if (!$sidebar.length) return false;
+	const current_module = frappe.app && frappe.app.sidebar && frappe.app.sidebar.current_module;
+	if (!current_module) return false;
 
-	if ($sidebar.find('[data-link-to="project-dashboard"]').length > 0) return true;
-
-	const text = $sidebar.text() || "";
-	return text.indexOf("EPC Operations") !== -1 && text.indexOf("Master Data") !== -1;
+	const sidebar_meta = (frappe.boot.module_sidebars || {})[current_module];
+	return !!sidebar_meta && sidebar_meta.app === "epcforge";
 };
 
 frappe.epcforge.render_sidebar_widget = function () {
