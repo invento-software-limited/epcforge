@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="https://raw.githubusercontent.com/invento-software-limited/epcforge/main/epcforge/public/img/epcforge-logo.svg" width="260" alt="EPCForge Logo">
+  <img src="docs/assets/epcforge-brand-light.png" width="260" alt="EPCForge Logo">
 </p>
 
 <h1 align="center">EPCForge</h1>
@@ -24,6 +24,20 @@
 Whether managing multi-million-dollar infrastructure projects or commercial builds, EPCForge unifies cost estimation, tender bidding, document submittals, and financial tracking directly inside your ERPNext Desk.
 
 ---
+
+## Product views
+
+### Project activity and status
+
+Projects, Tasks, BOQs and tenders in the published EPCForge dashboard.
+
+![EPCForge dashboard close-up](docs/assets/epcforge-dashboard-closeup.webp)
+
+### Tender packages in context
+
+Review tender status alongside the related project and tender type.
+
+![EPCForge tender list close-up](docs/assets/epcforge-tenders-closeup.webp)
 
 ## ✨ Detailed Features
 
