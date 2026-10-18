@@ -2,26 +2,32 @@
   <img src="docs/assets/epcforge-brand-light.png" width="260" alt="EPCForge Logo">
 </p>
 
-<h1 align="center">EPCForge</h1>
+<h1 align="center">EPCForge for ERPNext</h1>
 
 <p align="center">
   <strong>Engineering, Procurement & Construction Management for Frappe / ERPNext v16</strong>
 </p>
 
 <p align="center">
-  <a href="https://github.com/invento-software-limited/epcforge/blob/main/LICENSE"><img src="https://img.shields.io/badge/License-MIT-teal.svg" alt="License: MIT"></a>
+  <a href="https://github.com/invento-software-limited/epcforge/blob/version-16/license.txt"><img src="https://img.shields.io/badge/License-MIT-teal.svg" alt="License: MIT"></a>
   <a href="https://invento-software-limited.github.io/epcforge/"><img src="https://img.shields.io/badge/Docs-GitHub%20Pages-0d9488.svg" alt="Documentation"></a>
   <a href="https://frappe.io"><img src="https://img.shields.io/badge/Frappe-v16.0.0+-orange.svg" alt="Frappe Version"></a>
   <a href="https://erpnext.com"><img src="https://img.shields.io/badge/ERPNext-v16.0.0+-blue.svg" alt="ERPNext Version"></a>
+</p>
+
+<p align="center">
+  <a href="https://cloud.frappe.io/marketplace/apps/epcforge"><img src="https://img.shields.io/badge/Explore_the_free_app-Marketplace-125f9d?style=for-the-badge" alt="Explore EPCForge on Frappe Marketplace"></a>
+  <a href="https://invento.com.bd/epcforge-erpnext-boq-project-control/"><img src="https://img.shields.io/badge/See_the_workflow-BOQ_to_billing-0d9488?style=for-the-badge" alt="Read the EPCForge BOQ, procurement and billing guide"></a>
+  <a href="https://invento.com.bd/free-consultation/"><img src="https://img.shields.io/badge/Discuss_your_project-Invento-081a2a?style=for-the-badge" alt="Discuss your EPC implementation with Invento"></a>
 </p>
 
 ---
 
 ## 📦 About EPCForge
 
-**EPCForge** is an enterprise-grade Frappe application designed for Engineering, Procurement, and Construction (EPC) firms, main contractors, estimation engineers, and project managers. Built specifically for **Frappe v16** and **ERPNext v16**, it extends ERPNext with hierarchical Bill of Quantities (BOQ), baseline budget tracking, vendor tender management, and an engineering document control register.
+**EPCForge connects construction BOQs to project tasks, material requests and milestone invoice preparation in ERPNext v16.** It is built for EPC firms, contractors, estimators and project teams.
 
-Whether managing multi-million-dollar infrastructure projects or commercial builds, EPCForge unifies cost estimation, tender bidding, document submittals, and financial tracking directly inside your ERPNext Desk.
+ERPNext supplies purchasing, stock, accounting, Projects and Tasks. EPCForge adds BOQ scope, project budget cost heads, tender records and an engineering document register around that foundation.
 
 ---
 
@@ -41,33 +47,32 @@ Review tender status alongside the related project and tender type.
 
 ## ✨ Detailed Features
 
-### 🎯 BOQ (Bill of Quantities) Engine
-- **Hierarchical Structure**: Multi-level BOQ tree with parent/child sections and line items.
-- **Automated Pricing**: Quantity × Unit Rate calculations with customizable profit margin percentages.
-- **Milestone Payment Schedules**: Link BOQ items to project billing milestones and percentage payouts.
-- **Revision Audit History**: Track changes across project stages with `amended_from` baseline history.
+### 🎯 BOQ, project work and materials
+- **BOQ structure**: Group quantities, rates and estimated costs; link scope to project Tasks.
+- **Material Requests**: Prepare requests from eligible Material rows linked to stock Items, then continue through ERPNext purchasing.
+- **Milestone billing**: Use billing-milestone Tasks in the BOQ payment schedule to prepare a draft Sales Invoice for a selected milestone.
+- **Budget setup**: Submitting a BOQ can create a Project Budget record. Configure and review its cost-head allocations separately.
 
-### 💾 Project Budgeting & Cost Control
-- **Cost Head Allocation**: Link BOQ sections directly to custom budget heads (Material, Labor, Equipment, Subcontractor).
-- **Target vs. Actual Variance**: Live calculation of committed amounts, actual expenditure from GL entries, and remaining balances.
-- **Overrun Protection**: Real-time variance warnings when Purchase Orders or Material Requests exceed target thresholds.
+### 💾 Project budgets and recorded costs
+- **Budget allocations**: Organize planned amounts by project cost head.
+- **Commitments**: View totals from submitted Purchase Orders assigned to the project and cost head.
+- **Recorded costs**: Review submitted Purchase Invoice totals and approved Timesheet costs.
 
-### 🔌 Tender & Bidder Management
-- **Full Tender Lifecycle**: Draft → Open → Under Evaluation → Awarded → Cancelled.
-- **Flexible Classifications**: Support for Open Tenders, Selective Bidding, Negotiated Tenders, and Single Source awards.
-- **Bidder Invitations**: Track invited suppliers, bid submission status, commercial scores, and evaluation notes.
-- **Executive Reporting**: Integrated **Tender Summary** report for contract pipeline insights.
+**Review before relying on balances:** Purchase Orders remain in commitment totals after invoicing, so order and invoice values can overlap. Reconcile the underlying records; these views do not establish cash availability or project margin, or automatically prevent overspending.
 
-### ⚡ Engineering Document Register
-- **Centralized Control**: Classify engineering assets into Drawings, Specifications, RFIs, Submittals, and NCRs.
-- **Revision & Versioning**: Strict revision tracking (Rev A, B, C...) to ensure teams work on current drawings.
-- **Workflow Approval**: Configurable review states (`Draft` → `Under Review` → `Approved` → `Issued`).
+### 🔌 Tender and bidder management
+- **Tender packages**: Record tender status, project, type and key dates.
+- **Bidder evaluation**: Keep supplier bids, commercial scores and evaluation notes together.
+- **Award records**: Record decisions; create and approve Purchase Orders through the appropriate purchasing process.
 
-### 📊 Reports & Dashboards
-- **Tender Summary Report**: Consolidated view of open, evaluated, and awarded tender packages.
-- **BOQ Summary Report**: Itemized breakdown of rates, margins, and section totals.
-- **Budget vs. Actual Report**: Variance report comparing planned allocations to financial actuals.
-- **Desk Dashboards**: Interactive charts and number cards for active project status and pending document reviews.
+### ⚡ Engineering document register
+- **Document records**: Organize drawings, specifications, RFIs, submittals and NCRs.
+- **Revisions and reviews**: Record revision identifiers and review statuses.
+- **Issue procedures**: Configure responsibilities and approvals. Revision records alone do not prevent use of an obsolete drawing.
+
+### 📊 Reports and dashboards
+- **BOQ and tender summaries**: Review scope, amounts and tender status.
+- **Project views**: Inspect project activity, budget allocations and recorded costs, with the reconciliation boundaries above.
 
 ---
 
@@ -75,20 +80,23 @@ Review tender status alongside the related project and tender type.
 
 - **Frappe Framework**: `v16.0.0` or higher (`>=16.0.0,<17.0.0`)
 - **ERPNext**: `v16.0.0` or higher (`>=16.0.0,<17.0.0`)
-- **Python**: `3.10` or higher
+- **Release status**: Beta; evaluate on a test site before production.
+- **Runtime**: Use the Python, Node and database versions required by your Frappe v16 installation. The app package declares Python `>=3.10`; that is not the complete Frappe environment requirement.
 
 ---
 
 ## ⚙️ Installation
 
-Install EPCForge on your Frappe bench using the Bench CLI:
+**Frappe Cloud:** [Open the free app listing](https://cloud.frappe.io/marketplace/apps/epcforge) and check installation requirements for your site.
+
+**Self-hosted:** Back up your site and test the version-16 branch before installing on your Frappe bench:
 
 ```bash
 # Navigate to your bench directory
 cd ~/frappe-bench
 
 # Fetch the repository
-bench get-app https://github.com/invento-software-limited/epcforge
+bench get-app --branch version-16 https://github.com/invento-software-limited/epcforge
 
 # Install on your target site
 bench --site [your-site-name] install-app epcforge
@@ -102,11 +110,13 @@ bench --site [your-site-name] migrate
 
 ## 🚀 Quick Start & Usage Workflow
 
-1. **Set Up Project**: Create or open a project in ERPNext standard **Project** master.
-2. **Build BOQ**: Click **EPCForge** → **New BOQ** on the Project form. Add sections, line items, unit rates, and target margins, then Submit.
-3. **Establish Budget**: Select **EPCForge** → **Create Budget** to allocate cost heads against the approved BOQ baseline.
-4. **Float Tenders**: Go to **EPCForge** → **Tenders** to invite bidders, compare bids, and record awards.
-5. **Register Documents**: Go to **EPCForge** → **Document Register** to upload drawings, assign revision numbers, and route for approval.
+1. **Prepare the project**: Set up the Company, project, Items, accounts and permissions in ERPNext.
+2. **Build the BOQ**: Add groups and line items, quantities, rates and Task links. Review before submission.
+3. **Allocate the budget**: Open the linked Project Budget and review cost-head allocations.
+4. **Prepare materials and billing**: Use eligible material rows for Material Requests and the BOQ milestone schedule for draft invoice preparation. Review each resulting transaction.
+5. **Keep supporting records**: Record tender evaluations, awards, document revisions and review decisions.
+
+See the [illustrated EPCForge workflow](https://invento.com.bd/epcforge-erpnext-boq-project-control/) for fit, configuration and limitations. The MIT app is free; hosting, implementation and support services are separate.
 
 ---
 
@@ -130,4 +140,4 @@ Developed and maintained by **Invento Software Limited**. Invento builds enterpr
 
 ## 📄 License
 
-This repository is licensed under the [MIT License](LICENSE).
+This repository is licensed under the [MIT License](license.txt).
