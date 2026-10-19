@@ -32,8 +32,24 @@ add_to_apps_screen = [
 doctype_js = {
 	"Project": "public/js/project.js",
 	"Task": "public/js/task.js",
-	"BOQ": "public/js/boq.js",
-	"Project Budget": "public/js/project_budget.js",
+	"BOQ": [
+		"public/js/boq.js",
+		"public/js/boq_dashboard/format.js",
+		"public/js/boq_dashboard/charts.js",
+		"public/js/boq_dashboard/page_charts.js",
+		"public/js/boq_dashboard/styles.js",
+		"public/js/boq_dashboard/markup.js",
+		"public/js/boq_dashboard/sections.js",
+		"public/js/boq_dashboard/dashboard.js",
+	],
+	"Project Budget": [
+		"public/js/boq_dashboard/format.js",
+		"public/js/boq_dashboard/charts.js",
+		"public/js/boq_dashboard/page_charts.js",
+		"public/js/boq_dashboard/styles.js",
+		"public/js/budget_dashboard/markup.js",
+		"public/js/budget_dashboard/dashboard.js",
+	],
 }
 
 # include js, css files in header of desk.html

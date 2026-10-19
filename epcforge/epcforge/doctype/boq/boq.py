@@ -385,35 +385,6 @@ def create_sales_invoice(source_name: str, milestone_row_name: str):
 
 
 @frappe.whitelist()
-def get_boq_dashboard_data(boq_name: str):
-	"""Procurement, costing, and payment data for the BOQ form's in-document
-	Dashboard tab. Reuses the same aggregations as the Project Dashboard page
-	so the two views never drift apart.
-	"""
-	from epcforge.epcforge.page.project_dashboard.project_dashboard import (
-		_cost_by_item_type,
-		_payment_milestones,
-		_procurement_coverage,
-	)
-
-	boq = frappe.get_doc("BOQ", boq_name)
-	return {
-		"currency": frappe.db.get_single_value("EPCForge Settings", "default_currency")
-		or frappe.defaults.get_global_default("currency"),
-		"costing": {
-			"contract_value": flt(boq.total_amount),
-			"estimated_cost": flt(boq.estimated_cost),
-			"actual_cost": flt(boq.actual_cost),
-			"gross_margin_pct": flt(boq.gross_margin_pct),
-			"budget_variance": flt(boq.budget_variance),
-		},
-		"procurement": _procurement_coverage(boq),
-		"item_type_costs": _cost_by_item_type(boq),
-		"payment": _payment_milestones(boq),
-	}
-
-
-@frappe.whitelist()
 def get_linked_boq_item(task_name: str):
 	"""Return the stock BOQ Item row linked to this Task, if any."""
 	row = frappe.db.get_value(

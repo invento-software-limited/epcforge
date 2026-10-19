@@ -4,11 +4,16 @@
 import frappe
 from frappe import _
 
+from epcforge import report_kit as kit
+from epcforge.utils import ignore_active_project
+
 
 def execute(filters=None):
 	columns = get_columns()
-	data = get_data(filters)
-	return columns, data
+	# The report has its own Project filter; the sidebar's active-project list scope does not apply.
+	with ignore_active_project():
+		data = get_data(filters)
+	return columns, data, get_meta(filters, data)
 
 
 def get_columns():
@@ -32,33 +37,32 @@ def get_columns():
 
 
 def get_data(filters):
-	boq = frappe.qb.DocType("BOQ")
-
-	query = (
-		frappe.qb.from_(boq)
-		.select(
-			boq.name,
-			boq.project,
-			boq.contract_type,
-			boq.status,
-			boq.total_amount,
-			boq.estimated_cost,
-			boq.actual_cost,
-			boq.budget_variance,
-			boq.gross_margin_pct,
-			boq.revision,
-		)
-		.orderby(boq.creation, order=frappe.qb.desc)
-	)
-
-	if filters and filters.get("project"):
-		query = query.where(boq.project == filters.get("project"))
-	if filters and filters.get("status"):
-		query = query.where(boq.status == filters.get("status"))
-
-	data = query.run(as_dict=True)
-
+	filters = filters or {}
+	list_filters = {k: filters.get(k) for k in ("project", "status") if filters.get(k)}
+	data = frappe.get_list("BOQ", filters=list_filters, order_by="creation desc", limit_page_length=0,
+		fields=["name", "project", "contract_type", "status", "docstatus", "total_amount", "estimated_cost",
+			"actual_cost", "budget_variance", "gross_margin_pct", "revision"])
+	counts = {}
+	for parent in frappe.get_all("BOQ Item", filters={"parent": ["in", [r.name for r in data] or [""]]}, pluck="parent"):
+		counts[parent] = counts.get(parent, 0) + 1
 	for row in data:
-		row["item_count"] = frappe.db.count("BOQ Item", {"parent": row["name"]})
-
+		row["item_count"] = counts.get(row.name, 0)
 	return data
+
+
+def get_meta(filters, data):
+	"""Header cards and charts from the table's rows; cancelled BOQs are left out of totals."""
+	live = [r for r in data if r.get("docstatus") != 2]
+	contract = kit.total(live, lambda r: r.total_amount)
+	estimated = kit.total(live, lambda r: r.estimated_cost)
+	return kit.meta(
+		boqs=len(live),
+		cancelled=len(data) - len(live),
+		contract=contract,
+		estimated=estimated,
+		actual=kit.total(live, lambda r: r.actual_cost),
+		margin_pct=kit.pct(contract - estimated, contract),
+		statuses=kit.group(live, lambda r: r.status, lambda r: r.total_amount),
+		per_boq=[{"name": r.name, "project": r.project, "contract": r.total_amount, "estimated": r.estimated_cost,
+			"actual": r.actual_cost, "margin_pct": r.gross_margin_pct} for r in sorted(live, key=lambda r: -(r.total_amount or 0))[:12]],
+	)

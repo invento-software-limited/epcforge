@@ -3,14 +3,17 @@
 
 import frappe
 from frappe import _
-from frappe.query_builder import Order
-from frappe.query_builder.functions import Count
+
+from epcforge import report_kit as kit
+from epcforge.utils import ignore_active_project
 
 
 def execute(filters=None):
 	columns = get_columns()
-	data = get_data(filters)
-	return columns, data
+	# The report has its own Project filter; the sidebar's active-project list scope does not apply.
+	with ignore_active_project():
+		data = get_data(filters)
+	return columns, data, get_meta(filters, data)
 
 
 def get_columns():
@@ -82,38 +85,40 @@ def get_columns():
 
 
 def get_data(filters):
-	t = frappe.qb.DocType("Tender")
-	tb = frappe.qb.DocType("Tender Bidder")
+	filters = filters or {}
+	list_filters = [[k, "=", filters.get(k)] for k in ("project", "tender_type", "status") if filters.get(k)]
+	# The filters are labelled "Publish Date"; they used to filter the submission deadline.
+	if filters.get("from_date"):
+		list_filters.append(["publish_date", ">=", filters.get("from_date")])
+	if filters.get("to_date"):
+		list_filters.append(["publish_date", "<=", filters.get("to_date")])
+	data = frappe.get_list("Tender", filters=list_filters, order_by="submission_deadline desc", limit_page_length=0,
+		fields=["name as tender_name", "project", "tender_type", "status", "docstatus", "scope_of_work", "submission_deadline",
+			"evaluation_notes", "awarded_to", "award_amount", "estimated_value", "publish_date"])
+	bidders = {}
+	for parent in frappe.get_all("Tender Bidder", filters={"parent": ["in", [r.tender_name for r in data] or [""]]}, pluck="parent"):
+		bidders[parent] = bidders.get(parent, 0) + 1
+	for row in data:
+		row["number_of_bidders"] = bidders.get(row.tender_name, 0)
+	return data
 
-	subquery = frappe.qb.from_(tb).select(Count("*")).where(tb.parent == t.name)
 
-	query = (
-		frappe.qb.from_(t)
-		.select(
-			t.name.as_("tender_name"),
-			t.project,
-			t.tender_type,
-			t.status,
-			t.scope_of_work,
-			subquery.as_("number_of_bidders"),
-			t.submission_deadline,
-			t.evaluation_notes,
-			t.awarded_to,
-			t.award_amount,
-		)
-		.orderby(t.submission_deadline, order=Order.desc)
+def get_meta(filters, data):
+	"""Header cards and charts from the table's rows; cancelled tenders are left out of totals."""
+	live = [r for r in data if r.get("docstatus") != 2 and r.get("status") != "Cancelled"]
+	awarded = [r for r in live if r.status == "Awarded"]
+	estimated_awarded = kit.total(awarded, lambda r: r.estimated_value)
+	award_value = kit.total(awarded, lambda r: r.award_amount)
+	return kit.meta(
+		tenders=len(live),
+		open=len([r for r in live if r.status in ("Published", "Under Evaluation")]),
+		bidders=kit.total(live, lambda r: r.number_of_bidders),
+		bidders_per_tender=[{"name": r.tender_name, "bidders": r.number_of_bidders} for r in live],
+		estimated=kit.total(live, lambda r: r.estimated_value),
+		awarded_count=len(awarded),
+		award_value=award_value,
+		awarded_estimate=estimated_awarded,
+		award_vs_estimate_pct=kit.pct(award_value, estimated_awarded),
+		statuses=kit.group(live, lambda r: r.status, lambda r: r.estimated_value),
+		types=kit.group(live, lambda r: r.tender_type, lambda r: r.estimated_value),
 	)
-
-	if filters:
-		if filters.get("project"):
-			query = query.where(t.project == filters.get("project"))
-		if filters.get("tender_type"):
-			query = query.where(t.tender_type == filters.get("tender_type"))
-		if filters.get("status"):
-			query = query.where(t.status == filters.get("status"))
-		if filters.get("from_date"):
-			query = query.where(t.submission_deadline >= filters.get("from_date"))
-		if filters.get("to_date"):
-			query = query.where(t.submission_deadline <= filters.get("to_date"))
-
-	return query.run(as_dict=True)

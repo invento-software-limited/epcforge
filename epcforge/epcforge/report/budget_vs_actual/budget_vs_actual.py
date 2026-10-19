@@ -4,11 +4,16 @@
 import frappe
 from frappe import _
 
+from epcforge import report_kit as kit
+from epcforge.utils import ignore_active_project
+
 
 def execute(filters=None):
 	columns = get_columns()
-	data = get_data(filters)
-	return columns, data
+	# The report has its own Project filter; the sidebar's active-project list scope does not apply.
+	with ignore_active_project():
+		data = get_data(filters)
+	return columns, data, get_meta(filters, data)
 
 
 def get_columns():
@@ -44,38 +49,45 @@ def get_columns():
 
 
 def get_data(filters):
-	pb = frappe.qb.DocType("Project Budget")
-	pbi = frappe.qb.DocType("Project Budget Item")
+	filters = filters or {}
+	parent_filters = [["docstatus", "<", 2]]
+	if filters.get("project"):
+		parent_filters.append(["project", "=", filters.get("project")])
+	budgets = {b.name: b for b in frappe.get_list("Project Budget", filters=parent_filters, fields=["name", "project"], limit_page_length=0)}
+	if not budgets:
+		return []
+	item_filters = {"parent": ["in", list(budgets)], "parenttype": "Project Budget"}
+	if filters.get("cost_head"):
+		item_filters["cost_head"] = filters.get("cost_head")
+	rows = frappe.get_all("Project Budget Item", filters=item_filters, order_by="cost_head asc",
+		fields=["parent", "cost_head", "description", "budget_amount", "committed_amount", "actual_amount", "remaining_balance"])
+	data = []
+	for row in rows:
+		budget = row.budget_amount or 0
+		data.append({"project": budgets[row.parent].project, "budget_name": row.parent, "cost_head": row.cost_head,
+			"description": row.description, "budget_amount": budget, "committed_amount": row.committed_amount,
+			"actual_amount": row.actual_amount, "remaining_balance": row.remaining_balance,
+			"percent_used": ((row.committed_amount or 0) + (row.actual_amount or 0)) / budget * 100 if budget else 0})
+	return sorted(data, key=lambda r: (r["project"] or "", r["cost_head"] or ""))
 
-	query = (
-		frappe.qb.from_(pb)
-		.inner_join(pbi)
-		.on(pbi.parent == pb.name)
-		.select(
-			pb.project,
-			pb.name.as_("budget_name"),
-			pbi.cost_head,
-			pbi.description,
-			pbi.budget_amount,
-			pbi.committed_amount,
-			pbi.actual_amount,
-			pbi.remaining_balance,
-		)
-		.orderby(pb.project)
-		.orderby(pbi.cost_head)
+
+def get_meta(filters, data):
+	"""Header cards and charts from the table's rows."""
+	budget = kit.total(data, lambda r: r["budget_amount"])
+	used = lambda r: (r["committed_amount"] or 0) + (r["actual_amount"] or 0)
+	heads = kit.group(data, lambda r: r["cost_head"], lambda r: r["budget_amount"])
+	for h in heads:
+		rows = [r for r in data if r["cost_head"] == h["key"]]
+		h["committed"] = kit.total(rows, lambda r: r["committed_amount"])
+		h["actual"] = kit.total(rows, lambda r: r["actual_amount"])
+		h["used_pct"] = kit.pct(h["committed"] + h["actual"], h["value"])
+	return kit.meta(
+		budget=budget,
+		budgets=len({r["budget_name"] for r in data}),
+		committed=kit.total(data, lambda r: r["committed_amount"]),
+		actual=kit.total(data, lambda r: r["actual_amount"]),
+		remaining=kit.total(data, lambda r: r["remaining_balance"]),
+		used_pct=kit.pct(kit.total(data, used), budget),
+		heads=heads,
+		projects=kit.group(data, lambda r: r["project"], lambda r: r["budget_amount"]),
 	)
-
-	if filters and filters.get("project"):
-		query = query.where(pb.project == filters.get("project"))
-	if filters and filters.get("cost_head"):
-		query = query.where(pbi.cost_head == filters.get("cost_head"))
-
-	data = query.run(as_dict=True)
-
-	for row in data:
-		budget = row.get("budget_amount") or 0
-		committed = row.get("committed_amount") or 0
-		actual = row.get("actual_amount") or 0
-		row["percent_used"] = ((committed + actual) / budget * 100) if budget else 0
-
-	return data

@@ -179,6 +179,10 @@ def get_project_query_conditions(user, doctype=None):
 		return ""
 	if not frappe.request or frappe.request.headers.get("X-Epc-Active") != "1":
 		return ""
+	# A record's own dashboard reads that record's linked documents, whatever project the
+	# user is browsing; see ignore_active_project().
+	if frappe.flags.get("epc_ignore_active_project"):
+		return ""
 
 	project = frappe.defaults.get_user_default("project")
 	if not project:
@@ -216,3 +220,16 @@ def _find_project_task(project, template_task):
 			return new_task[0].name
 
 	return None
+
+
+class ignore_active_project:
+	"""Context manager: suspend the active-project list scope (a browsing filter, not a
+	permission) while code reads a specific record's links. Roles and User Permissions
+	still apply to every query made inside it."""
+
+	def __enter__(self):
+		self.previous = frappe.flags.get("epc_ignore_active_project")
+		frappe.flags.epc_ignore_active_project = True
+
+	def __exit__(self, *exc):
+		frappe.flags.epc_ignore_active_project = self.previous
