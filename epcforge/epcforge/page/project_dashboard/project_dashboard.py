@@ -152,7 +152,7 @@ def _procurement_coverage(boq):
 			flt(x)
 			for x in frappe.db.sql(
 				"""
-				select coalesce(sum(poi.qty), 0), coalesce(sum(poi.amount), 0)
+				select coalesce(sum(poi.qty), 0), coalesce(sum(poi.base_amount), 0)
 				from `tabPurchase Order Item` poi
 				join `tabPurchase Order` po on po.name = poi.parent
 				where poi.custom_boq_item = %s and po.docstatus = 1
@@ -165,7 +165,7 @@ def _procurement_coverage(boq):
 			flt(x)
 			for x in frappe.db.sql(
 				"""
-				select coalesce(sum(pri.qty), 0), coalesce(sum(pri.amount), 0)
+				select coalesce(sum(pri.qty), 0), coalesce(sum(pri.base_amount), 0)
 				from `tabPurchase Receipt Item` pri
 				join `tabPurchase Receipt` pr on pr.name = pri.parent
 				where pri.custom_boq_item = %s and pr.docstatus = 1

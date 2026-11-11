@@ -30,21 +30,7 @@ frappe.ui.form.on("BOQ", {
 			frm.add_custom_button(
 				__("Sales Invoice"),
 				function () {
-					const selected = frm.get_selected("boq_payment_schedule");
-					if (selected.length !== 1) {
-						frappe.msgprint(__("Please select exactly one Payment Schedule row."));
-						return;
-					}
-					frappe.call({
-						method: "epcforge.epcforge.doctype.boq.boq.create_sales_invoice",
-						args: { source_name: frm.doc.name, milestone_row_name: selected[0] },
-						callback: function (r) {
-							if (r.message) {
-								frappe.model.sync(r.message);
-								frappe.set_route("Form", "Sales Invoice", r.message.name);
-							}
-						},
-					});
+					show_sales_invoice_dialog(frm);
 				},
 				__("Create")
 			);
@@ -179,4 +165,138 @@ function set_linked_wbs_query(frm) {
 	frm.set_query("linked_wbs", "boq_payment_schedule", function (doc) {
 		return { filters: { project: doc.project, custom_is_billing_milestone: 1 } };
 	});
+}
+
+function show_sales_invoice_dialog(frm) {
+	if (frm.is_dirty()) {
+		frappe.msgprint(__("Please save the BOQ before creating a Sales Invoice."));
+		return;
+	}
+
+	const schedules = frm.doc.boq_payment_schedule || [];
+	if (!schedules.length) {
+		frappe.msgprint({
+			title: __("No Payment Schedule"),
+			indicator: "orange",
+			message: __("This BOQ does not have any Payment Schedule milestones to invoice."),
+		});
+		return;
+	}
+
+	const unbilled = schedules.filter((row) => !row.sales_invoice);
+	if (!unbilled.length) {
+		frappe.msgprint({
+			title: __("All Milestones Invoiced"),
+			indicator: "orange",
+			message: __("All Payment Schedule milestones for this BOQ have already been invoiced."),
+		});
+		return;
+	}
+
+	const selected_rows = frm.get_selected("boq_payment_schedule") || [];
+	let preselected = null;
+	if (selected_rows.length === 1 && unbilled.some((r) => r.name === selected_rows[0])) {
+		preselected = selected_rows[0];
+	} else {
+		preselected = unbilled[0].name;
+	}
+
+	const options = unbilled.map((r) => {
+		const amt = format_currency(r.amount, frm.doc.currency);
+		const pct = r.percent_amount ? `${r.percent_amount}%` : "0%";
+		let label = `${r.idx ? r.idx + ". " : ""}${r.milestone} (${pct} — ${amt})`;
+		if (r.payment_status && r.payment_status !== "Pending") {
+			label += ` [${r.payment_status}]`;
+		}
+		return {
+			label: label,
+			value: r.name,
+		};
+	});
+
+	function render_preview(milestone_name) {
+		const r = unbilled.find((x) => x.name === milestone_name) || unbilled[0];
+		if (!r) return "";
+
+		const amt = format_currency(r.amount, frm.doc.currency);
+		const adv = r.advance_deduction ? format_currency(r.advance_deduction, frm.doc.currency) : "—";
+		const ret = r.retention_amount ? format_currency(r.retention_amount, frm.doc.currency) : "—";
+		const net = r.net_payable ? format_currency(r.net_payable, frm.doc.currency) : amt;
+		const target_date = r.target_date ? frappe.datetime.str_to_user(r.target_date) : "—";
+		const pct = r.percent_amount ? `${r.percent_amount}%` : "0%";
+
+		return `
+			<div class="boq-milestone-preview-card" style="background: var(--bg-light-gray, #f8f9fa); border: 1px solid var(--border-color, #e2e8f0); border-radius: 8px; padding: 14px 16px; margin-top: 10px;">
+				<div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+					<span style="font-weight: 600; font-size: 14px; color: var(--text-color, #1f272e);">${frappe.utils.escape_html(r.milestone || "")}</span>
+					<span class="badge badge-primary" style="font-size: 12px; padding: 4px 8px;">${pct}</span>
+				</div>
+				<div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px 16px; font-size: 12px;">
+					<div><span class="text-muted">${__("Gross Amount")}:</span> <b style="color: var(--text-color, #1f272e);">${amt}</b></div>
+					<div><span class="text-muted">${__("Target Date")}:</span> <b>${target_date}</b></div>
+					<div><span class="text-muted">${__("Advance Deduction")}:</span> <b>${adv}</b></div>
+					<div><span class="text-muted">${__("Retention Amount")}:</span> <b>${ret}</b></div>
+					<div style="grid-column: span 2; border-top: 1px solid var(--border-color, #e2e8f0); padding-top: 8px; margin-top: 4px; display: flex; justify-content: space-between;">
+						<span class="text-muted" style="font-size: 13px;">${__("Estimated Net Payable")}:</span>
+						<b style="font-size: 14px; color: var(--primary, #1b84ff);">${net}</b>
+					</div>
+				</div>
+			</div>
+		`;
+	}
+
+	const dialog = new frappe.ui.Dialog({
+		title: __("Create Sales Invoice"),
+		fields: [
+			{
+				fieldname: "milestone_row_name",
+				fieldtype: "Select",
+				label: __("Payment Milestone"),
+				options: options,
+				default: preselected,
+				reqd: 1,
+				description: __("Select the payment schedule milestone you want to bill."),
+				onchange() {
+					const val = dialog.get_value("milestone_row_name");
+					if (dialog.fields_dict.preview_html) {
+						dialog.fields_dict.preview_html.$wrapper.html(render_preview(val));
+					}
+				},
+			},
+			{
+				fieldname: "preview_html",
+				fieldtype: "HTML",
+			},
+		],
+		primary_action_label: __("Create Sales Invoice"),
+		primary_action(values) {
+			if (!values.milestone_row_name) {
+				frappe.msgprint(__("Please select a Payment Schedule milestone."));
+				return;
+			}
+			dialog.hide();
+			frappe.call({
+				method: "epcforge.epcforge.doctype.boq.boq.create_sales_invoice",
+				args: {
+					source_name: frm.doc.name,
+					milestone_row_name: values.milestone_row_name,
+				},
+				freeze: true,
+				freeze_message: __("Creating Sales Invoice..."),
+				callback: function (r) {
+					if (r.message) {
+						frappe.model.sync(r.message);
+						frappe.set_route("Form", "Sales Invoice", r.message.name);
+					}
+				},
+			});
+		},
+	});
+
+	dialog.show();
+	setTimeout(() => {
+		if (dialog.fields_dict.preview_html) {
+			dialog.fields_dict.preview_html.$wrapper.html(render_preview(preselected));
+		}
+	}, 100);
 }

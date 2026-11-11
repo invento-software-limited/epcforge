@@ -83,4 +83,14 @@ class BudgetDashboard:
 		for row in frappe.get_list(doctype, filters={"project": self.budget.project, "docstatus": 1, "epc_cost_head": ["is", "set"]},
 			fields=["name", "epc_cost_head"], limit_page_length=0):
 			out.setdefault(row.epc_cost_head, []).append(row.name)
+
+		unset_rows = frappe.get_list(doctype, filters={"project": self.budget.project, "docstatus": 1, "epc_cost_head": ["in", [None, ""]]},
+			fields=["name"], limit_page_length=0)
+		if unset_rows:
+			from epcforge.epcforge.doctype.project_budget.budget_hooks import resolve_cost_head
+			for row in unset_rows:
+				doc = frappe.get_doc(doctype, row.name)
+				head = resolve_cost_head(doc)
+				if head:
+					out.setdefault(head, []).append(row.name)
 		return out

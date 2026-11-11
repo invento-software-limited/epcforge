@@ -63,7 +63,7 @@
    "fieldname": "epc_cost_head",
    "fieldtype": "Link",
    "label": "Budget Cost Head",
-   "insert_after": "project",
+   "insert_after": "cost_center",
    "name": "Purchase Order-epc_cost_head"
   },
   {

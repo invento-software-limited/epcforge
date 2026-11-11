@@ -5,7 +5,7 @@ import frappe
 from frappe import _
 from frappe.model.document import Document
 from frappe.model.mapper import get_mapped_doc
-from frappe.utils import flt
+from frappe.utils import flt, nowdate
 
 
 class BOQ(Document):
@@ -171,7 +171,7 @@ class BOQ(Document):
 		pr_val = (
 			frappe.db.sql(
 				"""
-				select coalesce(sum(pri.amount), 0)
+				select coalesce(sum(pri.base_amount), 0)
 				from `tabPurchase Receipt Item` pri
 				join `tabPurchase Receipt` pr on pr.name = pri.parent
 				where pri.custom_boq_item = %s and pr.docstatus = 1
@@ -195,7 +195,7 @@ class BOQ(Document):
 		pi_val = (
 			frappe.db.sql(
 				"""
-				select coalesce(sum(pii.amount), 0)
+				select coalesce(sum(pii.base_amount), 0)
 				from `tabPurchase Invoice Item` pii
 				join `tabPurchase Invoice` pi on pi.name = pii.parent
 				where pii.custom_boq_item = %s and pi.docstatus = 1
@@ -282,6 +282,26 @@ def get_billing_milestones(project: str):
 	)
 
 
+def get_default_warehouse(company: str | None = None) -> str | None:
+	warehouse = None
+	if company:
+		warehouse = frappe.db.get_value("Company", company, "default_warehouse")
+		if not warehouse:
+			warehouse = frappe.db.get_value(
+				"Warehouse",
+				{"company": company, "is_group": 0, "warehouse_name": ["like", "%Store%"]},
+				"name",
+			) or frappe.db.get_value(
+				"Warehouse",
+				{"company": company, "is_group": 0, "disabled": 0},
+				"name",
+				order_by="creation asc",
+			)
+	if not warehouse:
+		warehouse = frappe.db.get_value("Warehouse", {"is_group": 0, "disabled": 0}, "name")
+	return warehouse
+
+
 @frappe.whitelist()
 def create_material_request(source_name: str, target_doc: Document | str | None = None):
 	"""Create a Material Request from BOQ using get_mapped_doc.
@@ -290,10 +310,13 @@ def create_material_request(source_name: str, target_doc: Document | str | None 
 
 	def post_process(source, target):
 		target.material_request_type = "Purchase"
-		target.set_warehouse = frappe.db.get_single_value("Stock Settings", "default_warehouse")
 		target.custom_boq = source.name
 		if not target.company:
-			target.company = frappe.db.get_single_value("EPCForge Settings", "default_company")
+			target.company = (
+				frappe.db.get_value("Project", source.project, "company")
+				or frappe.db.get_single_value("EPCForge Settings", "default_company")
+			)
+		target.set_warehouse = get_default_warehouse(target.company)
 
 		target.items = [
 			item
@@ -302,6 +325,10 @@ def create_material_request(source_name: str, target_doc: Document | str | None 
 		]
 		if not target.items:
 			frappe.throw(_("No items with 'is_stock_item' enabled were found in this BOQ."))
+
+		for item in target.items:
+			if not item.warehouse:
+				item.warehouse = target.set_warehouse
 
 	return get_mapped_doc(
 		"BOQ",
@@ -345,9 +372,19 @@ def create_sales_invoice(source_name: str, milestone_row_name: str):
 		if customer:
 			target.customer = customer
 		target.project = boq.project
+		target.custom_boq = boq.name
 		target.epc_linked_milestone = row.linked_wbs
 		if not target.company:
-			target.company = frappe.db.get_single_value("EPCForge Settings", "default_company")
+			target.company = (
+				frappe.db.get_value("Project", boq.project, "company")
+				or frappe.db.get_single_value("EPCForge Settings", "default_company")
+			)
+
+		retention_pct = flt(boq.retention_pct)
+		target.epc_retention_percent = retention_pct
+		target.epc_retention_amount = flt(row.amount) * retention_pct / 100.0
+		target.epc_net_payable = flt(row.amount) - target.epc_retention_amount
+		target.epc_billing_period = frappe.utils.formatdate(nowdate(), "MMMM yyyy")
 
 		income_account = frappe.db.get_value(
 			"Account", {"company": target.company, "root_type": "Income", "is_group": 0}, "name"
@@ -367,6 +404,7 @@ def create_sales_invoice(source_name: str, milestone_row_name: str):
 				"description": _("Progress Billing for {0} ({1}% of Contract Value)").format(
 					row.milestone, row.percent_amount
 				),
+				"custom_boq": boq.name,
 			},
 		)
 
@@ -376,7 +414,7 @@ def create_sales_invoice(source_name: str, milestone_row_name: str):
 		{
 			"BOQ": {
 				"doctype": "Sales Invoice",
-				"field_map": {"project": "project"},
+				"field_map": {"project": "project", "name": "custom_boq"},
 				"field_no_map": ["status", "naming_series"],
 			}
 		},
@@ -411,7 +449,11 @@ def create_mr_from_task(source_name: str, target_doc: Document | str | None = No
 	mr.material_request_type = "Purchase"
 	mr.project = project
 	mr.custom_boq = row.parent
-	mr.set_warehouse = frappe.db.get_single_value("Stock Settings", "default_warehouse")
+	mr.company = (
+		frappe.db.get_value("Project", project, "company")
+		or frappe.db.get_single_value("EPCForge Settings", "default_company")
+	)
+	mr.set_warehouse = get_default_warehouse(mr.company)
 	mr.append(
 		"items",
 		{
@@ -421,6 +463,7 @@ def create_mr_from_task(source_name: str, target_doc: Document | str | None = No
 			"uom": row.uom,
 			"rate": row.rate,
 			"custom_boq_item": row.name,
+			"warehouse": mr.set_warehouse,
 		},
 	)
 	return mr

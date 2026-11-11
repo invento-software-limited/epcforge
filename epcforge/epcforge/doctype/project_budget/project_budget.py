@@ -85,10 +85,40 @@ class ProjectBudget(Document):
 		return (
 			frappe.db.sql(
 				"""
-				select coalesce(sum(grand_total), 0) from `tabPurchase Order`
-				where project = %s and epc_cost_head = %s and docstatus = 1
+				select coalesce(sum(po.base_grand_total), 0) from `tabPurchase Order` po
+				where po.project = %s and po.docstatus = 1
+				and (
+					po.epc_cost_head = %s
+					or (
+						(po.epc_cost_head is null or po.epc_cost_head = '')
+						and (
+							exists (
+								select 1 from `tabPurchase Order Item` poi
+								left join `tabBOQ Item` bi on bi.name = poi.custom_boq_item
+								where poi.parent = po.name
+								and (
+									(bi.item_type = 'Material' and %s = 'Direct Materials')
+									or (bi.item_type = 'Labour' and %s = 'Labour & Manpower')
+									or (bi.item_type = 'Equipment' and %s = 'Equipment & Machinery')
+									or (bi.item_type = 'Subcontract' and %s = 'Subcontract')
+									or (bi.item_type = 'Overhead' and %s = 'Overheads')
+								)
+							)
+							or (
+								not exists (
+									select 1 from `tabPurchase Order Item` poi2
+									where poi2.parent = po.name and poi2.custom_boq_item is not null and poi2.custom_boq_item != ''
+								)
+								and (
+									(po.is_subcontracted = 1 and %s = 'Subcontract')
+									or (po.is_subcontracted = 0 and %s = 'Direct Materials')
+								)
+							)
+						)
+					)
+				)
 				""",
-				(self.project, cost_head),
+				(self.project, cost_head, cost_head, cost_head, cost_head, cost_head, cost_head, cost_head, cost_head),
 			)[0][0]
 			or 0.0
 		)
@@ -97,21 +127,70 @@ class ProjectBudget(Document):
 		pi_total = (
 			frappe.db.sql(
 				"""
-				select coalesce(sum(grand_total), 0) from `tabPurchase Invoice`
-				where project = %s and epc_cost_head = %s and docstatus = 1
+				select coalesce(sum(pi.base_grand_total), 0) from `tabPurchase Invoice` pi
+				where pi.project = %s and pi.docstatus = 1
+				and (
+					pi.epc_cost_head = %s
+					or (
+						(pi.epc_cost_head is null or pi.epc_cost_head = '')
+						and (
+							exists (
+								select 1 from `tabPurchase Invoice Item` pii
+								left join `tabBOQ Item` bi on bi.name = pii.custom_boq_item
+								where pii.parent = pi.name
+								and (
+									(bi.item_type = 'Material' and %s = 'Direct Materials')
+									or (bi.item_type = 'Labour' and %s = 'Labour & Manpower')
+									or (bi.item_type = 'Equipment' and %s = 'Equipment & Machinery')
+									or (bi.item_type = 'Subcontract' and %s = 'Subcontract')
+									or (bi.item_type = 'Overhead' and %s = 'Overheads')
+								)
+							)
+							or exists (
+								select 1 from `tabPurchase Invoice Item` pii2
+								join `tabPurchase Order` po on po.name = pii2.purchase_order
+								where pii2.parent = pi.name and (
+									po.epc_cost_head = %s
+									or (
+										(po.epc_cost_head is null or po.epc_cost_head = '')
+										and (
+											(po.is_subcontracted = 1 and %s = 'Subcontract')
+											or (po.is_subcontracted = 0 and %s = 'Direct Materials')
+										)
+									)
+								)
+							)
+							or (
+								not exists (
+									select 1 from `tabPurchase Invoice Item` pii3
+									where pii3.parent = pi.name and (
+										(pii3.custom_boq_item is not null and pii3.custom_boq_item != '')
+										or (pii3.purchase_order is not null and pii3.purchase_order != '')
+									)
+								)
+								and (
+									(pi.is_subcontracted = 1 and %s = 'Subcontract')
+									or (pi.is_subcontracted = 0 and %s = 'Direct Materials')
+								)
+							)
+						)
+					)
+				)
 				""",
-				(self.project, cost_head),
+				(self.project, cost_head, cost_head, cost_head, cost_head, cost_head, cost_head, cost_head, cost_head, cost_head, cost_head, cost_head),
 			)[0][0]
 			or 0.0
 		)
 		ts_total = (
 			frappe.db.sql(
 				"""
-				select coalesce(sum(tsd.costing_amount), 0) from `tabTimesheet Detail` tsd
+				select coalesce(sum(tsd.base_costing_amount), 0) from `tabTimesheet Detail` tsd
 				join `tabTimesheet` ts on tsd.parent = ts.name
-				where tsd.project = %s and tsd.epc_cost_head = %s and ts.status = 'Approved'
+				where tsd.project = %s
+				and (tsd.epc_cost_head = %s or (tsd.epc_cost_head is null and %s = 'Labour & Manpower'))
+				and ts.status = 'Approved'
 				""",
-				(self.project, cost_head),
+				(self.project, cost_head, cost_head),
 			)[0][0]
 			or 0.0
 		)

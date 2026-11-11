@@ -53,27 +53,84 @@ def run_boq_update_in_background(project):
 
 
 # ---------------------------------------------------------------------------
-# BOQ header link (drives the BOQ form's Connections tab)
+# BOQ header link & Cost Head resolution
 # ---------------------------------------------------------------------------
+ITEM_TYPE_TO_COST_HEAD = {
+	"Material": "Direct Materials",
+	"Labour": "Labour & Manpower",
+	"Equipment": "Equipment & Machinery",
+	"Subcontract": "Subcontract",
+	"Overhead": "Overheads",
+}
+
+
+def resolve_cost_head(doc):
+	"""Infer the Budget Cost Head for a Purchase Order or Purchase Invoice."""
+	if doc.get("epc_cost_head"):
+		return doc.epc_cost_head
+
+	# For Purchase Invoice, check linked Purchase Order
+	if doc.doctype == "Purchase Invoice":
+		for it in doc.get("items", []):
+			if it.get("purchase_order"):
+				po_head = frappe.db.get_value("Purchase Order", it.purchase_order, "epc_cost_head")
+				if po_head:
+					return po_head
+
+	# Check items for linked BOQ item
+	for it in doc.get("items", []):
+		if it.get("custom_boq_item"):
+			item_type = frappe.db.get_value("BOQ Item", it.custom_boq_item, "item_type")
+			if item_type in ITEM_TYPE_TO_COST_HEAD:
+				return ITEM_TYPE_TO_COST_HEAD[item_type]
+
+	# Check subcontracting flag
+	if doc.get("is_subcontracted"):
+		return "Subcontract"
+
+	# Check items for fixed assets
+	for it in doc.get("items", []):
+		if it.get("is_fixed_asset"):
+			return "Equipment & Machinery"
+
+	# If items exist, default to Direct Materials for purchase transactions
+	if doc.get("items"):
+		return "Direct Materials"
+
+	return None
+
+
 def set_boq_link(doc, method):
 	"""Stamp custom_boq on new Purchase Order/Invoice/Receipt, Stock Entry, and
 	Sales Invoice docs from their Project's active BOQ, so the BOQ's own
 	Connections tab shows them (mirrors what create_material_request already
-	does for Material Request).
+	does for Material Request). Also auto-assign epc_cost_head if missing.
 	"""
-	if doc.get("custom_boq") or not doc.get("project"):
-		return
-	doc.custom_boq = frappe.db.get_value("BOQ", {"project": doc.project, "docstatus": ["!=", 2]}, "name")
+	if not doc.get("custom_boq") and doc.get("project"):
+		doc.custom_boq = frappe.db.get_value("BOQ", {"project": doc.project, "docstatus": ["!=", 2]}, "name")
+
+	if not doc.get("epc_cost_head") and doc.get("project") and doc.doctype in ("Purchase Order", "Purchase Invoice"):
+		cost_head = resolve_cost_head(doc)
+		if cost_head and frappe.db.exists("Budget Cost Head", cost_head):
+			doc.epc_cost_head = cost_head
 
 
 # ---------------------------------------------------------------------------
 # Purchase Order / Purchase Invoice / Purchase Receipt / Stock Entry / Timesheet
 # ---------------------------------------------------------------------------
 def on_purchase_order_update(doc, method):
+	if not doc.get("epc_cost_head") and doc.get("project"):
+		cost_head = resolve_cost_head(doc)
+		if cost_head and frappe.db.exists("Budget Cost Head", cost_head):
+			doc.db_set("epc_cost_head", cost_head, update_modified=False)
 	handle_budget_update(doc.project)
 
 
 def on_purchase_invoice_update(doc, method):
+	if not doc.get("epc_cost_head") and doc.get("project"):
+		cost_head = resolve_cost_head(doc)
+		if cost_head and frappe.db.exists("Budget Cost Head", cost_head):
+			doc.db_set("epc_cost_head", cost_head, update_modified=False)
 	handle_budget_update(doc.project)
 
 
@@ -155,28 +212,89 @@ def on_task_update(doc, method):
 # ---------------------------------------------------------------------------
 # Sales Invoice (progress billing)
 # ---------------------------------------------------------------------------
+def find_payment_schedule_row(doc):
+	"""Find the BOQ Payment Schedule row associated with a Sales Invoice.
+
+	Matches via:
+	1. Direct link: row already linked to this Sales Invoice (sales_invoice == doc.name)
+	2. Task milestone link: linked_wbs == doc.epc_linked_milestone
+	3. Milestone name: row milestone matching an item's item_name in doc.items
+	   scoped to doc.custom_boq or project's active BOQ.
+	"""
+	if doc.get("name"):
+		row = frappe.db.get_value(
+			"BOQ Payment Schedule",
+			{"sales_invoice": doc.name},
+			["name", "parent", "milestone", "sales_invoice"],
+			as_dict=True,
+		)
+		if row:
+			return row
+
+	boq_name = doc.get("custom_boq")
+	if not boq_name and doc.get("project"):
+		boq_name = frappe.db.get_value(
+			"BOQ", {"project": doc.project, "docstatus": ["!=", 2]}, "name"
+		)
+
+	if doc.get("epc_linked_milestone"):
+		filters = {"linked_wbs": doc.epc_linked_milestone}
+		if boq_name:
+			filters["parent"] = boq_name
+		row = frappe.db.get_value(
+			"BOQ Payment Schedule", filters, ["name", "parent", "milestone", "sales_invoice"], as_dict=True
+		)
+		if row:
+			return row
+
+	if boq_name and doc.get("items"):
+		item_names = [it.item_name for it in doc.get("items") if it.item_name]
+		if item_names:
+			candidates = frappe.get_all(
+				"BOQ Payment Schedule",
+				filters={
+					"parent": boq_name,
+					"milestone": ["in", item_names],
+				},
+				fields=["name", "parent", "milestone", "sales_invoice"],
+			)
+			for c in candidates:
+				if doc.get("name") and c.sales_invoice == doc.name:
+					return c
+			for c in candidates:
+				if not c.sales_invoice:
+					return c
+			if candidates:
+				return candidates[0]
+
+	return None
+
+
 def on_sales_invoice_validate(doc, method):
-	if not doc.get("epc_linked_milestone"):
+	boq_name = doc.get("custom_boq")
+	if not boq_name and doc.get("project"):
+		boq_name = frappe.db.get_value("BOQ", {"project": doc.project, "docstatus": ["!=", 2]}, "name")
+
+	if not boq_name and not doc.get("epc_linked_milestone"):
 		return
 
-	boq_name = frappe.db.get_value("BOQ", {"project": doc.project, "docstatus": ["!=", 2]}, "name")
 	if boq_name:
 		retention_pct = frappe.db.get_value("BOQ", boq_name, "retention_pct") or 0
-		if not doc.get("epc_retention_percent"):
+		if not doc.get("epc_retention_percent") and retention_pct:
 			doc.epc_retention_percent = retention_pct
 
-	doc.epc_retention_amount = flt(doc.grand_total) * flt(doc.get("epc_retention_percent")) / 100.0
-	doc.epc_net_payable = flt(doc.grand_total) - doc.epc_retention_amount
-	doc.epc_billing_period = frappe.utils.formatdate(doc.posting_date or nowdate(), "MMMM yyyy")
+	if doc.get("epc_retention_percent"):
+		doc.epc_retention_amount = flt(doc.grand_total) * flt(doc.epc_retention_percent) / 100.0
+	else:
+		doc.epc_retention_amount = 0.0
+
+	doc.epc_net_payable = flt(doc.grand_total) - flt(doc.epc_retention_amount)
+	if not doc.get("epc_billing_period"):
+		doc.epc_billing_period = frappe.utils.formatdate(doc.posting_date or nowdate(), "MMMM yyyy")
 
 
 def on_sales_invoice_update(doc, method):
-	if not doc.get("epc_linked_milestone"):
-		return
-
-	row = frappe.db.get_value(
-		"BOQ Payment Schedule", {"linked_wbs": doc.epc_linked_milestone}, ["name", "parent"], as_dict=True
-	)
+	row = find_payment_schedule_row(doc)
 	if not row:
 		return
 
@@ -189,6 +307,6 @@ def on_sales_invoice_update(doc, method):
 			"BOQ Payment Schedule", row.name, {"sales_invoice": None, "payment_status": "Pending"}
 		)
 
-	project = frappe.db.get_value("BOQ", row.parent, "project")
+	project = frappe.db.get_value("BOQ", row.parent, "project") or doc.get("project")
 	if project:
 		handle_boq_update(project)
