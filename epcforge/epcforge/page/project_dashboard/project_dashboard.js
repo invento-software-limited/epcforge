@@ -16,6 +16,7 @@ frappe.pages["project-dashboard"].on_page_load = function (wrapper) {
 
 	ensure_pd_styles();
 	ensure_pd_resize_listener();
+	ensure_pd_chart_interactions();
 
 	const project_field = page.add_field({
 		label: __("Project"),
@@ -71,12 +72,16 @@ function load_dashboard(page, project_id) {
 const PD_COLOR = {
 	green_deep: "#0a5a3c",
 	green_mid: "#097C52",
+	green_light: "#86efac",
 	teal_deep: "#17505d",
 	teal_mid: "#17626e",
+	teal_light: "#5eead4",
 	steel_deep: "#22405e",
 	steel_mid: "#2f5a86",
+	steel_light: "#93c5fd",
 	amber_deep: "#7a4f12",
 	amber_mid: "#8a5a16",
+	amber_light: "#fcd34d",
 	rust_deep: "#8a4527",
 	rust_mid: "#a3552f",
 	claret_deep: "#7e2a30",
@@ -97,6 +102,60 @@ const PD_SCHED_COLOR = {
 	Delayed: PD_COLOR.amber_deep,
 	"Severely Delayed": PD_COLOR.claret_deep,
 };
+
+function pd_status_bg(status) {
+	if (!status) return "";
+	const s = String(status).trim().toLowerCase();
+	if (s === "green" || s === "on track" || s === "completed") return "#dcfce7";
+	if (s === "yellow" || s === "delayed") return "#fef3c7";
+	if (s === "red" || s === "severely delayed") return "#fee2e2";
+	return "";
+}
+
+function pd_health_color(health) {
+	if (!health) return PD_COLOR.slate_mid;
+	const s = String(health).trim().toLowerCase();
+	if (s === "green") return PD_COLOR.green_deep;
+	if (s === "yellow") return PD_COLOR.amber_deep;
+	if (s === "red") return PD_COLOR.claret_deep;
+	return PD_HEALTH_COLOR[health] || PD_COLOR.slate_mid;
+}
+
+function pd_sched_color(sched) {
+	if (!sched) return PD_COLOR.slate_mid;
+	const s = String(sched).trim().toLowerCase();
+	if (s === "on track") return PD_COLOR.green_deep;
+	if (s === "completed") return PD_COLOR.teal_deep;
+	if (s === "delayed") return PD_COLOR.amber_deep;
+	if (s === "severely delayed") return PD_COLOR.claret_deep;
+	return PD_SCHED_COLOR[sched] || PD_COLOR.slate_mid;
+}
+
+function cpi_tooltip_html() {
+	return `
+		<span class="pd-tip-box" role="tooltip">
+			<strong class="pd-tip-title">${__("Cost Performance Index (CPI)")}</strong>
+			<span class="pd-tip-formula">${__("Formula")}: EV ÷ AC (${__("Earned Value / Actual Cost")})</span>
+			<ul class="pd-tip-list">
+				<li><span class="pd-tip-good">≥ 1.0</span>: ${__("Under or on budget (Cost efficient)")}</li>
+				<li><span class="pd-tip-bad">&lt; 1.0</span>: ${__("Over budget (Cost overrun)")}</li>
+			</ul>
+			<span class="pd-tip-desc">${__("Measures cost efficiency of work accomplished.")}</span>
+		</span>`;
+}
+
+function spi_tooltip_html() {
+	return `
+		<span class="pd-tip-box" role="tooltip">
+			<strong class="pd-tip-title">${__("Schedule Performance Index (SPI)")}</strong>
+			<span class="pd-tip-formula">${__("Formula")}: EV ÷ PV (${__("Earned Value / Planned Value")})</span>
+			<ul class="pd-tip-list">
+				<li><span class="pd-tip-good">≥ 1.0</span>: ${__("On or ahead of schedule")}</li>
+				<li><span class="pd-tip-bad">&lt; 1.0</span>: ${__("Behind schedule (Delayed)")}</li>
+			</ul>
+			<span class="pd-tip-desc">${__("Measures progress against the project schedule.")}</span>
+		</span>`;
+}
 
 // ---------------------------------------------------------------------------
 // Layout
@@ -126,13 +185,12 @@ function build_layout(data) {
 		<div class="pd">
 			${pd_header(project, budget, boq, symbol)}
 			${metric_row_1(project, budget, boq, symbol)}
-			${metric_row_2(budget, symbol)}
-			${procurement_stage_strip(data.procurement.kpis)}
+			${procurement_stage_strip(data.procurement.kpis, symbol)}
 
 			<div class="pd-ch2">
 				<div class="pd-card">
 					<div class="pd-hrow"><span>${__("Procurement Coverage by Item")}</span><span class="pd-sub">${__(
-						"MR · PO · GR"
+						"MR · PO · GR · Paid"
 					)}</span></div>
 					${procurement_item_rows(data.procurement.items)}
 				</div>
@@ -155,7 +213,7 @@ function build_layout(data) {
 
 			<div class="pd-ch2">
 				<div class="pd-card">
-					<div class="pd-hrow"><span>${__("Payment Milestones")}</span></div>
+					<div class="pd-hrow"><span>${__("Payment Milestones (Sales)")}</span></div>
 					${payment_milestones_donut(data.payment_milestones.kpis, symbol)}
 				</div>
 				<div class="pd-card">
@@ -219,6 +277,21 @@ function metric_row_1(project, budget, boq, symbol) {
 	const health = budget ? budget.epc_health : null;
 	const sched = budget ? budget.epc_sched_status : null;
 	const planned_pct = planned_progress_pct(project);
+	const remaining_pct = Math.max(0, 100 - flt(project.percent_complete));
+	const duration_days = project_duration_days(project.expected_start_date, project.expected_end_date);
+
+	const cpi = budget ? flt(budget.cpi) : 0;
+	const spi = budget ? flt(budget.epc_spi) : 0;
+	const cpi_color = cpi >= 1 ? PD_COLOR.green_deep : cpi >= 0.85 ? PD_COLOR.amber_deep : PD_COLOR.claret_deep;
+	const spi_color = spi >= 1 ? PD_COLOR.green_deep : spi >= 0.85 ? PD_COLOR.amber_deep : PD_COLOR.claret_deep;
+
+	const health_bg = budget && health ? pd_status_bg(health) : "";
+	const health_color = pd_health_color(health);
+	const sched_bg = sched ? pd_status_bg(sched) : "";
+	const sched_color = pd_sched_color(sched);
+
+	const cpi_tip_plain = `${__("Cost Performance Index (CPI)")}\n${__("Formula")}: EV ÷ AC (${__("Earned Value / Actual Cost")})\n• ${__("≥ 1.0: Under/on budget")}\n• ${__("< 1.0: Over budget")}`;
+	const spi_tip_plain = `${__("Schedule Performance Index (SPI)")}\n${__("Formula")}: EV ÷ PV (${__("Earned Value / Planned Value")})\n• ${__("≥ 1.0: On/ahead of schedule")}\n• ${__("< 1.0: Behind schedule")}`;
 
 	return `
 		<div class="pd-card pd-mx">
@@ -228,98 +301,102 @@ function metric_row_1(project, budget, boq, symbol) {
 				<div class="pd-s">${__("Approved budget")} ${symbol}${fmt_val(budget && budget.approved_budget)}</div>
 				<div class="pd-mx-sp">${composition}</div>
 			</div>
-			<div class="pd-mx-c">
+			<div class="pd-mx-c pd-status-col" style="${health_bg ? `background:${health_bg};` : ""}">
 				<div class="pd-k">${__("Budget Health")}</div>
-				<div class="pd-v"><span class="pd-pill" style="background:${
-					PD_HEALTH_COLOR[health] || PD_COLOR.slate_mid
-				}">${frappe.utils.escape_html(health || "—")}</span></div>
-				<div class="pd-s">${
-					budget ? `CPI ${flt2(budget.cpi)} · SPI ${flt2(budget.epc_spi)}` : "—"
-				}</div>
+				<div class="pd-v">
+					<span class="pd-pill pd-pill-lg" style="background:${health_color}">
+						<span class="pd-pill-dot"></span>
+						${frappe.utils.escape_html(health || "—")}
+					</span>
+				</div>
+				<div class="pd-s pd-has-tips">
+					${
+						budget
+							? `
+						<span class="pd-kpi-chip pd-tip" title="${frappe.utils.escape_html(cpi_tip_plain)}">
+							<span class="pd-kpi-lbl">CPI</span>
+							<strong class="pd-kpi-num" style="color:${cpi_color}">${flt2(budget.cpi)}</strong>
+							<i class="pd-info-icon">ⓘ</i>
+							${cpi_tooltip_html()}
+						</span>
+						<span class="pd-sep">·</span>
+						<span class="pd-kpi-chip pd-tip" title="${frappe.utils.escape_html(spi_tip_plain)}">
+							<span class="pd-kpi-lbl">SPI</span>
+							<strong class="pd-kpi-num" style="color:${spi_color}">${flt2(budget.epc_spi)}</strong>
+							<i class="pd-info-icon">ⓘ</i>
+							${spi_tooltip_html()}
+						</span>`
+							: "—"
+					}
+				</div>
+				<div class="pd-mx-sp">${budget ? linear_gauge(cpi ? Math.min(cpi * 100, 150) : 0, 100, health_color) : ""}</div>
 			</div>
-			<div class="pd-mx-c">
+			<div class="pd-mx-c pd-status-col" style="${sched_bg ? `background:${sched_bg};` : ""}">
 				<div class="pd-k">${__("Schedule Status")}</div>
-				<div class="pd-v"><span class="pd-pill" style="background:${
-					PD_SCHED_COLOR[sched] || PD_COLOR.slate_mid
-				}">${frappe.utils.escape_html(sched || "—")}</span></div>
-				<div class="pd-s">${pd_date_range(project.expected_start_date, project.expected_end_date)}</div>
+				<div class="pd-v">
+					<span class="pd-pill pd-pill-lg" style="background:${sched_color}">
+						<span class="pd-pill-dot"></span>
+						${frappe.utils.escape_html(sched || "—")}
+					</span>
+				</div>
+				<div class="pd-s">
+					<span class="pd-date-chip" title="${duration_days ? `${duration_days} ${__("days total")}` : ""}">
+						<span class="pd-date-icon">📅</span>
+						<span class="pd-kpi-lbl">${__("Duration")}:</span>
+						<strong>${pd_date_range(project.expected_start_date, project.expected_end_date)}</strong>
+					</span>
+				</div>
+				<div class="pd-mx-sp">${linear_gauge(planned_pct, 100, sched_color)}</div>
 			</div>
 			<div class="pd-mx-c">
 				<div class="pd-k">${__("Project Complete")}</div>
 				<div class="pd-v">${flt2(project.percent_complete)}<span class="pd-unit">%</span></div>
-				<div class="pd-s">${__("Planned")} ${planned_pct.toFixed(0)}%</div>
-				<div class="pd-mx-sp">${linear_gauge(flt(project.percent_complete), planned_pct, PD_COLOR.green_mid)}</div>
+				<div class="pd-s pd-has-tips">
+					${
+						project.total_tasks
+							? `
+						<span class="pd-kpi-chip" title="${project.completed_tasks} ${__("of")} ${project.total_tasks} ${__("tasks completed")}">
+							<span class="pd-kpi-lbl">${__("Tasks")}</span>
+							<strong class="pd-kpi-num">${project.completed_tasks}/${project.total_tasks}</strong>
+						</span>
+						<span class="pd-sep">·</span>
+						<span class="pd-kpi-chip" title="${flt2(remaining_pct)}% ${__("remaining to completion")}">
+							<span class="pd-kpi-lbl">${__("Remaining")}</span>
+							<strong class="pd-kpi-num">${flt2(remaining_pct)}%</strong>
+						</span>`
+							: `
+						<span class="pd-kpi-chip">
+							<span class="pd-kpi-lbl">${__("Status")}</span>
+							<strong class="pd-kpi-num">${frappe.utils.escape_html(project.status || "Open")}</strong>
+						</span>
+						<span class="pd-sep">·</span>
+						<span class="pd-kpi-chip" title="${flt2(remaining_pct)}% ${__("remaining to completion")}">
+							<span class="pd-kpi-lbl">${__("Remaining")}</span>
+							<strong class="pd-kpi-num">${flt2(remaining_pct)}%</strong>
+						</span>`
+					}
+				</div>
+				<div class="pd-mx-sp">${linear_gauge(flt(project.percent_complete), 100, PD_COLOR.green_mid)}</div>
 			</div>
 		</div>`;
 }
 
-function metric_row_2(budget, symbol) {
-	if (!budget) {
-		return `<div class="pd-card pd-mx"><div class="pd-mx-c"><div class="pd-k">${__(
-			"Project Budget"
-		)}</div><div class="pd-v">—</div><div class="pd-s">${__(
-			"No Project Budget has been created yet."
-		)}</div></div></div>`;
-	}
-
-	const cpi = flt(budget.cpi);
-	const spi = flt(budget.epc_spi);
-	const cpi_color = cpi >= 1 ? PD_COLOR.green_deep : cpi >= 0.85 ? PD_COLOR.amber_deep : PD_COLOR.claret_deep;
-	const spi_color = spi >= 1 ? PD_COLOR.green_deep : spi >= 0.85 ? PD_COLOR.amber_deep : PD_COLOR.claret_deep;
-
-	const approved = flt(budget.approved_budget);
-	const eac = flt(budget.eac);
-	const eac_pct = approved ? (eac / approved) * 100 : 0;
-	const eac_color = !approved ? PD_COLOR.slate_mid : eac <= approved ? PD_COLOR.green_deep : eac <= approved * 1.1 ? PD_COLOR.amber_deep : PD_COLOR.claret_deep;
-
-	const cv = flt(budget.cost_variance);
-	const cv_favorable = cv >= 0;
-	const cv_color = cv_favorable ? PD_COLOR.green_mid : PD_COLOR.claret_mid;
-
-	return `
-		<div class="pd-card pd-mx">
-			<div class="pd-mx-c">
-				<div class="pd-k">CPI</div>
-				<div class="pd-v" style="color:${cpi_color}">${flt2(cpi)}</div>
-				<div class="pd-s">${__("Cost efficiency, target")} 1.00</div>
-				<div class="pd-mx-sp">${linear_gauge(cpi * 100, 100, cpi_color)}</div>
-			</div>
-			<div class="pd-mx-c">
-				<div class="pd-k">SPI</div>
-				<div class="pd-v" style="color:${spi_color}">${flt2(spi)}</div>
-				<div class="pd-s">${__("Schedule efficiency, target")} 1.00</div>
-				<div class="pd-mx-sp">${linear_gauge(spi * 100, 100, spi_color)}</div>
-			</div>
-			<div class="pd-mx-c">
-				<div class="pd-k">${__("Estimate at Completion")}</div>
-				<div class="pd-v" style="color:${eac_color}">${symbol}${fmt_val(eac)}</div>
-				<div class="pd-s">${__("Approved")} ${symbol}${fmt_val(approved)}</div>
-				<div class="pd-mx-sp">${linear_gauge(eac_pct, 100, eac_color)}</div>
-			</div>
-			<div class="pd-mx-c tint">
-				<div class="pd-k">${__("Cost Variance")}</div>
-				<div class="pd-v" style="color:${cv_color}">${symbol}${fmt_val(cv)}</div>
-				<div class="pd-s"><span class="pd-pill" style="background:${cv_color}">${
-					cv_favorable ? "▲" : "▼"
-				} ${symbol}${fmt_val(Math.abs(cv))}</span> ${__("vs contract value")}</div>
-				<div class="pd-mx-sp">${bipolar_single(cv, PD_COLOR.green_mid, PD_COLOR.claret_mid)}</div>
-			</div>
-		</div>`;
-}
-
-function procurement_stage_strip(kpis) {
+function procurement_stage_strip(kpis, symbol) {
 	kpis = kpis || {};
+	symbol = symbol || currency_symbol(pd_currency_code);
 	const stages = [
-		{ label: __("Material Requested"), key: "mr_coverage_pct", color: PD_COLOR.steel_deep },
-		{ label: __("Purchase Ordered"), key: "po_coverage_pct", color: PD_COLOR.teal_deep },
-		{ label: __("Received (GR)"), key: "pr_coverage_pct", color: PD_COLOR.green_deep },
+		{ label: __("Material Requested"), key: "mr_coverage_pct", val_key: "total_mr_value", color: PD_COLOR.steel_deep },
+		{ label: __("Purchase Ordered"), key: "po_coverage_pct", val_key: "total_po_value", color: PD_COLOR.teal_deep },
+		{ label: __("Received (GR)"), key: "pr_coverage_pct", val_key: "total_pr_value", color: PD_COLOR.green_deep },
+		{ label: __("Paid"), key: "paid_coverage_pct", val_key: "total_paid_value", color: PD_COLOR.amber_deep },
 	];
 	const blocks = stages
 		.map(
 			(s) => `
-			<div class="pd-stage" style="background:${s.color}">
+			<div class="pd-stage" style="background:${s.color}" title="${frappe.utils.escape_html(s.label)}: ${flt2(kpis[s.key])}%${s.val_key && kpis[s.val_key] != null ? ` (${symbol}${fmt_val(kpis[s.val_key])})` : ""}">
 				<div class="pd-stage-v">${flt2(kpis[s.key])}%</div>
 				<div class="pd-stage-l">${s.label}</div>
+				${s.val_key && kpis[s.val_key] != null ? `<div class="pd-stage-s">${symbol}${fmt_val(kpis[s.val_key])}</div>` : ""}
 			</div>`
 		)
 		.join("");
@@ -339,9 +416,10 @@ function procurement_item_rows(items) {
 
 	const legend = `
 		<div class="pd-pi-legend">
-			<span><i style="background:${PD_COLOR.steel_mid}"></i>${__("MR")}</span>
-			<span><i style="background:${PD_COLOR.teal_mid}"></i>${__("PO")}</span>
-			<span><i style="background:${PD_COLOR.green_mid}"></i>${__("GR")}</span>
+			<span><i style="background:${PD_COLOR.steel_light}"></i>${__("MR")}</span>
+			<span><i style="background:${PD_COLOR.teal_light}"></i>${__("PO")}</span>
+			<span><i style="background:${PD_COLOR.green_light}"></i>${__("GR")}</span>
+			<span><i style="background:${PD_COLOR.amber_light}"></i>${__("Paid")}</span>
 		</div>`;
 
 	const rows = items
@@ -352,9 +430,10 @@ function procurement_item_rows(items) {
 					(it.description || it.item_code || "").slice(0, 28)
 				)}</div>
 				<div class="pd-pi-tracks">
-					${pi_track(it.mr_pct, PD_COLOR.steel_mid)}
-					${pi_track(it.po_pct, PD_COLOR.teal_mid)}
-					${pi_track(it.pr_pct, PD_COLOR.green_mid)}
+					${pi_track(it.mr_pct, PD_COLOR.steel_light)}
+					${pi_track(it.po_pct, PD_COLOR.teal_light)}
+					${pi_track(it.pr_pct, PD_COLOR.green_light)}
+					${pi_track(it.paid_pct, PD_COLOR.amber_light)}
 				</div>
 			</div>`
 		)
@@ -381,9 +460,9 @@ function procurement_split_donut(kpis, symbol) {
 	if (total <= 0) return pd_empty_note();
 
 	const parts = [
-		{ label: __("Received"), value: received, color: PD_COLOR.green_deep },
-		{ label: __("Ordered, not received"), value: ordered_not_received, color: PD_COLOR.amber_deep },
 		{ label: __("Not yet ordered"), value: not_ordered, color: PD_COLOR.slate_deep },
+		{ label: __("Ordered, not received"), value: ordered_not_received, color: PD_COLOR.amber_deep },
+		{ label: __("Received"), value: received, color: PD_COLOR.green_deep },
 	].map((p) => ({ ...p, pct: Math.round((p.value / total) * 100) }));
 
 	return donut_chart(parts, { label: __("MATERIAL VALUE"), value: symbol + fmt_val(total) }, (p) => symbol + fmt_val(p.value));
@@ -392,9 +471,9 @@ function procurement_split_donut(kpis, symbol) {
 function payment_milestones_donut(kpis, symbol) {
 	kpis = kpis || {};
 	const parts_raw = [
-		{ label: __("Received"), value: Math.max(flt(kpis.received), 0), color: PD_COLOR.green_deep },
-		{ label: __("Invoiced"), value: Math.max(flt(kpis.invoiced), 0), color: PD_COLOR.amber_deep },
 		{ label: __("Pending"), value: Math.max(flt(kpis.pending), 0), color: PD_COLOR.slate_deep },
+		{ label: __("Invoiced"), value: Math.max(flt(kpis.invoiced), 0), color: PD_COLOR.amber_deep },
+		{ label: __("Received"), value: Math.max(flt(kpis.received), 0), color: PD_COLOR.green_deep },
 	];
 	const total = parts_raw.reduce((s, p) => s + p.value, 0);
 	if (total <= 0) return pd_empty_note();
@@ -445,6 +524,7 @@ function cost_by_head_chart(rows, symbol) {
 // much wider full-width column. Kept (not cleared) so a window resize can
 // redraw the same charts at their new width without a full data reload.
 let pd_last_charts = [];
+let pd_charts_data = {};
 
 function redraw_pd_bar_charts() {
 	if (pd_pending_charts.length) {
@@ -454,9 +534,12 @@ function redraw_pd_bar_charts() {
 	pd_last_charts.forEach((c) => {
 		const el = document.getElementById(c.id);
 		if (!el) return;
+		pd_charts_data[c.id] = c;
 		const w = Math.max(280, el.clientWidth);
-		const h = Math.max(220, Math.round(w * 0.24));
-		el.innerHTML = grouped_bar_chart(c.labels, c.series, c.symbol, { w, h });
+		const n = (c.labels && c.labels.length) || 1;
+		const rotate = (w - 68) / n < 110 || (c.labels && c.labels.some((l) => String(l).length > 10));
+		const h = Math.max(rotate ? 260 : 220, Math.round(w * (rotate ? 0.3 : 0.24)));
+		el.innerHTML = grouped_bar_chart(c.labels, c.series, c.symbol, { w, h, id: c.id });
 	});
 }
 
@@ -470,6 +553,182 @@ function ensure_pd_resize_listener() {
 		clearTimeout(timer);
 		timer = setTimeout(redraw_pd_bar_charts, 150);
 	});
+
+	// Mobile / click toggle for tooltips
+	$(document).on("click.project-dashboard", ".pd-tip", function (e) {
+		e.stopPropagation();
+		const $this = $(this);
+		const wasActive = $this.hasClass("pd-tip-active");
+		$(".pd-tip-active").removeClass("pd-tip-active");
+		if (!wasActive) {
+			$this.addClass("pd-tip-active");
+		}
+	});
+
+	$(document).on("click.project-dashboard", () => {
+		$(".pd-tip-active").removeClass("pd-tip-active");
+	});
+}
+
+let pd_charts_bound = false;
+
+function ensure_pd_chart_interactions() {
+	if (pd_charts_bound) return;
+	pd_charts_bound = true;
+
+	function show_chart_tip(e, targetEl) {
+		const $target = $(targetEl);
+		const $wrap = $target.closest(".pd-chart-wrap");
+		const chartId = $wrap.attr("id");
+		const c = pd_charts_data[chartId];
+		if (!c) return;
+
+		const groupIdx = parseInt($target.attr("data-group-idx"), 10);
+		const seriesIdxAttr = $target.attr("data-series-idx");
+		const seriesIdx =
+			seriesIdxAttr !== undefined && seriesIdxAttr !== null && seriesIdxAttr !== ""
+				? parseInt(seriesIdxAttr, 10)
+				: null;
+
+		if (isNaN(groupIdx) || groupIdx < 0 || groupIdx >= c.labels.length) return;
+
+		const groupLabel = c.labels[groupIdx];
+		const symbol = c.symbol || "";
+
+		let rowsHtml = "";
+		c.series.forEach((s, idx) => {
+			const val = flt(s.values[groupIdx]);
+			const isActive = seriesIdx !== null && idx === seriesIdx;
+			const compactVal = (symbol ? symbol + " " : "") + fmt_val(val);
+			const fullVal = fmt_full_val(val);
+			const showFull = fullVal && fullVal !== compactVal && Math.abs(val) >= 1000;
+
+			rowsHtml += `
+				<div class="pd-ct-row ${isActive ? "is-active" : ""}">
+					<span class="pd-ct-dot" style="background:${s.color}"></span>
+					<span class="pd-ct-name">${frappe.utils.escape_html(s.name)}</span>
+					<span class="pd-ct-val">${frappe.utils.escape_html(compactVal)}</span>
+					${showFull ? `<span class="pd-ct-full">(${frappe.utils.escape_html(fullVal)})</span>` : ""}
+				</div>
+			`;
+		});
+
+		const tipHtml = `
+			<div class="pd-ct-head">${frappe.utils.escape_html(groupLabel)}</div>
+			<div class="pd-ct-rows">${rowsHtml}</div>
+		`;
+
+		const $tip = $wrap.find(".pd-chart-tip");
+		$tip.html(tipHtml).show();
+		$wrap.addClass("has-hover");
+
+		// Highlight column background and x-axis label
+		$wrap.find(".pd-col-bg").hide();
+		$wrap.find(`.pd-col-bg[data-group-idx="${groupIdx}"]`).show();
+		$wrap.find(".pd-chart-xlabel").removeClass("is-active");
+		$wrap.find(`.pd-chart-xlabel[data-group-idx="${groupIdx}"]`).addClass("is-active");
+
+		// Highlight specific active bar
+		$wrap.find(".pd-chart-bar").removeClass("is-active");
+		if (seriesIdx !== null) {
+			$wrap
+				.find(`.pd-chart-bar[data-group-idx="${groupIdx}"][data-series-idx="${seriesIdx}"]`)
+				.addClass("is-active");
+		}
+
+		position_chart_tip(e, $wrap, $tip);
+	}
+
+	function position_chart_tip(e, $wrap, $tip) {
+		const wrapOffset = $wrap.offset();
+		if (!wrapOffset) return;
+
+		const mouseX = e.pageX - wrapOffset.left;
+		const mouseY = e.pageY - wrapOffset.top;
+		const wrapW = $wrap.width();
+		const wrapH = $wrap.height();
+		const tipW = $tip.outerWidth() || 220;
+		const tipH = $tip.outerHeight() || 100;
+
+		let left = mouseX + 16;
+		if (left + tipW > wrapW - 8) {
+			left = mouseX - tipW - 16;
+		}
+		if (left < 8) left = 8;
+
+		let top = mouseY - tipH - 12;
+		if (top < 8) {
+			top = mouseY + 18;
+		}
+		if (top + tipH > wrapH - 8) {
+			top = Math.max(8, wrapH - tipH - 8);
+		}
+
+		$tip.css({ left: `${left}px`, top: `${top}px` });
+	}
+
+	function hide_chart_tip($wrap) {
+		$wrap.find(".pd-chart-tip").hide();
+		$wrap.removeClass("has-hover");
+		$wrap.find(".pd-col-bg").hide();
+		$wrap.find(".pd-chart-bar").removeClass("is-active");
+		$wrap.find(".pd-chart-xlabel").removeClass("is-active");
+	}
+
+	$(document).on(
+		"mouseenter.pd-chart",
+		".pd-chart-wrap .pd-bar-hit, ".concat(
+			".pd-chart-wrap .pd-col-hit, ",
+			".pd-chart-wrap .pd-chart-bar"
+		),
+		function (e) {
+			show_chart_tip(e, this);
+		}
+	);
+
+	$(document).on("mousemove.pd-chart", ".pd-chart-wrap", function (e) {
+		const $wrap = $(this);
+		const $tip = $wrap.find(".pd-chart-tip");
+		if ($tip.is(":visible")) {
+			position_chart_tip(e, $wrap, $tip);
+		}
+	});
+
+	$(document).on("mouseleave.pd-chart", ".pd-chart-wrap", function () {
+		hide_chart_tip($(this));
+	});
+
+	// Mobile / click support
+	$(document).on(
+		"click.pd-chart",
+		".pd-chart-wrap .pd-bar-hit, ".concat(
+			".pd-chart-wrap .pd-col-hit, ",
+			".pd-chart-wrap .pd-chart-bar"
+		),
+		function (e) {
+			e.stopPropagation();
+			show_chart_tip(e, this);
+		}
+	);
+
+	$(document).on("click.pd-chart-dismiss", function (e) {
+		if (!$(e.target).closest(".pd-chart-wrap").length) {
+			hide_chart_tip($(".pd-chart-wrap"));
+		}
+	});
+
+	// Legend hover highlights corresponding series across the chart
+	$(document).on("mouseenter.pd-chart", ".pd-chart-wrap .pd-lg-i", function () {
+		const $this = $(this);
+		const si = $this.attr("data-series-idx");
+		if (si !== undefined && si !== null && si !== "") {
+			$this.closest(".pd-chart-wrap").attr("data-hover-series", si);
+		}
+	});
+
+	$(document).on("mouseleave.pd-chart", ".pd-chart-wrap .pd-lg-i", function () {
+		$(this).closest(".pd-chart-wrap").removeAttr("data-hover-series");
+	});
 }
 
 function phase_progress_rows(phases) {
@@ -478,7 +737,7 @@ function phase_progress_rows(phases) {
 	const rows = phases
 		.map(
 			(p) => `
-			<div class="pd-pr-row">
+			<div class="pd-pr-row" title="${frappe.utils.escape_html(p.phase)}: ${flt2(p.percent_complete)}%">
 				<div class="pd-pr-name">${frappe.utils.escape_html(p.phase)}</div>
 				<div class="pd-pr-gauge">${linear_gauge(flt(p.percent_complete), 100, PD_COLOR.green_mid)}</div>
 				<div class="pd-pr-pct">${flt2(p.percent_complete)}%</div>
@@ -502,12 +761,16 @@ function milestone_table(rows, symbol) {
 					m.sales_invoice
 				)}</a>`
 			: "—";
+		const due_date = m.target_date
+			? (frappe.datetime && frappe.datetime.str_to_user ? frappe.datetime.str_to_user(m.target_date) : m.target_date)
+			: "—";
+
 		body += `
 			<tr>
 				<td class="pd-tb-strong">${frappe.utils.escape_html(m.milestone || "")}</td>
-				<td class="pd-tb-muted">${m.target_date || "—"}</td>
+				<td class="pd-tb-muted">${due_date}</td>
 				<td class="pd-tb-num">${flt2(m.percent_amount)}%</td>
-				<td class="pd-tb-num">${symbol}${fmt_val(m.net_payable)}</td>
+				<td class="pd-tb-num pd-tb-val">${symbol}${fmt_val(m.net_payable)}</td>
 				<td>${invoice}</td>
 				<td class="pd-tb-center"><span class="pd-pill" style="background:${bg}">${frappe.utils.escape_html(
 					m.payment_status || ""
@@ -522,12 +785,12 @@ function milestone_table(rows, symbol) {
 				<table class="pd-tb">
 					<thead>
 						<tr>
-							<th>${__("Milestone")}</th>
-							<th>${__("Due")}</th>
-							<th class="pd-tb-num">%</th>
-							<th class="pd-tb-num">${__("Net Payable")}</th>
-							<th>${__("Invoice")}</th>
-							<th class="pd-tb-center">${__("Status")}</th>
+							<th style="min-width:240px">${__("Milestone")}</th>
+							<th style="width:130px">${__("Due")}</th>
+							<th class="pd-tb-num" style="width:90px">%</th>
+							<th class="pd-tb-num" style="width:140px">${__("Net Payable")}</th>
+							<th style="width:140px">${__("Invoice")}</th>
+							<th class="pd-tb-center" style="width:110px">${__("Status")}</th>
 						</tr>
 					</thead>
 					<tbody>${body}</tbody>
@@ -638,16 +901,22 @@ function donut_chart(parts, center, fmtRow) {
 
 function grouped_bar_chart(labels, series, symbol, opts) {
 	opts = opts || {};
-	const W = opts.w || 1040,
-		H = opts.h || 230,
-		ML = 56,
-		MR = 12,
-		MT = 16,
-		MB = 34;
-	const plotW = W - ML - MR,
-		plotH = H - MT - MB;
+	const chartId = opts.id || "";
 	const n = labels.length;
 	if (!n) return pd_empty_note();
+
+	const ML = 56,
+		MR = 12,
+		MT = 16;
+	const W = opts.w || 1040;
+	const plotW = W - ML - MR;
+	const colW = plotW / n;
+
+	// Rotate x-axis labels if columns are narrow or labels are long to prevent overlap
+	const rotateLabels = colW < 110 || labels.some((l) => String(l).length > 10);
+	const MB = rotateLabels ? 72 : 34;
+	const H = opts.h ? Math.max(opts.h, rotateLabels ? 255 : 220) : rotateLabels ? 255 : 230;
+	const plotH = H - MT - MB;
 
 	const allValues = series.reduce((acc, s) => acc.concat(s.values), []);
 	const maxV = Math.max(0, Math.max.apply(null, allValues.concat([0])));
@@ -676,36 +945,89 @@ function grouped_bar_chart(labels, series, symbol, opts) {
 		)}" font-size="9.5" fill="${PD_COLOR.soft}" text-anchor="end">${symbol}${fmt_val_short(v)}</text>`;
 	}
 
-	const colW = plotW / n;
 	const groupW = Math.min(colW * 0.72, 120);
 	const barW = Math.max(6, groupW / series.length - 4);
-	let barsSvg = "",
+	let colBgSvg = "",
+		colHitSvg = "",
+		barsSvg = "",
+		barHitSvg = "",
 		labelsSvg = "";
+
 	for (let i = 0; i < n; i++) {
+		const colLeft = ML + i * colW;
 		const groupX = ML + (i + 0.5) * colW - groupW / 2;
+
+		// Column hover background (subtle soft highlight behind the bars)
+		colBgSvg += `<rect class="pd-col-bg" data-group-idx="${i}" x="${(colLeft + 2).toFixed(1)}" y="${MT.toFixed(
+			1
+		)}" width="${(colW - 4).toFixed(1)}" height="${plotH.toFixed(1)}" rx="4" style="display:none;"></rect>`;
+
+		// Column hit area (spans full column slot)
+		colHitSvg += `<rect class="pd-col-hit" data-chart-id="${chartId}" data-group-idx="${i}" x="${colLeft.toFixed(
+			1
+		)}" y="${MT.toFixed(1)}" width="${colW.toFixed(1)}" height="${plotH.toFixed(1)}" fill="transparent" style="cursor:pointer;"></rect>`;
+
 		series.forEach((s, si) => {
 			const bx = groupX + si * (barW + 4);
-			const v = s.values[i] || 0;
-			const barH = v * scale;
-			const title = frappe.utils.escape_html(`${labels[i]} — ${s.name}: ${symbol}${fmt_val(v)}`);
-			barsSvg += `<rect x="${bx.toFixed(1)}" y="${(baseY - barH).toFixed(1)}" width="${barW.toFixed(
+			const v = flt(s.values[i]);
+			const rawBarH = v * scale;
+			const isZero = v <= 0;
+			const barH = isZero ? 1.5 : Math.max(rawBarH, 2.5);
+			const barY = isZero ? baseY - 1.5 : baseY - barH;
+			const zeroClass = isZero ? " pd-chart-bar-zero" : "";
+			const zeroAttr = isZero ? ' opacity="0.35"' : "";
+			const title = frappe.utils.escape_html(`${labels[i]} — ${s.name}: ${symbol ? symbol + " " : ""}${fmt_val(v)}`);
+
+			barsSvg += `<rect class="pd-chart-bar${zeroClass}" data-chart-id="${chartId}" data-group-idx="${i}" data-series-idx="${si}" x="${bx.toFixed(
 				1
-			)}" height="${barH.toFixed(1)}" fill="${s.color}" rx="2"><title>${title}</title></rect>`;
+			)}" y="${barY.toFixed(1)}" width="${barW.toFixed(1)}" height="${barH.toFixed(
+				1
+			)}" fill="${s.color}" rx="${isZero ? 1 : 2}"${zeroAttr}><title>${title}</title></rect>`;
+
+			// Bar-specific hit target: full column height from MT to baseline, with horizontal padding for effortless hover
+			barHitSvg += `<rect class="pd-bar-hit" data-chart-id="${chartId}" data-group-idx="${i}" data-series-idx="${si}" x="${(
+				bx - 2
+			).toFixed(1)}" y="${MT.toFixed(1)}" width="${(barW + 4).toFixed(1)}" height="${plotH.toFixed(
+				1
+			)}" fill="transparent" style="cursor:pointer;"></rect>`;
 		});
+
 		const rawLabel = String(labels[i] || "");
-		const shortLabel = rawLabel.length > 16 ? rawLabel.slice(0, 15) + "…" : rawLabel;
-		labelsSvg += `<text x="${(ML + (i + 0.5) * colW).toFixed(
-			1
-		)}" y="${H - 12}" font-size="10" fill="${PD_COLOR.mid}" text-anchor="middle">${frappe.utils.escape_html(
-			shortLabel
-		)}</text>`;
+		if (rotateLabels) {
+			const maxLen = colW < 60 ? 14 : 18;
+			const shortLabel = rawLabel.length > maxLen ? rawLabel.slice(0, maxLen - 1) + "…" : rawLabel;
+			const lx = (ML + (i + 0.5) * colW).toFixed(1);
+			const ly = (baseY + 10).toFixed(1);
+			labelsSvg += `<text class="pd-chart-xlabel pd-col-hit" data-chart-id="${chartId}" data-group-idx="${i}" x="${lx}" y="${ly}" transform="rotate(-35 ${lx} ${ly})" font-size="9.5" fill="${PD_COLOR.mid}" text-anchor="end" style="cursor:pointer;">${frappe.utils.escape_html(
+				shortLabel
+			)}<title>${frappe.utils.escape_html(rawLabel)}</title></text>`;
+		} else {
+			const shortLabel = rawLabel.length > 16 ? rawLabel.slice(0, 15) + "…" : rawLabel;
+			labelsSvg += `<text class="pd-chart-xlabel pd-col-hit" data-chart-id="${chartId}" data-group-idx="${i}" x="${(
+				ML +
+				(i + 0.5) * colW
+			).toFixed(1)}" y="${(baseY + 16).toFixed(
+				1
+			)}" font-size="10" fill="${PD_COLOR.mid}" text-anchor="middle" style="cursor:pointer;">${frappe.utils.escape_html(
+				shortLabel
+			)}<title>${frappe.utils.escape_html(rawLabel)}</title></text>`;
+		}
 	}
 
 	const legend = series
-		.map((s) => `<span class="pd-lg-i"><i style="background:${s.color}"></i>${frappe.utils.escape_html(s.name)}</span>`)
+		.map(
+			(s, si) =>
+				`<span class="pd-lg-i" data-chart-id="${chartId}" data-series-idx="${si}"><i style="background:${s.color}"></i>${frappe.utils.escape_html(
+					s.name
+				)}</span>`
+		)
 		.join("");
 
-	return `<svg viewBox="0 0 ${W} ${H}" width="100%" height="${H}">${gridSvg}${barsSvg}${labelsSvg}</svg><div class="pd-legend">${legend}</div>`;
+	return `
+		<svg viewBox="0 0 ${W} ${H}" width="100%" height="${H}" class="pd-chart-svg">${colBgSvg}${gridSvg}${colHitSvg}${barsSvg}${barHitSvg}${labelsSvg}</svg>
+		<div class="pd-chart-tip" role="tooltip" style="display:none;"></div>
+		<div class="pd-legend">${legend}</div>
+	`;
 }
 
 // ---------------------------------------------------------------------------
@@ -728,6 +1050,14 @@ function pd_date_range(start, end) {
 	if (!start && !end) return "—";
 	const f = (d) => (d ? frappe.datetime.str_to_user(d) : "—");
 	return `${f(start)} → ${f(end)}`;
+}
+
+function project_duration_days(start, end) {
+	if (!start || !end) return 0;
+	const s = frappe.datetime.str_to_obj(start);
+	const e = frappe.datetime.str_to_obj(end);
+	const diff = (e - s) / 86400000;
+	return diff > 0 ? Math.round(diff) : 0;
 }
 
 function planned_progress_pct(project) {
@@ -822,14 +1152,34 @@ function fmt_val_short(v) {
 	return neg ? "-" + r : r;
 }
 
+function fmt_full_val(v) {
+	v = flt(v);
+	if (typeof format_currency === "function" && pd_currency_code) {
+		try {
+			const formatted = format_currency(v, pd_currency_code);
+			if (formatted) return formatted;
+		} catch (e) {}
+	}
+	const sym = currency_symbol(pd_currency_code);
+	const neg = v < 0;
+	const absV = Math.abs(v);
+	const parts = absV.toFixed(2).split(".");
+	parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+	const numStr = (neg ? "-" : "") + parts.join(".");
+	return sym ? `${sym} ${numStr}` : numStr;
+}
+
 // ---------------------------------------------------------------------------
 // Styles (design-system.md — injected once, scoped under .pd)
 // ---------------------------------------------------------------------------
 
 function ensure_pd_styles() {
-	if (document.getElementById("pd-dashboard-styles")) return;
-	const style = document.createElement("style");
-	style.id = "pd-dashboard-styles";
+	let style = document.getElementById("pd-dashboard-styles");
+	if (!style) {
+		style = document.createElement("style");
+		style.id = "pd-dashboard-styles";
+		document.head.appendChild(style);
+	}
 	style.textContent = `
 .pd { font-family: var(--font-stack); font-feature-settings: "tnum" 1; width: 100%; box-sizing: border-box; }
 .pd-card { background:#fff; border:1px solid ${PD_COLOR.rule}; border-radius:8px; box-shadow:0 1px 1px rgba(16,24,40,.03), 0 12px 24px -22px rgba(16,24,40,.30); padding:16px; margin-top:25px; box-sizing:border-box; }
@@ -855,22 +1205,57 @@ function ensure_pd_styles() {
 .pd-mx-c { padding:14px 16px; border-right:1px solid ${PD_COLOR.rule}; display:flex; flex-direction:column; min-width:0; }
 .pd-mx-c:last-child { border-right:none; }
 .pd-mx-c.tint { background:#f8fafc; }
+.pd-status-col { transition: background 0.2s ease; }
 .pd-k { font-size:9px; font-weight:500; letter-spacing:.16em; text-transform:uppercase; color:${PD_COLOR.ink}; }
-.pd-v { font-size:26px; font-weight:600; letter-spacing:-1.1px; color:${PD_COLOR.ink}; margin-top:6px; }
+.pd-v { font-size:26px; font-weight:600; letter-spacing:-1.1px; color:${PD_COLOR.ink}; margin-top:6px; min-height:34px; display:flex; align-items:center; }
 .pd-unit { font-size:14px; font-weight:400; color:${PD_COLOR.mid}; }
 .pd-s { font-size:10.5px; color:${PD_COLOR.mid}; margin-top:4px; white-space:nowrap; min-height:20px; overflow:hidden; text-overflow:ellipsis; }
+.pd-s.pd-has-tips { overflow:visible !important; white-space:normal; }
 .pd-mx-sp { margin-top:auto; padding-top:8px; }
 
 /* Pills */
 .pd-pill { display:inline-block; padding:3px 9px; border-radius:5px; font-size:10.5px; font-weight:600; color:#fff; white-space:nowrap; }
+.pd-pill-lg { display:inline-flex; align-items:center; gap:6px; padding:5px 13px; border-radius:6px; font-size:15px; font-weight:700; color:#fff; white-space:nowrap; letter-spacing:0.2px; box-shadow:0 1px 3px rgba(0,0,0,0.12); }
+.pd-pill-dot { display:inline-block; width:8px; height:8px; border-radius:50%; background:#fff; opacity:.95; }
+
+/* KPI chips & Date chip */
+.pd-kpi-chip { display:inline-flex; align-items:center; gap:4px; font-size:11.5px; font-weight:500; color:${PD_COLOR.ink}; background:rgba(255,255,255,0.85); padding:2px 7px; border-radius:4px; border:1px solid rgba(0,0,0,0.08); transition:background .15s ease, border-color .15s ease; }
+.pd-kpi-chip:hover { background:#ffffff; border-color:rgba(0,0,0,0.25); }
+.pd-kpi-lbl { font-weight:700; color:${PD_COLOR.mid}; font-size:10px; letter-spacing:.05em; }
+.pd-kpi-num { font-weight:700; font-feature-settings:"tnum" 1; }
+.pd-info-icon { font-style:normal; font-size:11px; line-height:1; color:${PD_COLOR.mid}; opacity:.75; margin-left:2px; }
+.pd-kpi-chip:hover .pd-info-icon, .pd-tip:hover .pd-info-icon { opacity:1; color:${PD_COLOR.ink}; }
+.pd-date-chip { display:inline-flex; align-items:center; gap:5px; font-size:11px; font-weight:500; color:${PD_COLOR.ink}; background:rgba(255,255,255,0.85); padding:2px 7px; border-radius:4px; border:1px solid rgba(0,0,0,0.08); }
+.pd-date-icon { font-size:10px; opacity:.85; }
+.pd-sep { color:${PD_COLOR.soft}; margin:0 1px; }
+
+/* Tooltips */
+.pd-tip { position:relative; cursor:help; }
+.pd-tip-box { display:none; position:absolute; bottom:calc(100% + 8px); left:50%; transform:translateX(-50%); width:260px; padding:10px 12px; background:#0f172a; color:#f8fafc; border-radius:6px; font-size:11px; line-height:1.45; font-weight:400; text-transform:none; letter-spacing:normal; white-space:normal; box-shadow:0 10px 25px -5px rgba(0,0,0,0.35), 0 8px 10px -6px rgba(0,0,0,0.2); z-index:99999; pointer-events:none; }
+.pd-tip-box::after { content:""; position:absolute; top:100%; left:50%; transform:translateX(-50%); border-width:5px; border-style:solid; border-color:#0f172a transparent transparent transparent; }
+.pd-tip:hover .pd-tip-box, .pd-tip.pd-tip-active .pd-tip-box { display:block; }
+.pd-tip-left .pd-tip-box { left:0; transform:none; }
+.pd-tip-left .pd-tip-box::after { left:20px; transform:none; }
+.pd-tip-title { display:block; font-weight:700; font-size:12px; color:#fff; margin-bottom:4px; border-bottom:1px solid rgba(255,255,255,0.15); padding-bottom:4px; }
+.pd-tip-formula { display:block; font-family:var(--font-monospace, monospace); font-size:10px; color:#93c5fd; margin-bottom:6px; }
+.pd-tip-list { margin:0 0 5px 0; padding-left:14px; list-style-type:disc; }
+.pd-tip-list li { margin-bottom:3px; color:#cbd5e1; }
+.pd-tip-good { color:#4ade80; font-weight:600; }
+.pd-tip-bad { color:#f87171; font-weight:600; }
+.pd-tip-desc { display:block; font-size:10px; color:#94a3b8; font-style:italic; border-top:1px solid rgba(255,255,255,0.1); padding-top:4px; }
 
 /* Stage strip */
 .pd-stage-sec { margin-top:30px; }
 .pd-stage-title { margin-bottom:8px; }
 .pd-stage-strip { display:flex; gap:2px; border-radius:8px; overflow:hidden; }
-.pd-stage { flex:1; padding:14px 16px; color:#fff; }
+.pd-stage { flex:1; padding:14px 16px; color:#fff; min-width:0; }
 .pd-stage-v { font-size:21px; font-weight:600; letter-spacing:-0.6px; }
-.pd-stage-l { font-size:10.5px; opacity:.88; margin-top:2px; }
+.pd-stage-l { font-size:10.5px; opacity:.88; margin-top:2px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+.pd-stage-s { font-size:11px; opacity:.85; margin-top:3px; font-weight:500; }
+@media (max-width: 640px) {
+	.pd-stage-strip { flex-wrap:wrap; }
+	.pd-stage { flex:1 1 calc(50% - 2px); }
+}
 
 /* Two-column chart grid */
 .pd-ch2 { display:grid; grid-template-columns:1.3fr 1fr; gap:34px; margin-top:25px; }
@@ -888,14 +1273,14 @@ function ensure_pd_styles() {
 /* Procurement per-item rows */
 .pd-pi-legend { display:flex; gap:14px; font-size:9.5px; color:${PD_COLOR.mid}; margin-bottom:10px; }
 .pd-pi-legend span { display:flex; align-items:center; gap:4px; }
-.pd-pi-legend i { width:7px; height:7px; display:inline-block; border-radius:2px; }
+.pd-pi-legend i { width:8px; height:8px; display:inline-block; border-radius:2px; border:1px solid rgba(0,0,0,0.08); box-sizing:border-box; }
 .pd-pi-list { display:flex; flex-direction:column; gap:10px; }
 .pd-pi-row { display:grid; grid-template-columns:150px 1fr; gap:12px; align-items:center; }
 .pd-pi-name { font-size:11.5px; color:${PD_COLOR.ink}; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
-.pd-pi-tracks { display:grid; grid-template-columns:1fr 1fr 1fr; gap:8px; }
+.pd-pi-tracks { display:grid; grid-template-columns:repeat(4, 1fr); gap:6px; }
 .pd-pi-track { position:relative; height:14px; border-radius:3px; background:${PD_COLOR.rule2}; overflow:hidden; }
 .pd-pi-fill { position:absolute; left:0; top:0; height:100%; border-radius:3px; }
-.pd-pi-pct { position:absolute; right:4px; top:0; height:100%; display:flex; align-items:center; font-size:8.5px; font-weight:600; color:${PD_COLOR.ink}; }
+.pd-pi-pct { position:absolute; right:4px; top:0; height:100%; display:flex; align-items:center; font-size:9px; font-weight:600; color:${PD_COLOR.ink}; }
 
 /* Phase progress rows */
 .pd-pr-list { display:flex; flex-direction:column; gap:12px; }
@@ -905,19 +1290,69 @@ function ensure_pd_styles() {
 
 /* Bar chart legend */
 .pd-legend { display:flex; justify-content:center; gap:16px; margin-top:8px; }
-.pd-lg-i { font-size:10.5px; color:${PD_COLOR.mid}; display:flex; align-items:center; gap:5px; }
+.pd-lg-i { font-size:10.5px; color:${PD_COLOR.mid}; display:flex; align-items:center; gap:5px; cursor:pointer; user-select:none; padding:2px 6px; border-radius:4px; transition:background-color .15s ease; }
+.pd-lg-i:hover { background:#f1f5f9; }
 .pd-lg-i i { width:8px; height:8px; display:inline-block; border-radius:2px; }
+
+/* Grouped bar charts & interactive tooltips */
+.pd-chart-wrap { position: relative; width: 100%; }
+.pd-chart-svg { display: block; overflow: visible; }
+.pd-col-bg { pointer-events: none; fill: rgba(15, 23, 42, 0.04); rx: 4px; }
+.pd-chart-bar { cursor: pointer; transition: opacity 0.15s ease, filter 0.15s ease; }
+.pd-chart-wrap.has-hover .pd-chart-bar { opacity: 0.45; }
+.pd-chart-wrap.has-hover .pd-chart-bar.is-active { opacity: 1 !important; filter: brightness(1.2) drop-shadow(0 2px 5px rgba(0, 0, 0, 0.25)); }
+.pd-chart-wrap[data-hover-series] .pd-chart-bar { opacity: 0.25; }
+.pd-chart-wrap[data-hover-series="0"] .pd-chart-bar[data-series-idx="0"],
+.pd-chart-wrap[data-hover-series="1"] .pd-chart-bar[data-series-idx="1"],
+.pd-chart-wrap[data-hover-series="2"] .pd-chart-bar[data-series-idx="2"],
+.pd-chart-wrap[data-hover-series="3"] .pd-chart-bar[data-series-idx="3"] { opacity: 1 !important; filter: brightness(1.2) drop-shadow(0 0 3px rgba(0, 0, 0, 0.25)); }
+.pd-chart-xlabel { font-family: var(--font-stack); user-select: none; transition: fill 0.15s ease, opacity 0.15s ease; }
+.pd-chart-wrap.has-hover .pd-chart-xlabel { opacity: 0.55; }
+.pd-chart-wrap.has-hover .pd-chart-xlabel.is-active { opacity: 1 !important; fill: ${PD_COLOR.ink}; font-weight: 600; }
+
+.pd-chart-tip {
+	position: absolute;
+	pointer-events: none;
+	z-index: 9999;
+	background: #0f172a;
+	color: #f8fafc;
+	border-radius: 8px;
+	padding: 10px 14px;
+	font-size: 11px;
+	line-height: 1.4;
+	box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.4), 0 8px 10px -6px rgba(0, 0, 0, 0.25);
+	border: 1px solid rgba(255, 255, 255, 0.12);
+	min-width: 210px;
+	max-width: 380px;
+	white-space: nowrap;
+	display: none;
+	transform: translate3d(0, 0, 0);
+	transition: opacity 0.1s ease;
+}
+.pd-ct-head { font-size: 11.5px; font-weight: 700; color: #f8fafc; padding-bottom: 6px; margin-bottom: 6px; border-bottom: 1px solid rgba(255, 255, 255, 0.12); }
+.pd-ct-rows { display: flex; flex-direction: column; gap: 4px; }
+.pd-ct-row { display: flex; align-items: center; gap: 8px; padding: 3px 6px; border-radius: 4px; font-size: 11px; transition: background-color 0.1s ease; }
+.pd-ct-row.is-active { background: rgba(255, 255, 255, 0.14); }
+.pd-ct-dot { width: 8px; height: 8px; border-radius: 2px; flex-shrink: 0; }
+.pd-ct-name { color: #cbd5e1; margin-right: auto; }
+.pd-ct-row.is-active .pd-ct-name { color: #ffffff; font-weight: 600; }
+.pd-ct-val { font-weight: 600; color: #ffffff; font-feature-settings: "tnum" 1; }
+.pd-ct-row.is-active .pd-ct-val { color: #38bdf8; }
+.pd-ct-full { font-size: 10px; color: #94a3b8; font-feature-settings: "tnum" 1; }
+.pd-ct-row.is-active .pd-ct-full { color: #cbd5e1; }
 
 /* Table */
 .pd-tb-wrap { overflow-x:auto; }
-.pd-tb { width:100%; border-collapse:collapse; font-size:12px; min-width:560px; }
-.pd-tb th { padding:8px 10px; text-align:left; font-size:9px; font-weight:500; letter-spacing:.16em; text-transform:uppercase; color:${PD_COLOR.ink}; border-bottom:1px solid ${PD_COLOR.rule}; }
-.pd-tb td { padding:9px 10px; border-bottom:1px solid ${PD_COLOR.rule2}; color:${PD_COLOR.ink}; }
+.pd-tb { width:100%; border-collapse:collapse; font-size:12px; min-width:680px; }
+.pd-tb th { padding:10px 14px; text-align:left; font-size:9px; font-weight:600; letter-spacing:.14em; text-transform:uppercase; color:${PD_COLOR.ink}; border-bottom:1px solid ${PD_COLOR.rule}; white-space:nowrap; }
+.pd-tb td { padding:11px 14px; border-bottom:1px solid ${PD_COLOR.rule2}; color:${PD_COLOR.ink}; vertical-align:middle; }
 .pd-tb tr:last-child td { border-bottom:none; }
+.pd-tb tr:hover td { background-color: #f8fafc; }
 .pd-tb-strong { font-weight:600; }
-.pd-tb-muted { color:${PD_COLOR.mid}; }
-.pd-tb-num { text-align:right; }
-.pd-tb-center { text-align:center; }
+.pd-tb-muted { color:${PD_COLOR.mid}; white-space:nowrap; }
+.pd-tb th.pd-tb-num, .pd-tb td.pd-tb-num { text-align:right !important; font-feature-settings:"tnum" 1; }
+.pd-tb-val { font-weight:600; }
+.pd-tb th.pd-tb-center, .pd-tb td.pd-tb-center { text-align:center !important; }
 `;
 	document.head.appendChild(style);
 }

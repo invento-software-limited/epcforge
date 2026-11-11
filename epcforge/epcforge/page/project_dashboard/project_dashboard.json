@@ -1,9 +1,11 @@
 {
- "content": "<div id=\"project-dashboard-root\"></div>",
- "creation": "2026-09-16 00:00:00.000000",
+ "content": null,
+ "creation": "2026-09-16 00:00:00",
+ "docstatus": 0,
  "doctype": "Page",
  "icon": "dashboard",
- "modified": "2026-09-16 00:00:00.000000",
+ "idx": 0,
+ "modified": "2026-11-11 13:37:33.643263",
  "modified_by": "Administrator",
  "module": "EPCForge",
  "name": "project-dashboard",
@@ -11,11 +13,19 @@
  "page_name": "project-dashboard",
  "restrict_to_domain": "",
  "roles": [
-  {"role": "System Manager"},
-  {"role": "Project Manager"},
-  {"role": "Engineer"}
+  {
+   "role": "System Manager"
+  },
+  {
+   "role": "Project Manager"
+  },
+  {
+   "role": "Engineer"
+  }
  ],
+ "script": null,
  "standard": "Yes",
+ "style": null,
  "system_page": 0,
  "title": "Project Dashboard"
 }
