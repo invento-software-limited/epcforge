@@ -103,15 +103,6 @@ const PD_SCHED_COLOR = {
 	"Severely Delayed": PD_COLOR.claret_deep,
 };
 
-function pd_status_bg(status) {
-	if (!status) return "";
-	const s = String(status).trim().toLowerCase();
-	if (s === "green" || s === "on track" || s === "completed") return "#dcfce7";
-	if (s === "yellow" || s === "delayed") return "#fef3c7";
-	if (s === "red" || s === "severely delayed") return "#fee2e2";
-	return "";
-}
-
 function pd_health_color(health) {
 	if (!health) return PD_COLOR.slate_mid;
 	const s = String(health).trim().toLowerCase();
@@ -285,9 +276,7 @@ function metric_row_1(project, budget, boq, symbol) {
 	const cpi_color = cpi >= 1 ? PD_COLOR.green_deep : cpi >= 0.85 ? PD_COLOR.amber_deep : PD_COLOR.claret_deep;
 	const spi_color = spi >= 1 ? PD_COLOR.green_deep : spi >= 0.85 ? PD_COLOR.amber_deep : PD_COLOR.claret_deep;
 
-	const health_bg = budget && health ? pd_status_bg(health) : "";
 	const health_color = pd_health_color(health);
-	const sched_bg = sched ? pd_status_bg(sched) : "";
 	const sched_color = pd_sched_color(sched);
 
 	const cpi_tip_plain = `${__("Cost Performance Index (CPI)")}\n${__("Formula")}: EV ÷ AC (${__("Earned Value / Actual Cost")})\n• ${__("≥ 1.0: Under/on budget")}\n• ${__("< 1.0: Over budget")}`;
@@ -301,7 +290,7 @@ function metric_row_1(project, budget, boq, symbol) {
 				<div class="pd-s">${__("Approved budget")} ${symbol}${fmt_val(budget && budget.approved_budget)}</div>
 				<div class="pd-mx-sp">${composition}</div>
 			</div>
-			<div class="pd-mx-c pd-status-col" style="${health_bg ? `background:${health_bg};` : ""}">
+			<div class="pd-mx-c">
 				<div class="pd-k">${__("Budget Health")}</div>
 				<div class="pd-v">
 					<span class="pd-pill pd-pill-lg" style="background:${health_color}">
@@ -331,7 +320,7 @@ function metric_row_1(project, budget, boq, symbol) {
 				</div>
 				<div class="pd-mx-sp">${budget ? linear_gauge(cpi ? Math.min(cpi * 100, 150) : 0, 100, health_color) : ""}</div>
 			</div>
-			<div class="pd-mx-c pd-status-col" style="${sched_bg ? `background:${sched_bg};` : ""}">
+			<div class="pd-mx-c">
 				<div class="pd-k">${__("Schedule Status")}</div>
 				<div class="pd-v">
 					<span class="pd-pill pd-pill-lg" style="background:${sched_color}">
@@ -1205,7 +1194,6 @@ function ensure_pd_styles() {
 .pd-mx-c { padding:14px 16px; border-right:1px solid ${PD_COLOR.rule}; display:flex; flex-direction:column; min-width:0; }
 .pd-mx-c:last-child { border-right:none; }
 .pd-mx-c.tint { background:#f8fafc; }
-.pd-status-col { transition: background 0.2s ease; }
 .pd-k { font-size:9px; font-weight:500; letter-spacing:.16em; text-transform:uppercase; color:${PD_COLOR.ink}; }
 .pd-v { font-size:26px; font-weight:600; letter-spacing:-1.1px; color:${PD_COLOR.ink}; margin-top:6px; min-height:34px; display:flex; align-items:center; }
 .pd-unit { font-size:14px; font-weight:400; color:${PD_COLOR.mid}; }
